@@ -1,0 +1,1 @@
+- en React avec vite (comme outil de build)
