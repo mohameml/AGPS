@@ -1,2 +1,2 @@
-# AGPS
-application de gestion de prosuit structuré
+# AGPS : application de gestion de prosuit structuré
+

@@ -1,0 +1,63 @@
+@startuml archi
+
+
+package HedginigEngine {
+    class Portfolio {
+        + Double Cash 
+        + Dictionary<string, double> Compositions
+        + DateTime date 
+        + void UpdateCompo(Dictionary<string, double> Compos ,  DataFeed feed)
+        + double GetPortfolioValue(DataFeed feed)
+    }
+
+
+    class Hedging {
+        + TestParameters Params 
+        + Pricer Pricer 
+        + Rebalacing DetectRebalacing
+        + List<DataFeed> MarketData 
+
+        + List<OutputData> Hedge()
+    }
+    Hedging o-- Portfolio 
+}
+
+
+
+package PricerEngine {
+    
+
+
+    class BlackScholesPricer {
+    }
+
+    class BlackScholesModel {
+
+    }
+
+    abstract class Option {
+
+    }
+    
+}
+
+
+
+package Backend {
+
+}
+
+
+package Frontend {
+
+}
+
+
+
+Frontend -- Backend
+
+Backend -- HedginigEngine
+
+HedginigEngine -- PricerEngine
+
+@enduml
