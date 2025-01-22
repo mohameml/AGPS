@@ -1,0 +1,292 @@
+@startuml Hedging 
+
+
+
+package MarketDataReader {
+    
+    enum IndexesEnum {
+        SP500 , 
+        CAC40 ,
+        DAX ,
+        NIKKEI ,
+        FTSE100 , 
+        TOPIX 
+    }
+
+    enum CurrencyEnum {
+        EUR ,
+        USD ,
+        JPY ,
+        GBP ,
+        CHF ,
+        AUD 
+    }
+
+
+    class MarketDataReader {
+        + string FilePath 
+        + List<EnumIndex> Indexes
+        + Date T0
+        + Date T 
+        ' + DataIndexPrice : DataFrame 
+        ' + DataExchangeRate : DataFrame
+        ' + DataInterestRate : DataFrame
+        + ExchangeRateHistory _ExchangeRatesHistory
+        + IndexPriceHistory _IndexPriceHistory
+        + InterestRateHistory _InterestRateHistory
+        + Dictionary<DateTime ,int>  numberOfDaysInOneYear
+        + MarketDataReader(string filePath , List<EnumIndex> indexes , Date T0 , Date T)
+        + ExtractDataIndexPrice()
+        + ExtractDataInterestRate()
+        + ExtractDataExchangeRate()
+        + GetDataFeed(DateTime date)
+    
+    }
+
+    MarketDataReader *-- IndexPriceHistory
+    MarketDataReader *-- InterestRateHistory
+    MarketDataReader *-- ExchangeRateHistory
+
+    class IndexPrice {
+        + string IndexName
+        + string Currency 
+        + double Price 
+
+    }
+
+    class IndexPriceList {        
+        + List<IndexPrice> PriceList 
+    }
+
+
+    class IndexPriceHistory {
+        + Dictionary<DateTime , IndexPriceList> IndexPriceRecords
+    }
+
+    IndexPriceList *-- IndexPrice
+    IndexPriceHistory *-- IndexPriceList
+
+
+    class InterestRate {
+        + string Currency   
+        + double Rate
+    }
+
+    class InterestRateList {
+        + List<InterestRate> Rates  
+    }
+
+    class InterestRateHistory {
+        + Dictionary<DateTime , InterestRateList> InterestRateRecords
+    }
+
+    InterestRateHistory *-- InterestRateList
+    InterestRateList *-- InterestRate
+
+
+    class ExchangeRate {
+        + string BaseCurrency 
+        + string TargetCurrency = "EUR"
+        + double Rate 
+    }
+
+    class ExchangeRateList {
+        + List<ExchangeRate> Rates 
+    }
+
+    class ExchangeRateHistory {
+        + Dictionary<DateTime , ExchangeRateList> ExchangeRateRecords
+    }
+
+    ExchangeRateHistory *-- ExchangeRateList
+    ExchangeRateList *-- ExchangeRate
+}
+
+
+class FormuleDescription {
+    + List<DateTime> paymentDates
+    + DateTime creationDate
+    + DateTime maturityDate
+    + List<double> Dividendes
+    + double V0
+    + double VF 
+}
+
+package MarketData  {
+
+    
+    class DataFeed {
+        + DateTime Date 
+        + Dictionary<string , IndexPrice> IndexPrices
+        + Dictionary<string , double> InterestRates
+        + Dictionary<string , double> ExchangeRates 
+    }
+
+
+    class OutputData {
+        + DateTime Date
+        + double Value
+        + Double[] Deltas
+        +  Double[] DeltasStdDev
+        +  double Price
+        + double PriceStdDev
+    }
+}
+
+
+package Utils {
+
+    class MathDateConverter {
+
+        + double ConvertToMathDistance(Date from , Date to)
+    }
+
+}
+
+
+
+
+
+package HedginigEngine {
+
+    class Portfolio {
+        + Double Cash 
+        + Dictionary<string, double> Compositions
+        + DateTime date 
+        + void UpdateCompo(Dictionary<string, double> Compos ,  DataFeed feed)
+        + double GetPortfolioValue(DataFeed feed)
+    }
+
+
+    abstract class Pricer {
+        + TestParameters Params
+        + abstract PricingResults PriceAndDeltas(PricingParams pricingParams ) 
+    }
+
+    class PricingParams {
+        +  List<DataFeed> DataFeeds
+        + double Time 
+        + bool MonitoringDate
+    }
+
+    class  PricingResults {
+        + Dictionary<string , double> Deltas 
+        + Dictionary<string , double> DeltasStdDev 
+        + double Price 
+        + double PriceStdDev 
+    }  
+
+    Pricer o-- PricingParams
+    Pricer o-- PricingResults
+
+
+    class PricerGrpc {
+        - GrpcPricer.GrpcPricerClient GrpcClient
+        + PricerGrpc(TestParameters testParameters , string adress)
+        + override PricingResults PriceAndDeltas(PricingParams pricingParams)
+
+    }
+
+    Pricer <|-- PricerGrpc 
+
+
+    abstract class  Rebalacing  {
+        + bool IsRebalancing(DateTime date)
+    }
+
+    class FixedRebalacing {
+        - int Count 
+        - int Periode 
+        + override bool IsRebalancing(DateTime date)
+    }
+
+    Rebalacing <|-- FixedRebalacing
+
+    class Hedging {
+        + TestParameters Params 
+        + Pricer Pricer 
+        + Rebalacing DetectRebalacing
+        + List<DataFeed> MarketData 
+
+        + List<OutputData> Hedge()
+    }
+
+    Hedging o-- Pricer 
+    Hedging o-- Portfolio 
+    Hedging o-- Rebalacing 
+
+
+}
+
+package FinancialEstimator {
+
+    class VolatilityEstimator {
+        
+        + double AnnualVolatility 
+        + List<double> PriceHistory     
+    }
+
+
+    class CorrelationMatrixEstimator {
+        + Dictionary<string, List<double>> PriceHistory
+    }
+
+}
+
+
+package Grpc {
+
+    class GrpcPricer {
+        + PricingOutput PriceAndDeltas(PricingInput)
+    }
+
+    class PricingInput {
+        + PastLines[] past 
+        + double[] vols 
+        + double[][] correlations
+        + double[]  PaymentDates
+        + double[] Dividendes
+        + Currency[] Currencies
+        + double[] InterestRates
+        + double[] ExchangeRates
+        + int NumberOfDaysInOneYear
+        + bool monitoringDateReached
+        + double time 
+    }
+
+    class PastLines {
+        + double[] value 
+    }
+
+    class Currency {
+        + string id 
+        + double InterestRate
+        + double volatility 
+    }
+
+    class PricingOutput {
+        + double price 
+        + double[] deltas 
+        + double priceStdDev 
+        + double[] deltasStdDev
+    }
+
+    GrpcPricer o-- PricingInput 
+    GrpcPricer o-- PricingOutput 
+
+    PricingInput o-- PastLines 
+
+
+}
+
+
+
+DataFeed -- MarketDataReader
+
+Hedging -- DataFeed
+
+Hedging -- Grpc
+
+
+
+@enduml
