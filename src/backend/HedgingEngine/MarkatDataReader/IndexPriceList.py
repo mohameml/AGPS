@@ -1,8 +1,7 @@
-from typing import List, Optional
+from typing import Optional
 from backend.HedgingEngine.MarkatDataReader.IndexPrice import IndexPrice
 from backend.HedgingEngine.MarkatDataReader.GenericList import GenericList
-# from IndexPrice import IndexPrice
-# from GenericList import GenericList
+
 
 
 

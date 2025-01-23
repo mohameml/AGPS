@@ -6,11 +6,11 @@ from dataclasses import dataclass
 @dataclass
 class InterestRate:
     """
-    Represents an interest rate for a specific currency.
+    - Represents an interest rate for a specific currency.
 
-    Attributes:
-        currency (str): The currency associated with the interest rate (e.g., USD, EUR).
-        rate (float): The interest rate value (e.g., 0.05 for 5%).
+    - Attributes:
+        - currency (str): The currency associated with the interest rate (e.g., USD, EUR).
+        - rate (float): The interest rate value (e.g., 0.05 for 5%).
     """
     currency: EnumCurrency
     rate: float
@@ -26,12 +26,6 @@ class InterestRate:
 
 
     def display_info(self) -> str:
-        """
-        Returns a formatted string with the currency and interest rate.
-
-        Returns:
-            str: The formatted string.
-        """
         return f"Currency: {self.currency.value}, Interest Rate: {self.rate * 100:.2f}%"
 
 

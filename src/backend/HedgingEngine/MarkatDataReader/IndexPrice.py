@@ -7,12 +7,12 @@ from backend.HedgingEngine.MarkatDataReader.EnumCurrency import EnumCurrency
 @dataclass
 class IndexPrice:
     """
-    Représente le prix d'un indice de marché dans une devise spécifique.
+    - Représente le prix d'un indice de marché dans une devise spécifique.
 
-    Attributes:
-        index_name (str): Nom de l'indice (ex: SP500, CAC40, etc.).
-        currency (str): Devise associée à l'indice (ex: USD, EUR).
-        price (float): Valeur du prix de l'indice.
+    - Attributes:
+        - index_name (str): Nom de l'indice (ex: SP500, CAC40, etc.).
+        - currency (str): Devise associée à l'indice (ex: USD, EUR).
+        - price (float): Valeur du prix de l'indice.
     """
     index_name: EnumIndex
     currency: EnumCurrency
@@ -37,12 +37,6 @@ class IndexPrice:
 
 
     def display_info(self) -> str:
-        """
-        Retourne une chaîne de caractères formatée contenant les informations de l'indice.
-
-        Returns:
-            str: Informations de l'indice sous forme de texte.
-        """
         return f"Indice: {self.index_name.value}, Devise: {self.currency.value}, Prix: {self.price:.2f}"
 
 
