@@ -20,6 +20,9 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
+```bash
+python -m backend.tests.test_market_data_reader  
+```
 
 - **PricerEngine:**
 
@@ -31,3 +34,18 @@ cmake -DCMAKE_PREFIX_PATH=/path/to/pnl/build ..
 make
 ./pricing_server
 ```
+
+
+<!-- - backend :
+    - HedgingEnginr :
+        - MarketDataReader :
+            - IndexPrice.py
+            - __inti__.py
+        __init__.py 
+
+    - tests :
+        - test.py 
+
+    - __init__.py  -->
+
+

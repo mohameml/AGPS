@@ -1,6 +1,8 @@
 from backend.HedgingEngine.MarkatDataReader.GenericList import GenericList
 from backend.HedgingEngine.MarkatDataReader.ExchangeRate import ExchangeRate
-from types import List 
+
+
+from typing import List 
 
 # Liste des taux de change
 class ExchangeRateList(GenericList[ExchangeRate]):

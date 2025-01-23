@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from backend.HedgingEngine.MarkatDataReader.EnumIndex import EnumIndex
 from backend.HedgingEngine.MarkatDataReader.EnumCurrency import EnumCurrency
 
+
 @dataclass
 class IndexPrice:
     """

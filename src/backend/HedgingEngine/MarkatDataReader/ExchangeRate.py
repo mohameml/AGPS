@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from backend.HedgingEngine.MarkatDataReader.EnumCurrency import EnumCurrency
 
+
 @dataclass
 class ExchangeRate:
     """
@@ -12,8 +13,8 @@ class ExchangeRate:
         - rate (float): The exchange rate value (e.g., 1.12 for USD/EUR).
     """
     base_currency: EnumCurrency
-    target_currency: EnumCurrency = field(default=EnumCurrency.EUR)
     rate: float
+    target_currency: EnumCurrency = field(default=EnumCurrency.EUR)
 
     def __post_init__(self):
         """

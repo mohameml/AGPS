@@ -1,6 +1,6 @@
 from enum import Enum
-from backend.HedgingEngine.MarkatDataReader.EnumIndex import EnumIndex
 from backend.HedgingEngine.MarkatDataReader.EnumCurrency import  EnumCurrency
+
 
 class EnumIndex(Enum):
     ASX200 = "ASX200"
@@ -10,7 +10,7 @@ class EnumIndex(Enum):
     TOPIX = "TOPIX"
 
 
-    def str_to_enum(name: str) -> EnumIndex:
+    def str_to_enum(name: str) :
         """
         Converts a string to an EnumIndex object.
 
@@ -21,20 +21,18 @@ class EnumIndex(Enum):
             EnumIndex: The EnumIndex object.
         """
         match name :
-            case "SP500":
-                return EnumIndex.SP500
-            case "CAC40":
-                return EnumIndex.CAC40
-            case "DAX":
-                return EnumIndex.DAX
-            case "NIKKEI":
-                return EnumIndex.NIKKEI
+            case "ASX200":
+                return EnumIndex.ASX200
+            case "EUROSTOXX50":
+                return EnumIndex.EUROSTOXX50
             case "FTSE100":
                 return EnumIndex.FTSE100
+            case "SP500":
+                return EnumIndex.SP500
             case "TOPIX":
                 return EnumIndex.TOPIX
             case _:
-                raise ValueError("Invalid index")
+                raise ValueError(f"Invalid index : {name}")
 
 
 

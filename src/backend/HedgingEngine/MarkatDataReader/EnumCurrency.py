@@ -1,6 +1,6 @@
 from enum import Enum
-from backend.HedgingEngine.MarkatDataReader.EnumCurrency import EnumCurrency
-from backend.HedgingEngine.MarkatDataReader.EnumIndex import EnumIndex
+
+
 
 class EnumCurrency(Enum):
     EUR = "EUR"
@@ -9,7 +9,7 @@ class EnumCurrency(Enum):
     GBP = "GBP"
     AUD = "AUD"
 
-    def str_to_enum(name: str) -> EnumCurrency:
+    def str_to_enum(name: str) :
         """
         Converts a string to an EnumCurrency object.
 

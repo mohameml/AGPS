@@ -1,14 +1,17 @@
-# from backend.HedgingEngine.MarkatDataReader.MarketDataReader import MarketDataReader
-# from backend.HedgingEngine.MarkatDataReader.EnumIndex import EnumIndex
-
-from datetime import datetime 
+import os
 import pandas as pd
+from backend.HedgingEngine.MarkatDataReader.MarketDataReader import MarketDataReader
+from backend.HedgingEngine.MarkatDataReader.MarketDataReader import EnumIndex
 
-from ..HedgingEngine.MarkatDataReader.MarketDataReader import MarketDataReader
-from ..HedgingEngine.MarkatDataReader.MarketDataReader import EnumIndex
 
 
-FILE_PATH = "../data/DonneesGPS2025.xlsx"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
+FILE_PATH = os.path.join(BASE_DIR, "../data/DonneesGPS2025.xlsx")
+FILE_PATH = os.path.abspath(FILE_PATH)
+
+# print(FILE_PATH)
+
 
 def test_1() :
 
@@ -28,6 +31,11 @@ def test_1() :
     # 'Tc': '01-06-2014'
 
     T0 = pd.to_datetime('01-05-2009' , format='%d-%m-%Y')
-    T = pd.to_datetime('01-06-2010', format='%d-%m-%Y')
+    T = pd.to_datetime('01-06-2014', format='%d-%m-%Y')
     reader : MarketDataReader = MarketDataReader( FILE_PATH , indexes , T0 , T)
     reader._index_price_history.display_info()
+    reader._interest_rate_history.display_info()
+    reader._exchange_rate_history.display_info()
+
+
+test_1()

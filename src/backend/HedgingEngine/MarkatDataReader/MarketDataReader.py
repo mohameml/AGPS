@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 from typing import List, Dict
 import pandas as pd
 from backend.HedgingEngine.MarkatDataReader.EnumIndex import EnumIndex
@@ -19,21 +19,13 @@ from backend.HedgingEngine.MarkatDataReader.ExchangeRate import ExchangeRate
 
 class MarketDataReader:
     """
-    Classe responsable de la lecture des données de marché à partir d'un fichier et de la gestion des indices, 
-    des taux de change et des taux d'intérêt.
+    - Classe responsable de la lecture des données de marché à partir d'un fichier et de la gestion des indices,  des taux de change et des taux d'intérêt.
 
-    Attributes:
+    - Attributes:
         - file_path (str): Chemin du fichier contenant les données de marché.
         - indexes (List[EnumIndex]): Liste des indices à analyser.
         - T0 (date): Date de début de la période d'analyse.
         - T (date): Date de fin de la période d'analyse.
-        data_index_price (pd.DataFrame): Données des prix des indices.
-        data_exchange_rate (pd.DataFrame): Données des taux de change.
-        data_interest_rate (pd.DataFrame): Données des taux d'intérêt.
-        _exchange_rate_history (ExchangeRateHistory): Historique des taux de change.
-        _index_price_history (IndexPriceHistory): Historique des prix des indices.
-        _interest_rate_history (InterestRateHistory): Historique des taux d'intérêt.
-        number_of_days_in_one_year (Dict[datetime, int]): Nombre de jours dans une année pour différentes dates.
     """
 
     def __init__(self, file_path: str, indexes: List[EnumIndex], T0: datetime, T: datetime):
@@ -44,17 +36,20 @@ class MarketDataReader:
         self.indexes : List[EnumIndex] = indexes
         self.T0 : datetime = T0
         self.T : datetime = T
-
+    
         try :
             self.data_index_price: pd.DataFrame = pd.read_excel(self.file_path  , sheet_name = 'ClosePrice')
             self.data_exchange_rate: pd.DataFrame = pd.read_excel(self.file_path  , sheet_name = 'XFORPrice')
             self.data_interest_rate: pd.DataFrame = pd.read_excel(self.file_path  , sheet_name = 'TauxInteret')
         except Exception as e : 
-            print(f"Erreur lors du chargement du fichier {self.file_path}.\n{e}")
+            
+            raise RuntimeError(f"Erreur lors du chargement du fichier {self.file_path}.\n{e}")
         
-        self.clean_data(self.data_index_price , filter_names=[e.value for e in self.indexes])
-        self.clean_data(self.data_exchange_rate , filter_names= [f'R{index_to_currency(e).value}' for e in self.indexes])
-        self.clean_data(self.data_interest_rate , filter_names=[f'X{index_to_currency(e).value}' for e in self.indexes])
+        self.data_index_price = self.clean_data(self.data_index_price , filter_names=[e.value for e in self.indexes])
+        self.data_interest_rate = self.clean_data(self.data_interest_rate , filter_names=[f'R{index_to_currency[e].value}' for e in self.indexes])
+        filter_names_exchange_rate = [f'X{index_to_currency[e].value}' for e in self.indexes]
+        filter_names_exchange_rate.remove('XEUR')
+        self.data_exchange_rate = self.clean_data(self.data_exchange_rate , filter_names= filter_names_exchange_rate)
 
 
         self._exchange_rate_history: ExchangeRateHistory = ExchangeRateHistory()
@@ -69,12 +64,14 @@ class MarketDataReader:
 
 
     def clean_data(self , df : pd.DataFrame , filter_names : List[str]) -> None : 
-
+        filter_names.append('Date')
         df = df[filter_names]
         df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-        df = df.set_index('Date')
         df = df[(df.Date >= self.T0) & (df.Date <= self.T)]
+        df = df.set_index('Date')
         df = df.dropna()
+
+        return df 
 
     def extract_index_price_history(self) -> None:
         """Extrait les données des prix des indices depuis data_index_price."""
@@ -84,7 +81,7 @@ class MarketDataReader:
             index_price_list = IndexPriceList()
             for key , value in row_dict.items() :
                 enum_index = EnumIndex.str_to_enum(key)
-                enum_curr = index_to_currency(enum_index)
+                enum_curr = index_to_currency[enum_index]
                 index_price = IndexPrice(enum_index , enum_curr , value)
                 index_price_list.add(index_price)
             self._index_price_history.add_record(date , index_price_list)
@@ -110,7 +107,7 @@ class MarketDataReader:
             exchange_rate_list = ExchangeRateList()
             for key , value in row_dict.items() :
                 enum_curr = EnumCurrency.str_to_enum(key[1:])
-                exchange_rate = ExchangeRate(enum_curr , EnumCurrency.EUR, value)
+                exchange_rate = ExchangeRate(enum_curr , value , EnumCurrency.EUR)
                 exchange_rate_list.add(exchange_rate)
             self._exchange_rate_history.add_record(date , exchange_rate_list)
 
