@@ -85,8 +85,8 @@ package MarketDataReader {
 
 
     class ExchangeRate {
-        + string BaseCurrency 
-        + string TargetCurrency = "EUR"
+        + CurrencyEnum BaseCurrency 
+        + CurrencyEnum TargetCurrency = "EUR"
         + double Rate 
     }
 
