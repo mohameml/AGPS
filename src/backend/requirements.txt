@@ -8,15 +8,19 @@ exceptiongroup==1.2.2
 fastapi==0.115.6
 h11==0.14.0
 idna==3.10
+iniconfig==2.0.0
 isort==5.13.2
 mccabe==0.7.0
 numpy==2.2.2
 openpyxl==3.1.5
+packaging==24.2
 pandas==2.2.3
 platformdirs==4.3.6
+pluggy==1.5.0
 pydantic==2.10.5
 pydantic_core==2.27.2
 pylint==3.3.3
+pytest==8.3.4
 python-dateutil==2.9.0.post0
 pytz==2024.2
 six==1.17.0
@@ -27,3 +31,4 @@ tomlkit==0.13.2
 typing_extensions==4.12.2
 tzdata==2025.1
 uvicorn==0.34.0
+XlsxWriter==3.2.2

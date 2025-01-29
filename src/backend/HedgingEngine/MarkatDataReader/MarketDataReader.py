@@ -13,7 +13,7 @@ from backend.HedgingEngine.MarkatDataReader.InterestRate import InterestRate
 from backend.HedgingEngine.MarkatDataReader.ExchangeRateHistory import ExchangeRateHistory
 from backend.HedgingEngine.MarkatDataReader.ExchangeRateList import ExchangeRateList
 from backend.HedgingEngine.MarkatDataReader.ExchangeRate import ExchangeRate
-
+from backend.HedgingEngine.MarkatDataReader.DataFeed import DataFeed
 
 
 
@@ -85,6 +85,7 @@ class MarketDataReader:
                 index_price = IndexPrice(enum_index , enum_curr , value)
                 index_price_list.add(index_price)
             self._index_price_history.add_record(date , index_price_list)
+            
 
 
 
@@ -111,18 +112,29 @@ class MarketDataReader:
                 exchange_rate_list.add(exchange_rate)
             self._exchange_rate_history.add_record(date , exchange_rate_list)
 
-    def get_data_feed(self, date: datetime) -> Dict[str, pd.DataFrame]:
+
+
+
+    def get_data_feed(self, date: datetime) -> DataFeed:
         """
         Récupère les données du marché pour une date spécifique.
-
-        Args:
-            date (datetime): La date pour laquelle récupérer les données.
-
-        Returns:
-            Dict[str, pd.DataFrame]: Un dictionnaire contenant les données de marché pour la date donnée.
         """
-        return {
-            "index_price": self.data_index_price[self.data_index_price['date'] == date.strftime('%Y-%m-%d')],
-            "exchange_rate": self.data_exchange_rate[self.data_exchange_rate['date'] == date.strftime('%Y-%m-%d')],
-            "interest_rate": self.data_interest_rate[self.data_interest_rate['date'] == date.strftime('%Y-%m-%d')],
-        }
+        dict_index_prices : Dict[EnumIndex , IndexPrice] = {}
+        dict_intersat_rates : Dict[EnumCurrency , InterestRate] = {}
+        dict_exchanges : Dict [EnumCurrency , ExchangeRate]= {}
+
+        for index_price in self._index_price_history.records[date].items:
+            dict_index_prices[index_price.index_name] = index_price
+
+        for intersate_rate in self._interest_rate_history.records[date].items :
+            dict_intersat_rates[intersate_rate.currency]  = intersate_rate
+
+        for exchange_rate in self._exchange_rate_history.records[date].items:
+            dict_exchanges[exchange_rate.base_currency] = exchange_rate
+        
+
+
+        data_feed  : DataFeed = DataFeed(date , dict_index_prices , dict_intersat_rates , dict_exchanges)
+
+        return data_feed
+

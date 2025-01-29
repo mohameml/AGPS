@@ -1,64 +1,36 @@
 from datetime import datetime
 from typing import Dict
+from backend.HedgingEngine.MarkatDataReader.EnumCurrency import EnumCurrency
+from backend.HedgingEngine.MarkatDataReader.EnumIndex import EnumIndex
+from backend.HedgingEngine.MarkatDataReader.IndexPrice import IndexPrice
+from backend.HedgingEngine.MarkatDataReader.ExchangeRate import ExchangeRate
+from backend.HedgingEngine.MarkatDataReader.InterestRate import InterestRate
 
-class DataFeed:
-    def __init__(self, date: datetime, 
-                index_price: Dict[str, float], 
-                intersate_rate: Dict[str, float], 
-                exchanges: Dict[str, str]
-        ):
+
+
+class DataFeed :
+    def __init__(
+        self, date: datetime, 
+        dict_index_price: Dict[EnumIndex, IndexPrice], 
+        dict_interest_rate: Dict[EnumCurrency, InterestRate], 
+        dict_exchange_rate: Dict[EnumCurrency, ExchangeRate]
+    ):
         self.date = date
-        self.index_price = index_price
-        self.inert_state_rate = intersate_rate
-        self.exchanges = exchanges
+        self.dict_index_price = dict_index_price
+        self.dict_interest_rate = dict_interest_rate
+        self.dict_exchange_rate = dict_exchange_rate
 
-    
-    def add_index_price(self, symbol: str, price: float):
-        
-        self.index_price[symbol] = price
-    
-    def add_inert_state_rate(self, symbol: str, rate: float):
-        """
-        Ajouter ou mettre à jour un taux d'état inertiel dans le dictionnaire `inert_state_rate`.
-        
-        :param symbol: Symbole associé au taux d'état inertiel
-        :param rate: Valeur du taux d'état inertiel
-        """
-        self.inert_state_rate[symbol] = rate
-    
-    def add_exchange(self, exchange_name: str, exchange_info: str):
-        """
-        Ajouter ou mettre à jour une information d'échange dans le dictionnaire `exchanges`.
-        
-        :param exchange_name: Nom de l'échange
-        :param exchange_info: Information de l'échange (par exemple, URL ou description)
-        """
-        self.exchanges[exchange_name] = exchange_info
-    
-    def get_index_price(self, symbol: str) -> float:
-        """
-        Récupérer le prix d'un indice à partir de son symbole.
-        
-        :param symbol: Symbole de l'indice
-        :return: Le prix de l'indice
-        """
-        return self.index_price.get(symbol)
-    
-    def get_inert_state_rate(self, symbol: str) -> float:
-        """
-        Récupérer le taux d'état inertiel à partir de son symbole.
-        
-        :param symbol: Symbole du taux d'état inertiel
-        :return: Le taux d'état inertiel
-        """
-        return self.inert_state_rate.get(symbol)
+    def display_info(self):
+        print(f"=========== t = {self.date} =========")
+        for key in self.dict_index_price.keys() :
+            print(f'\t the price of index {key.value} is : {self.dict_index_price[key].price} ')
 
-    def get_exchange_info(self, exchange_name: str) -> str:
-        """
-        Récupérer les informations d'un échange à partir de son nom.
+        for key in self.dict_interest_rate.keys() :
+            print(f'\t the intersat rate of  {key.value} is : {self.dict_interest_rate[key].rate} ')
         
-        :param exchange_name: Nom de l'échange
-        :return: Les informations de l'échange
-        """
-        return self.exchanges.get(exchange_name)
+        for key in self.dict_exchange_rate.keys() :
+            print(f'\t the exchange rate  of  {key.value} to EUR is : {self.dict_exchange_rate[key].rate} ')
+
+
+
 
