@@ -13,9 +13,9 @@ TimeGrid::~TimeGrid()
 {
 }
 
-TimeGrid::TimeGrid(nlohmann::json json)
+TimeGrid::TimeGrid(std::vector<double> grid_time)
 {
-    TimeGridType = json.at("Option").at("FixingDatesInDays").at("Type").get<std::string>();
+    this->grid_time = grid_time;
 
 }
 
@@ -35,59 +35,18 @@ int TimeGrid::len()
     return grid_time.size();
 }
 
-bool TimeGrid::has(int nDays)
-{
-    for (int elem : grid_time) {
-        if (elem == nDays) {
-            return true;
-        }
-    }
-    return false;
-}
 
-void TimeGrid::setGridTime(std::vector<int> grid_time)
-{
-    this->grid_time = grid_time;
-}
 
-int TimeGrid::getLastIndex(int t)
+int TimeGrid::getLastIndex(double t)
 {
     for (int i = 0; i < grid_time.size(); i++)
     {
-        if(grid_time.at(i) > t) {
-            return i - 1;
+        if(std::fabs(grid_time.at(i) - t) < 1E-10) {
+            return i;
         }
     }
     
     return grid_time.size() - 1;
 }
 
-std::vector<int> TimeGrid::getAllDates()
-{
-    std::vector<int> allDates ;
-    int T = grid_time.at(grid_time.size() - 1);
 
-    for (int t = 1 ; t < T ; t++)
-    {
-        allDates.push_back(t);
-    }
-
-    return allDates;    
-}
-
-TimeGrid createTimeGridFromJson(const nlohmann::json json)
-{
-    std::string type = json.at("Option").at("FixingDatesInDays").at("Type").get<std::string>();
-    TimeGrid timeGrid  ;
-    if(type == "Fixed") 
-        timeGrid = FixedTimeGrid(json);
-    else if(type == "Grid")
-        timeGrid = GridTimeGrid(json);
-    else
-    {
-        std::cout << "Option " << type << " unknow. Abort." << std::endl;
-        abort();
-    }
-
-    return timeGrid;
-}
