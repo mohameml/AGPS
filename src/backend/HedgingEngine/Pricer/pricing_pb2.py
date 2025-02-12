@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rpricing.proto\x12\x0bgrpc_pricer\"\xa9\x03\n\x0cPricingInput\x12$\n\x04past\x18\x01 \x03(\x0b\x32\x16.grpc_pricer.PastLines\x12\x1d\n\x15monitoringDateReached\x18\x02 \x01(\x08\x12\x0c\n\x04time\x18\x03 \x01(\x01\x12)\n\ncurrencies\x18\x04 \x03(\x0b\x32\x15.grpc_pricer.Currency\x12\x1a\n\x12\x64omesticCurrencyId\x18\x05 \x01(\t\x12\"\n\x06\x61ssets\x18\x06 \x03(\x0b\x32\x12.grpc_pricer.Asset\x12\x1d\n\x15numberOfDaysInOneYear\x18\x07 \x01(\x05\x12\x61\n%portfolioRebalancingOracleDescription\x18\x08 \x01(\x0b\x32\x32.grpc_pricer.PortfolioRebalancingOracleDescription\x12#\n\x06option\x18\t \x01(\x0b\x32\x13.grpc_pricer.Option\x12\x34\n\x0c\x63orrelations\x18\n \x03(\x0b\x32\x1e.grpc_pricer.CorrelationMatrix\"\x1a\n\tPastLines\x12\r\n\x05value\x18\x01 \x03(\x01\"@\n\x08\x43urrency\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0cinterestRate\x18\x02 \x01(\x01\x12\x12\n\nvolatility\x18\x03 \x01(\x01\"/\n\x05\x41sset\x12\x12\n\ncurrencyId\x18\x01 \x01(\t\x12\x12\n\nvolatility\x18\x02 \x01(\x01\"E\n%PortfolioRebalancingOracleDescription\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0e\n\x06period\x18\x02 \x01(\x05\"y\n\x06Option\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x39\n\x11\x66ixingDatesInDays\x18\x02 \x01(\x0b\x32\x1e.grpc_pricer.FixingDatesInDays\x12\x0e\n\x06strike\x18\x03 \x01(\x01\x12\x16\n\x0ematurityInDays\x18\x04 \x01(\x05\"6\n\x11\x46ixingDatesInDays\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x61tesInDays\x18\x02 \x03(\x05\"#\n\x11\x43orrelationMatrix\x12\x0e\n\x06values\x18\x01 \x03(\x01\"Y\n\rPricingOutput\x12\r\n\x05price\x18\x01 \x01(\x01\x12\x0e\n\x06\x64\x65ltas\x18\x02 \x03(\x01\x12\x13\n\x0bpriceStdDev\x18\x03 \x01(\x01\x12\x14\n\x0c\x64\x65ltasStdDev\x18\x04 \x03(\x01\"\x07\n\x05\x45mpty\"\x1a\n\x07ReqInfo\x12\x0f\n\x07message\x18\x01 \x01(\t2\x8d\x01\n\nGrpcPricer\x12G\n\x0ePriceAndDeltas\x12\x19.grpc_pricer.PricingInput\x1a\x1a.grpc_pricer.PricingOutput\x12\x36\n\nHelloWorld\x12\x12.grpc_pricer.Empty\x1a\x14.grpc_pricer.ReqInfob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rpricing.proto\x12\x0bgrpc_pricer\"\x95\x02\n\x0cPricingInput\x12$\n\x04past\x18\x01 \x03(\x0b\x32\x16.grpc_pricer.PastLines\x12\x1d\n\x15monitoringDateReached\x18\x02 \x01(\x08\x12\x0c\n\x04time\x18\x03 \x01(\x01\x12)\n\ncurrencies\x18\x04 \x03(\x0b\x32\x15.grpc_pricer.Currency\x12\x1a\n\x12\x64omesticCurrencyId\x18\x05 \x01(\t\x12\"\n\x06\x61ssets\x18\x06 \x03(\x0b\x32\x12.grpc_pricer.Asset\x12\x34\n\x0c\x63orrelations\x18\x07 \x03(\x0b\x32\x1e.grpc_pricer.CorrelationMatrix\x12\x11\n\ttime_grid\x18\x08 \x03(\x01\"\x1a\n\tPastLines\x12\r\n\x05value\x18\x01 \x03(\x01\"@\n\x08\x43urrency\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0cinterestRate\x18\x02 \x01(\x01\x12\x12\n\nvolatility\x18\x03 \x01(\x01\"/\n\x05\x41sset\x12\x12\n\ncurrencyId\x18\x01 \x01(\t\x12\x12\n\nvolatility\x18\x02 \x01(\x01\"#\n\x11\x43orrelationMatrix\x12\x0e\n\x06values\x18\x01 \x03(\x01\"Y\n\rPricingOutput\x12\r\n\x05price\x18\x01 \x01(\x01\x12\x0e\n\x06\x64\x65ltas\x18\x02 \x03(\x01\x12\x13\n\x0bpriceStdDev\x18\x03 \x01(\x01\x12\x14\n\x0c\x64\x65ltasStdDev\x18\x04 \x03(\x01\"\x07\n\x05\x45mpty\"\x1a\n\x07ReqInfo\x12\x0f\n\x07message\x18\x01 \x01(\t2\x8d\x01\n\nGrpcPricer\x12G\n\x0ePriceAndDeltas\x12\x19.grpc_pricer.PricingInput\x1a\x1a.grpc_pricer.PricingOutput\x12\x36\n\nHelloWorld\x12\x12.grpc_pricer.Empty\x1a\x14.grpc_pricer.ReqInfob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,27 +32,21 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'pricing_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_PRICINGINPUT']._serialized_start=31
-  _globals['_PRICINGINPUT']._serialized_end=456
-  _globals['_PASTLINES']._serialized_start=458
-  _globals['_PASTLINES']._serialized_end=484
-  _globals['_CURRENCY']._serialized_start=486
-  _globals['_CURRENCY']._serialized_end=550
-  _globals['_ASSET']._serialized_start=552
-  _globals['_ASSET']._serialized_end=599
-  _globals['_PORTFOLIOREBALANCINGORACLEDESCRIPTION']._serialized_start=601
-  _globals['_PORTFOLIOREBALANCINGORACLEDESCRIPTION']._serialized_end=670
-  _globals['_OPTION']._serialized_start=672
-  _globals['_OPTION']._serialized_end=793
-  _globals['_FIXINGDATESINDAYS']._serialized_start=795
-  _globals['_FIXINGDATESINDAYS']._serialized_end=849
-  _globals['_CORRELATIONMATRIX']._serialized_start=851
-  _globals['_CORRELATIONMATRIX']._serialized_end=886
-  _globals['_PRICINGOUTPUT']._serialized_start=888
-  _globals['_PRICINGOUTPUT']._serialized_end=977
-  _globals['_EMPTY']._serialized_start=979
-  _globals['_EMPTY']._serialized_end=986
-  _globals['_REQINFO']._serialized_start=988
-  _globals['_REQINFO']._serialized_end=1014
-  _globals['_GRPCPRICER']._serialized_start=1017
-  _globals['_GRPCPRICER']._serialized_end=1158
+  _globals['_PRICINGINPUT']._serialized_end=308
+  _globals['_PASTLINES']._serialized_start=310
+  _globals['_PASTLINES']._serialized_end=336
+  _globals['_CURRENCY']._serialized_start=338
+  _globals['_CURRENCY']._serialized_end=402
+  _globals['_ASSET']._serialized_start=404
+  _globals['_ASSET']._serialized_end=451
+  _globals['_CORRELATIONMATRIX']._serialized_start=453
+  _globals['_CORRELATIONMATRIX']._serialized_end=488
+  _globals['_PRICINGOUTPUT']._serialized_start=490
+  _globals['_PRICINGOUTPUT']._serialized_end=579
+  _globals['_EMPTY']._serialized_start=581
+  _globals['_EMPTY']._serialized_end=588
+  _globals['_REQINFO']._serialized_start=590
+  _globals['_REQINFO']._serialized_end=616
+  _globals['_GRPCPRICER']._serialized_start=619
+  _globals['_GRPCPRICER']._serialized_end=760
 # @@protoc_insertion_point(module_scope)
