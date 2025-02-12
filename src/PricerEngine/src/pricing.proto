@@ -17,10 +17,13 @@ message PricingInput {
 	repeated Currency currencies = 4;
 	string domesticCurrencyId = 5;
 	repeated Asset assets = 6;
-	int32 numberOfDaysInOneYear = 7; //  252 par déafut :
-	PortfolioRebalancingOracleDescription portfolioRebalancingOracleDescription = 8;
-	Option option = 9; // ? :
-	repeated CorrelationMatrix correlations = 10;
+	repeated CorrelationMatrix correlations = 7;
+	repeated double time_grid = 8;
+	
+	// int32 numberOfDaysInOneYear = 7; //  252 par déafut :
+	// PortfolioRebalancingOracleDescription portfolioRebalancingOracleDescription = 8;
+	// Option option = 7; // ? :
+	
 	// int32 sampleNb = 11; 50000
 	// double relativeFiniteDifferenceStep = 12; // 0.1 
 
@@ -45,24 +48,25 @@ message Asset {
 }
 
 // Description de la stratégie de rééquilibrage du portefeuille
-message PortfolioRebalancingOracleDescription {
-	string type = 1;
-	int32 period = 2;
-}
+// message PortfolioRebalancingOracleDescription {
+// 	string type = 1;
+// 	int32 period = 2;
+// }
+
 
 // Détails de l'option
-message Option {
-	string type = 1;
-	FixingDatesInDays fixingDatesInDays = 2;
-	double strike = 3;
-	int32 maturityInDays = 4;
-}
+// message Option {
+// 	string type = 1;
+// 	FixingDatesInDays fixingDatesInDays = 2;
+// 	double strike = 3;
+// 	int32 maturityInDays = 4;
+// }
 
 // Fixing dates en jours
-message FixingDatesInDays {
-	string type = 1;
-	repeated int32 datesInDays = 2;
-}
+// message FixingDatesInDays {
+// 	string type = 1;
+// 	repeated int32 datesInDays = 2;
+// }
 
 // Matrice des corrélations
 message CorrelationMatrix {
