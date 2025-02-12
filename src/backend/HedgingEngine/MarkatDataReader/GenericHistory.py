@@ -17,6 +17,10 @@ class GenericHistory(Generic[T]):
         """
         self.records: Dict[datetime, T] = {}
 
+
+    def len(self):
+        return len(self.records)
+
     def add_record(self, date: datetime, data_list: T) -> None:
         """
         - Adds a new data list for a specific date.

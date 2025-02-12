@@ -17,6 +17,8 @@ class ExchangeRateHistory(GenericHistory[ExchangeRateList]):
         for date in self.records.keys():
             list_rate.append(self.records[date].get_rate_by_currency_name(curr_name))
 
+        return list_rate
+
     def get_all_rate_for_all_curr_name(self) :
         
         """

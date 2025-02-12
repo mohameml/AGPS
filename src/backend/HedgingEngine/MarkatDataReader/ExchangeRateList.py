@@ -16,6 +16,9 @@ class ExchangeRateList(GenericList[ExchangeRate]):
 
     def get_rate_by_currency_name(self , curr_name : EnumCurrency) :
 
+        # print("==============================================")
+        # print(curr_name)
+
         for exchange_rate in self.items : 
             if exchange_rate.base_currency == curr_name : 
                 return exchange_rate.rate

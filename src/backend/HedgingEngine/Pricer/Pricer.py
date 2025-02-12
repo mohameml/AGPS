@@ -1,19 +1,14 @@
 from abc import ABC, abstractmethod
-
 from backend.HedgingEngine.Pricer.PricingParams import PricingParams
 from backend.HedgingEngine.Pricer.PricingResults import PricingResults
-
-
-class TestParameters:
-    # Définir les propriétés de TestParameters ici
-    pass
+from backend.HedgingEngine.FinancialParam.FinancialParams import FinancialParams
 
 
 class Pricer(ABC):
-    
-    def __init__(self, test_parameters: TestParameters):
-        self.params = test_parameters
+
+    def __init__(self, financial_parameters: FinancialParams):
+        self.params : FinancialParams = financial_parameters
 
     @abstractmethod
-    def price_and_deltas(self, pricing_params: PricingParams) -> PricingResults:
+    def price_and_deltas(self, pricing_params: PricingParams) -> PricingResults :
         pass
