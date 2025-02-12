@@ -5,8 +5,8 @@ from enum import Enum
 class EnumCurrency(Enum):
     EUR = "EUR"
     USD = "USD"
-    JPY = "JPY"
     GBP = "GBP"
+    JPY = "JPY"
     AUD = "AUD"
 
     def str_to_enum(name: str) :

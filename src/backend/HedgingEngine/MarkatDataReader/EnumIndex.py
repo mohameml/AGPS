@@ -3,11 +3,11 @@ from backend.HedgingEngine.MarkatDataReader.EnumCurrency import  EnumCurrency
 
 
 class EnumIndex(Enum):
-    ASX200 = "ASX200"
     EUROSTOXX50 = "EUROSTOXX50"
-    FTSE100 = "FTSE100"
     SP500 = "SP500"
+    FTSE100 = "FTSE100"
     TOPIX = "TOPIX"
+    ASX200 = "ASX200"
 
 
     def str_to_enum(name: str) :
@@ -38,10 +38,10 @@ class EnumIndex(Enum):
 
 # Dictionnaire d'association entre les index et les devises
 index_to_currency = {
-    EnumIndex.ASX200: EnumCurrency.AUD,
     EnumIndex.EUROSTOXX50: EnumCurrency.EUR,
-    EnumIndex.FTSE100: EnumCurrency.GBP,
     EnumIndex.SP500: EnumCurrency.USD,
-    EnumIndex.TOPIX: EnumCurrency.JPY
+    EnumIndex.FTSE100: EnumCurrency.GBP,
+    EnumIndex.TOPIX: EnumCurrency.JPY,
+    EnumIndex.ASX200: EnumCurrency.AUD
 }
 

@@ -17,9 +17,9 @@ class IndexPriceList(GenericList[IndexPrice]):
         if not isinstance(index_name , EnumIndex) :
             raise ValueError("the index name must be a EnumIndex")
 
-        for price in self.price_list:
+        for price in self.items:
             if price.index_name == index_name:
-                return price
+                return price.price
         return None
 
 
