@@ -12,17 +12,13 @@ class TimeGrid {
 
 public : 
 
-    std::vector<int> grid_time;
-    std::string TimeGridType ;
+    std::vector<double> grid_time;
     TimeGrid();
     ~TimeGrid();
     TimeGrid(nlohmann::json json);
     int at(int index);
     int len();
-    bool has(int nDays);
-    void setGridTime(std::vector<int> grid_time);
-    int getLastIndex(int t);
-    std::vector<int> getAllDates();
+    int getLastIndex(double t);
 
 };
 

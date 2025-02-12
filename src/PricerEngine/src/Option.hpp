@@ -15,19 +15,16 @@
 class Option
 {
 public:
-    std::vector<int> assetCurrencyMapping; 
-    std::vector<InterestRateModel> foreignInterestRates;
+
     InterestRateModel domesticInterestRate;
     TimeGrid monitoringTimeGrid;
-    double maturity ;
-    int numberOfDaysPerYear;
 
 public:
     Option();
     /**
      * Constructeur de parsing :
      */
-    Option(const nlohmann::json json);
+    Option(InterestRateModel domesticInterestRate, TimeGrid monitoringTimeGrid);
 
     /**
      * Destructeur
@@ -40,13 +37,11 @@ public:
      * @param[in] matrix est une matrice  de taille (dates + 1)*size
      *  ligne d'index i de la matrice continet la valeur de l'actif du sous-jacent à t = t_i
      */
+
+    virtual double computeDividends(double t, const PnlMat* matrix);
     virtual double payOff(const PnlMat *matrix) = 0;
 };
 
-/**
- * return la classe de l'option selon OptionType
- */
-extern Option *instance_option(const nlohmann::json json);
 
 #endif
 
