@@ -23,14 +23,14 @@ def test_reader() :
 
     T0 = pd.to_datetime('01-05-2009' , format='%d-%m-%Y')
     # T = pd.to_datetime('01-06-2009', format='%d-%m-%Y')
-    T = pd.to_datetime('01-06-2014', format='%d-%m-%Y')
+    T = pd.to_datetime('01-06-2009', format='%d-%m-%Y')
 
     reader : MarketDataReader = MarketDataReader(FILE_PATH , indexes , T0 , T)
-    # reader._exchange_rate_history.display_info()
+    reader._exchange_rate_history.display_info()
 
-    print(reader._exchange_rate_history.len())
-    print(reader._index_price_history.len())
-    print(reader._interest_rate_history.len())
+    # print(reader._exchange_rate_history.len())
+    # print(reader._index_price_history.len())
+    # print(reader._interest_rate_history.len())
 
 
 test_reader()

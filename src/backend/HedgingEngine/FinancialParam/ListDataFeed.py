@@ -2,7 +2,15 @@ from typing import List
 import numpy as np
 from backend.HedgingEngine.FinancialParam.DataFeed import DataFeed
 
+# TODO : ajouter un attribut dict_rf pour les r_f 
+# TODO : estimer les valeurs de rf avec MarketDataReader  || ou ajouter un lien entre ListDataFeed et AssetDescription ???? 
+# TODO : passert dict_rf à to toDomestic 
+# TODO : dans PricingParmas il prend en attri ListDataFeed au lieu de List[DataDFeed]
+
+
+
 class ListDataFeed:
+
     def __init__(self):
         self.data_feeds = []
     

@@ -13,3 +13,4 @@ class  Asset :
 
         print(f"Asset : id = {self.id.name} , volatility = {self.volatility}")
     
+    

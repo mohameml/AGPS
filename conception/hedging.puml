@@ -1,25 +1,121 @@
 @startuml Hedging 
 
 
+package FinancialEstimator {
+
+    class VolatilityEstimator {
+        + trading_days_per_year
+        + estimate_volatility(list_price : List[float],  annualize: bool = True  )
+    }
+
+
+    class CorrelationMatrixEstimator {
+        + estimate_correlation_matrix(list_prices: np.ndarray) -> np.ndarray
+    }
+
+    class RiskFreeRateEstimator {
+        + mean_estimate(r_t : List[float])
+    }
+
+    class FinancialEstimator {
+        + volatilityEstimator 
+        + riskFreeEstimator 
+        + corrMatrixEstimator 
+    }
+
+    FinancialEstimator o-- VolatilityEstimator
+    FinancialEstimator o-- RiskFreeRateEstimator    
+    FinancialEstimator o-- CorrelationMatrixEstimator
+
+}
+
+
+package FinancialParam  {
+
+    
+    class DataFeed {
+        + DateTime Date 
+        + Dictionary<string , IndexPrice> IndexPrices
+        + Dictionary<string , ExchangeRate> ExchangeRates 
+    }
+
+    class ListDataFeed {
+    
+        + dataFeeds = [] 
+        + Dict[str , float] dict_estimate_rf 
+        
+        + addDataFeed()
+    }
+
+
+    class FinancialParams {
+        + marketDataReader
+        + assetDescription 
+        + formuleDescription
+
+        + to_json(file)
+    }
+
+    class AssetDescription {
+
+        + assets 
+        + currencies 
+        + financialEstimator
+    
+    }
+
+    class Asset {
+        + id 
+        + volatility 
+        + rate 
+    }
+
+    class Currency {
+        + id 
+        + volatility 
+        + rate 
+    }
+
+
+    class FormuleDescription {
+        
+        + creationDate  
+        +  converter : MathDateConverter
+        +  paymentDates 
+        + maturity = T 
+        + time_grid = [] 
+    }
+
+    FinancialParams o-- AssetDescription
+    FinancialParams o-- FormuleDescription
+    
+    AssetDescription o-- Asset 
+    AssetDescription o-- Currency
+
+    ListDataFeed    o-- DataFeed
+
+
+}
+
 
 package MarketDataReader {
     
-    enum IndexesEnum {
-        SP500 , 
-        CAC40 ,
-        DAX ,
-        NIKKEI ,
-        FTSE100 , 
-        TOPIX 
+    enum IndexeEnum {
+
+        + EUROSTOXX50 = "EUROSTOXX50"
+        + SP500 = "SP500"
+        + FTSE100 = "FTSE100"
+        + T+ OPIX = "TOPIX"
+        + ASX200 = "ASX200"        
     }
 
     enum CurrencyEnum {
-        EUR ,
-        USD ,
-        JPY ,
-        GBP ,
-        CHF ,
-        AUD 
+        
+        + EUR = "EUR"
+        + USD = "USD"
+        + GBP = "GBP"
+        + JPY = "JPY"
+        + AUD = "AUD"
     }
 
 
@@ -103,41 +199,11 @@ package MarketDataReader {
 }
 
 
-class FormuleDescription {
-    + List<DateTime> paymentDates
-    + DateTime creationDate
-    + DateTime maturityDate
-    + List<double> Dividendes
-    + double V0
-    + double VF 
-}
-
-package MarketData  {
-
-    
-    class DataFeed {
-        + DateTime Date 
-        + Dictionary<string , IndexPrice> IndexPrices
-        + Dictionary<string , double> InterestRates
-        + Dictionary<string , double> ExchangeRates 
-    }
-
-
-    class OutputData {
-        + DateTime Date
-        + double Value
-        + Double[] Deltas
-        +  Double[] DeltasStdDev
-        +  double Price
-        + double PriceStdDev
-    }
-}
-
-
 package Utils {
 
     class MathDateConverter {
-
+        + T0 
+        + workingDaysPerYear 
         + double ConvertToMathDistance(Date from , Date to)
     }
 
@@ -145,21 +211,10 @@ package Utils {
 
 
 
-
-
-package HedginigEngine {
-
-    class Portfolio {
-        + Double Cash 
-        + Dictionary<string, double> Compositions
-        + DateTime date 
-        + void UpdateCompo(Dictionary<string, double> Compos ,  DataFeed feed)
-        + double GetPortfolioValue(DataFeed feed)
-    }
-
+package PricingEngin {
 
     abstract class Pricer {
-        + TestParameters Params
+        + FinancialParams Params
         + abstract PricingResults PriceAndDeltas(PricingParams pricingParams ) 
     }
 
@@ -188,7 +243,18 @@ package HedginigEngine {
     }
 
     Pricer <|-- PricerGrpc 
+}
 
+
+package HedginigEngine {
+
+    class Portfolio {
+        + Double Cash 
+        + Dictionary<string, double> Compositions
+        + DateTime date 
+        + void UpdateCompo(Dictionary<string, double> Compos ,  DataFeed feed)
+        + double GetPortfolioValue(DataFeed feed)
+    }
 
     abstract class  Rebalacing  {
         + bool IsRebalancing(DateTime date)
@@ -211,81 +277,81 @@ package HedginigEngine {
         + List<OutputData> Hedge()
     }
 
-    Hedging o-- Pricer 
     Hedging o-- Portfolio 
     Hedging o-- Rebalacing 
 
 
 }
 
-package FinancialEstimator {
-
-    class VolatilityEstimator {
-        
-        + double AnnualVolatility 
-        + List<double> PriceHistory     
-    }
 
 
-    class CorrelationMatrixEstimator {
-        + Dictionary<string, List<double>> PriceHistory
-    }
+' package Grpc {
 
-}
+'     class GrpcPricer {
+'         + PricingOutput PriceAndDeltas(PricingInput)
+'     }
 
+'     class PricingInput {
+'         + PastLines[] past 
+'         + double[] vols 
+'         + double[][] correlations
+'         + double[]  PaymentDates
+'         + double[] Dividendes
+'         + Currency[] Currencies
+'         + double[] InterestRates
+'         + double[] ExchangeRates
+'         + int NumberOfDaysInOneYear
+'         + bool monitoringDateReached
+'         + double time 
+'     }
 
-package Grpc {
+'     class PastLines {
+'         + double[] value 
+'     }
 
-    class GrpcPricer {
-        + PricingOutput PriceAndDeltas(PricingInput)
-    }
+'     class Currency {
+'         + string id 
+'         + double InterestRate
+'         + double volatility 
+'     }
 
-    class PricingInput {
-        + PastLines[] past 
-        + double[] vols 
-        + double[][] correlations
-        + double[]  PaymentDates
-        + double[] Dividendes
-        + Currency[] Currencies
-        + double[] InterestRates
-        + double[] ExchangeRates
-        + int NumberOfDaysInOneYear
-        + bool monitoringDateReached
-        + double time 
-    }
+'     class PricingOutput {
+'         + double price 
+'         + double[] deltas 
+'         + double priceStdDev 
+'         + double[] deltasStdDev
+'     }
 
-    class PastLines {
-        + double[] value 
-    }
+'     GrpcPricer o-- PricingInput 
+'     GrpcPricer o-- PricingOutput 
 
-    class Currency {
-        + string id 
-        + double InterestRate
-        + double volatility 
-    }
-
-    class PricingOutput {
-        + double price 
-        + double[] deltas 
-        + double priceStdDev 
-        + double[] deltasStdDev
-    }
-
-    GrpcPricer o-- PricingInput 
-    GrpcPricer o-- PricingOutput 
-
-    PricingInput o-- PastLines 
+'     PricingInput o-- PastLines 
 
 
-}
+' }
 
 
 
-DataFeed -- MarketDataReader
 
-Hedging -- DataFeed
 
-Hedging -- Grpc
+
+' Pricer o-- FinancialParam
+
+' FinancialParam o-- MarketDataReader
+' FinancialParam o-- FinancialEstimator
+
+' HedginigEngine o-- Pricer 
+' HedginigEngine o-- MarketDataReader
+
+Pricer <|-- FinancialParam
+
+FinancialParams <|-- MarketDataReader
+FinancialParams <|-- FinancialEstimator
+
+Hedging <|-- Pricer 
+Hedging <|-- MarketDataReader
+
+
 
 
 

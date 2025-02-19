@@ -7,6 +7,9 @@ from datetime import datetime
 import json
 
 
+
+# TODO : passer MarketDataReader comme args au lieur de file_path 
+
 class FinancialParams : 
 
     def __init__(self , file_path: str, indexes: List[EnumIndex], T0: datetime, T: datetime , list_ti : List[datetime] ):
@@ -18,7 +21,7 @@ class FinancialParams :
         self.assetDescription : AssetDescription = AssetDescription()
         self.assetDescription.estimate_params(self.marketDataReader)
         
-        self.formuleDescription : FormuleDescription = FormuleDescription(T0 , list_ti , T)
+        self.formuleDescription : FormuleDescription = FormuleDescription(T0 , list_ti , T , self.nombreOfDaysInOneYear)
 
     def to_json(self, json_path: str):
         """Sauvegarde certains attributs de l'objet dans un fichier JSON."""

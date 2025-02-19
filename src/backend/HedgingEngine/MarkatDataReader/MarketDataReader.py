@@ -134,7 +134,7 @@ class MarketDataReader:
         
 
 
-        data_feed  : DataFeed = DataFeed(date , dict_index_prices , dict_intersat_rates , dict_exchanges , self.T0)
+        data_feed  : DataFeed = DataFeed(date , dict_index_prices , dict_exchanges ,  dict_intersat_rates   , self.T0)
 
         return data_feed
 
