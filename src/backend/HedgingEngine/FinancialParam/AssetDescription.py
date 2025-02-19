@@ -19,6 +19,7 @@ class  AssetDescription :
         self.assets : List[Asset]= []
         self.currencies : List[Currency] =  []
         self.financialEstimator : FinancialEstimator = FinancialEstimator()
+
         
 
     def estimate_params(self , marketDataReader : MarketDataReader):

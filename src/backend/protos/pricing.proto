@@ -11,9 +11,12 @@ service GrpcPricer {
 // Message contenant les données pour invoquer le pricer
 message PricingInput {
 
-  	repeated PastLines past = 1;  // Matrice des données historiques
+	// info dynamique : 
+  	repeated PastLines past = 1;  // Matrice des données historiques dans le marche domestique 
   	bool monitoringDateReached = 2; // Indique si une date de monitoring est atteinte
   	double time = 3; // Temps mathématique
+	
+	// static info :
 	repeated Currency currencies = 4;
 	string domesticCurrencyId = 5;
 	repeated Asset assets = 6;
