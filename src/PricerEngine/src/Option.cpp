@@ -2,6 +2,7 @@
 #include <iostream>
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include <vector>
 
 using namespace std;
 
@@ -50,8 +51,6 @@ void Option::computeDividends(const PnlMat* matrix,  PnlVect* perfDiv){
         pnl_vect_minus_vect(row_i, row_i_1); 
         pnl_vect_div_vect_term(row_i, row_i_1); 
 
-        std::cout << "Dividendes rows  : " << std::endl;
-        pnl_vect_print_nsp(row_i);
         double perf_i = std::max(pnl_vect_min(row_i), 0.0);
         pnl_vect_set(perfDiv, i-1, perf_i);
     }
@@ -62,44 +61,59 @@ void Option::computeDividends(const PnlMat* matrix,  PnlVect* perfDiv){
 }
 
 
-void perf(const PnlMat* matrix, PnlVect* perf){
 
+
+
+void perf(const PnlMat* matrix, PnlVect* perf) {
     PnlVect *row_i = pnl_vect_create(5);
-    PnlVect *row_0 = pnl_vect_create(5);
-    PnlVectInt *excluded_indices = pnl_vect_int_create(5);
+    PnlVect *row_0 = pnl_vect_create(5); 
 
+    std::vector<int> excluded_indices;
 
-    for (int i = 1; i < 6; i++){
+    pnl_mat_get_row(row_0, matrix, 0);
 
+    for (int i = 1; i < 6; i++) { 
         pnl_mat_get_row(row_i, matrix, i);
 
-        pnl_vect_minus_vect(row_i, row_0); 
-        pnl_vect_div_vect_term(row_i, row_0); 
+        // Calcul de la performance relative
+        pnl_vect_minus_vect(row_i, row_0);
+        pnl_vect_div_vect_term(row_i, row_0);
 
         // Exclure les indices déjà sélectionnés
-        for (int j = 0; j < excluded_indices->size; j++) {
-            int idx = GET_INT(excluded_indices, j);
-            LET(row_i, idx) = -INFINITY; 
+        for (int j = 0; j < excluded_indices.size(); j++) {
+            int idx = excluded_indices[j];
+            if (idx != -1) {  // Si l'indice est valide (pas déjà exclu)
+                LET(row_i, idx) = -INFINITY;
+            }
         }
-        
-        std::cout << "Performance rows  : " << std::endl;
-        pnl_vect_print_nsp(row_i);
 
+        // Calcul de la performance pour cette ligne
         double perf_i = barriere_plus_ou_moins_15(row_i);
 
-        // Trouver l'indice du max et l'ajouter aux exclus
+        // Trouver l'indice de la meilleure performance
         double max_value;
         int max_index;
         pnl_vect_max_index(&max_value, &max_index, row_i);
 
-        pnl_vect_int_set(excluded_indices, i-1, max_index);
+        // Ajouter l'indice exclu à la liste des indices exclus, si nécessaire
+        bool already_excluded = false;
+        for (int j = 0; j < excluded_indices.size(); j++) {
+            if (excluded_indices[j] == max_index) {
+                already_excluded = true;
+                break;
+            }
+        }
+
+        if (!already_excluded) {
+            // Ajouter l'indice à excluded_indices
+            excluded_indices.push_back(max_index);
+        }
 
         pnl_vect_set(perf, i-1, perf_i);
     }
 
     pnl_vect_free(&row_i);
     pnl_vect_free(&row_0);
-    pnl_vect_int_free(&excluded_indices);
 }
 
 
@@ -130,15 +144,12 @@ double Option::payOff(const PnlMat* matrix){
         //double t_i = monitoringTimeGrid.at(i);
         //double t_f = monitoringTimeGrid.at(5);
         perfValue += pnl_vect_get(perfFlux, i-1);
-        std::cout << "Performance : " << pnl_vect_get(perfFlux, i-1) << std::endl;
-
         res += pnl_vect_get(perfDiv, i-1)*100;  //*domesticInterestRate.account(t_i, t_f);
 
-        std::cout << "Dividende : " << pnl_vect_get(perfDiv, i-1)*100 << std::endl;
     }
 
     perfValue += pnl_vect_get(perfFlux, 4);
-    double flux_Tc = barriere_800_euros(1000*(1+perfValue));
+    double flux_Tc = barriere_800_euros(1000*(1+0.60*perfValue));
     
     std::cout << "Flux à la date Tc : " << flux_Tc << std::endl;
 
