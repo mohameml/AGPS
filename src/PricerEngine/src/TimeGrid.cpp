@@ -1,8 +1,7 @@
 #include "TimeGrid.hpp"
 #include <nlohmann/json.hpp>
 #include <iostream>
-#include "FixedTimeGrid.hpp"
-#include "GridTimeGrid.hpp"
+
 
 
 TimeGrid::TimeGrid()

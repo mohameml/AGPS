@@ -38,8 +38,8 @@ public:
      *  ligne d'index i de la matrice continet la valeur de l'actif du sous-jacent à t = t_i
      */
 
-    virtual double computeDividends(double t, const PnlMat* matrix);
-    virtual double payOff(const PnlMat *matrix) = 0;
+    void computeDividends(const PnlMat* matrix, PnlVect* perfDiv);
+    double payOff(const PnlMat *matrix);
 };
 
 

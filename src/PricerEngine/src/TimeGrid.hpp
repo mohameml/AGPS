@@ -15,6 +15,7 @@ public :
     std::vector<double> grid_time;
     TimeGrid();
     ~TimeGrid();
+    TimeGrid(std::vector<double> grid_time); 
     TimeGrid(nlohmann::json json);
     int at(int index);
     int len();
