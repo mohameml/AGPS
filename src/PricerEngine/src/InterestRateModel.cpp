@@ -1,5 +1,6 @@
 #include "InterestRateModel.hpp"
 #include <iostream>
+#include <math.h>
 
 InterestRateModel::InterestRateModel()
 {

@@ -3,6 +3,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -141,10 +142,13 @@ double Option::payOff(const PnlMat* matrix){
 
     for (int i=1; i < 5; i++){
 
-        //double t_i = monitoringTimeGrid.at(i);
-        //double t_f = monitoringTimeGrid.at(5);
+        double t_i = monitoringTimeGrid.at(i);
+        double t_f = monitoringTimeGrid.at(5);
         perfValue += pnl_vect_get(perfFlux, i-1);
-        res += pnl_vect_get(perfDiv, i-1)*100;  //*domesticInterestRate.account(t_i, t_f);
+        res += pnl_vect_get(perfDiv, i-1)*100 *domesticInterestRate.account(t_i, t_f);
+
+        std::cout << "Dividence numéro : " << i-1 << std::endl;
+        std::cout << "Valeur : " << pnl_vect_get(perfDiv, i-1)*100 *domesticInterestRate.account(t_i, t_f) << std::endl;
 
     }
 
