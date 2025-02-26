@@ -13,7 +13,7 @@ from backend.HedgingEngine.MarkatDataReader.InterestRate import InterestRate
 from backend.HedgingEngine.MarkatDataReader.ExchangeRateHistory import ExchangeRateHistory
 from backend.HedgingEngine.MarkatDataReader.ExchangeRateList import ExchangeRateList
 from backend.HedgingEngine.MarkatDataReader.ExchangeRate import ExchangeRate
-from backend.HedgingEngine.MarkatDataReader.DataFeed import DataFeed
+from backend.HedgingEngine.FinancialParam.DataFeed import DataFeed
 
 
 
@@ -134,7 +134,7 @@ class MarketDataReader:
         
 
 
-        data_feed  : DataFeed = DataFeed(date , dict_index_prices , dict_intersat_rates , dict_exchanges)
+        data_feed  : DataFeed = DataFeed(date , dict_index_prices , dict_exchanges ,  dict_intersat_rates   , self.T0)
 
         return data_feed
 
