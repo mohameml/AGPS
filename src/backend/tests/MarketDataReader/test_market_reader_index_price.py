@@ -6,11 +6,11 @@ from backend.HedgingEngine.MarkatDataReader.MarketDataReader import EnumIndex
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
-FILE_PATH = os.path.join(BASE_DIR, "../data/DonneesGPS2025.xlsx")
+FILE_PATH = os.path.join(BASE_DIR, "../../data/DonneesGPS2025.xlsx")
 FILE_PATH = os.path.abspath(FILE_PATH)
 
 
-def test_get_data_feed() :
+def test_reader() :
 
     indexes = [
         EnumIndex.ASX200 , 
@@ -23,14 +23,13 @@ def test_get_data_feed() :
 
 
     T0 = pd.to_datetime('01-05-2009' , format='%d-%m-%Y')
-    T = pd.to_datetime('01-06-2014', format='%d-%m-%Y')
+    T = pd.to_datetime('01-06-2009', format='%d-%m-%Y')
     reader : MarketDataReader = MarketDataReader(FILE_PATH , indexes , T0 , T)
+    reader._index_price_history.display_info()
 
 
-    date = pd.to_datetime('01-05-2009' , format = '%d-%m-%Y')
-    data_feed = reader.get_data_feed(date)
-    data_feed.display_info()
+test_reader()
 
 
 
-test_get_data_feed()
+

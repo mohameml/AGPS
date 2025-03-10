@@ -14,7 +14,7 @@ class FinancialParams :
 
     def __init__(self , file_path: str, indexes: List[EnumIndex], T0: datetime, T: datetime , list_ti : List[datetime] ):
         
-        self.nombreOfDaysInOneYear = 252 
+        self.nombreOfDaysInOneYear = 252 # TODO : a changer
 
         self.marketDataReader : MarketDataReader = MarketDataReader(file_path , indexes , T0 , T)
 

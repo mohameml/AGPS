@@ -66,7 +66,7 @@ class  AssetDescription :
         dict_interset : Dict[EnumCurrency , float] = {}
 
         for curr in self.currencies :
-            dict_interset[curr.name]  = curr.rate
+            dict_interset[curr.id]  = curr.rate
 
         return dict_interset
 

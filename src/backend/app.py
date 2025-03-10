@@ -6,6 +6,6 @@ app = FastAPI()
 # Route de base
 @app.get("/")
 def read_root():
-    return {"message": "Bienvenue sur FastAPI avec Uvicorn!"}
-
+    message =  {"message": "Bienvenue sur FastAPI avec Uvicorn!"}
+    return message
 

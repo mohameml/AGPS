@@ -10,7 +10,7 @@ from backend.HedgingEngine.Pricer.PricingResults import PricingResults
 
 class PricerGrpc(Pricer):
 
-    def __init__(self, financial_parameters: FinancialParams , address: str = "http://localhost:50051"):
+    def __init__(self, financial_parameters: FinancialParams , address: str = "localhost:50051"):
         
         super().__init__(financial_parameters)
         self.channel = grpc.insecure_channel(address)
@@ -22,16 +22,12 @@ class PricerGrpc(Pricer):
         
         output = self.grpc_client.PriceAndDeltas(input_data)
 
-        # TODO : tester cette partie avec C++ et verifier les ordres de deltas et deltas_StdDev 
         res = PricingResults(list(output.deltas) , output.price , list(output.deltasStdDev) , output.priceStdDev)
 
         return res 
 
 
-    def hello_world(self):
-
-        # TODO : Test avec C++  : pour verfifer la partie connection : 
-        
+    def hello_world(self):        
         info = self.grpc_client.HelloWorld(pricing_pb2.Empty())
         print(f"Message reçu : {info.message}")
         return info
@@ -44,9 +40,10 @@ class PricerGrpc(Pricer):
         
         # 1) Convert ListDataFeed to pastLines un marketDomestic : past 
 
-        for feed in pricing_params.data_feeds:
+        past_in_market_domestic = pricing_params.data_feeds.toDomesticMarket()
+        for feed in past_in_market_domestic:
             line = pricing_pb2.PastLines()
-            line.value.extend(feed.toDomesticMarket())
+            line.value.extend(feed)
             input_data.past.append(line)
         
         # 2) Convert to monitoringDateReached , time , domesticCurrencyId : 

@@ -120,21 +120,27 @@ class MarketDataReader:
         Récupère les données du marché pour une date spécifique.
         """
         dict_index_prices : Dict[EnumIndex , IndexPrice] = {}
-        dict_intersat_rates : Dict[EnumCurrency , InterestRate] = {}
         dict_exchanges : Dict [EnumCurrency , ExchangeRate]= {}
 
         for index_price in self._index_price_history.records[date].items:
             dict_index_prices[index_price.index_name] = index_price
 
-        for intersate_rate in self._interest_rate_history.records[date].items :
-            dict_intersat_rates[intersate_rate.currency]  = intersate_rate
 
         for exchange_rate in self._exchange_rate_history.records[date].items:
             dict_exchanges[exchange_rate.base_currency] = exchange_rate
         
 
-
-        data_feed  : DataFeed = DataFeed(date , dict_index_prices , dict_exchanges ,  dict_intersat_rates   , self.T0)
+        data_feed  : DataFeed = DataFeed(date , dict_index_prices , dict_exchanges , self.T0)
 
         return data_feed
+
+    def get_all_data_feed(self) -> List[DataFeed]:
+        """
+        Récupère les données du marché pour toutes les dates de la période d'analyse.
+        """
+        # il faut parcourir les dates et appler get_data_feed pour chaque date
+        data_feeds = []
+        for date in self._index_price_history.records.keys():
+            data_feeds.append(self.get_data_feed(date))
+        return data_feeds
 

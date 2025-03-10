@@ -1,23 +1,23 @@
 from typing import Dict
 import math
-from backend.HedgingEngine.FinancialParam.DataFeed import DataFeed
+# from backend.HedgingEngine.FinancialParam.DataFeed import DataFeed
 
 class Portfolio:
 
-    def __init__(self, dict_init: Dict[str, float], data: DataFeed, value: float):
+    def __init__(self, dict_init: Dict[str, float], spot_list: Dict[str , float] , date, value: float):
         
         self.compositions = dict_init
-        self.cash = value - sum(dict_init[key] * data.spot_list[key] for key in dict_init)
-        self.date = data.date
+        self.cash = value - sum(dict_init[key] * spot_list[key] for key in dict_init)
+        self.date = date
 
-    def update_compo(self, compos: Dict[str, float], feed: DataFeed, value: float):
+    def update_compo(self, compos: Dict[str, float],spot_list: Dict[str , float] , date, value: float):
         
         self.compositions = compos
-        self.cash = value - sum(compos[key] * feed.spot_list[key] for key in compos)
-        self.date = feed.date
+        self.cash = value - sum(compos[key] * spot_list[key] for key in compos)
+        self.date = date
 
-    def get_portfolio_value(self, feed: DataFeed, time: float, r: float) -> float:
+    def get_portfolio_value(self, spot_list: Dict[str , float], time: float, r: float) -> float:
 
-        value = sum(self.compositions[key] * feed.spot_list[key] for key in self.compositions) + self.cash * math.exp(r * time)
+        value = sum(self.compositions[key] * spot_list[key] for key in self.compositions) + self.cash * math.exp(r * time)
         
         return value

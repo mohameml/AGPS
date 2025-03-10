@@ -6,7 +6,7 @@ from backend.HedgingEngine.MarkatDataReader.MarketDataReader import EnumIndex
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
-FILE_PATH = os.path.join(BASE_DIR, "../data/DonneesGPS2025.xlsx")
+FILE_PATH = os.path.join(BASE_DIR, "../../data/DonneesGPS2025.xlsx")
 FILE_PATH = os.path.abspath(FILE_PATH)
 
 

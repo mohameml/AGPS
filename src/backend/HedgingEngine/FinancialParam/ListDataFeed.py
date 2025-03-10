@@ -7,24 +7,26 @@ from backend.HedgingEngine.FinancialParam.DataFeed import DataFeed
 # TODO : passert dict_rf à to toDomestic 
 # TODO : dans PricingParmas il prend en attri ListDataFeed au lieu de List[DataDFeed]
 
-
+from backend.HedgingEngine.FinancialParam.FinancialParams import FinancialParams
 
 class ListDataFeed:
 
-    def __init__(self):
+    def __init__(self , fincial_params : FinancialParams):
         self.data_feeds = []
+        self.fincial_params = fincial_params
+        self.dict_rf = fincial_params.assetDescription.get_dict_interset_rate_estimate() 
     
 
     def addDataFeed(self , dataFeed : DataFeed) :
         self.data_feeds.append(dataFeed)
 
-    def toDomesticMarket(self):
+    def toDomesticMarket(self) -> np.array:
         """
         Applique la méthode toDomesticMarket() de chaque DataFeed
         et retourne une matrice où chaque ligne correspond aux données d'un DataFeed.
         """
 
-        past = np.array([df.toDomesticMarket() for df in self.data_feeds])
+        past = np.array([df.toDomesticMarket(self.dict_rf) for df in self.data_feeds])
         return past 
     
     def display_info(self):

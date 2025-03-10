@@ -12,7 +12,6 @@ class PricingResults:
         self.price_std_dev: float = price_std_dev
 
 
-        # TODO  : FIX cette partie  
         i = 0 
         for index_name in EnumIndex : 
             self.deltas[index_name.value] = deltas[i]
@@ -25,7 +24,10 @@ class PricingResults:
                 self.deltas_std_dev[curr_name.value] = deltas_std_dev[i]
                 i+=1
 
-
-        # for i in range(len(deltas)):
-        #     self.deltas[ids[i]] = deltas[i]
-        #     self.deltas_std_dev[ids[i]] = deltas_std_dev[i]
+    def display_info(self):
+        print(f"Price : {self.price}")
+        print(f"Price std dev : {self.price_std_dev}")
+        for key in self.deltas.keys():
+            print(f"{key} : {self.deltas[key]}")
+            print(f"{key} std dev : {self.deltas_std_dev[key]}")
+        print("\n")
