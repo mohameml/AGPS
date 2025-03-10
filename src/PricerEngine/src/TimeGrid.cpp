@@ -1,5 +1,4 @@
 #include "TimeGrid.hpp"
-#include <nlohmann/json.hpp>
 #include <iostream>
 
 
@@ -40,7 +39,7 @@ int TimeGrid::getLastIndex(double t)
 {
     for (int i = 0; i < grid_time.size(); i++)
     {
-        if(std::fabs(grid_time.at(i) - t) < 1E-10) {
+        if(std::abs(grid_time.at(i) - t) < 1E-10) {
             return i;
         }
     }

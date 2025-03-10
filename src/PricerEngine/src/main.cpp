@@ -1,10 +1,21 @@
 #include <iostream>
 #include "Option.hpp"
 #include "pnl/pnl_matrix.h"
+#include "TimeGrid.hpp"
+#include "InterestRateModel.hpp"
 
 int main() {
-    Option option;
-    
+
+    std::vector<double> dates(6, 0.0);
+    TimeGrid timeGrid = TimeGrid(dates);
+
+    double r = 0.0;
+    std::string id = "id";
+    InterestRateModel interestModel = InterestRateModel(r, id);
+
+    Option option = Option(interestModel, timeGrid);
+
+
     PnlMat *test_matrix = pnl_mat_create(6, 5);
 
     // Remplir manuellement la matrice ligne par ligne pour s'assurer que l'ordre est correct
@@ -22,6 +33,7 @@ int main() {
             MLET(test_matrix, i, j) = data[i][j];
         }
     }
+    
 
     double payoff = option.payOff(test_matrix);
     std::cout << "Payoff: " << payoff << std::endl;
