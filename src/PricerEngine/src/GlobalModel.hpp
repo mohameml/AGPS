@@ -24,9 +24,10 @@ public:
 
     PnlMat *L;            /// raccine carrée de matrice de corrélation
     PnlVect *G;           /// Vector for simulation
-    std::vector<std::unique_ptr<Currency>>  currencies;
-    InterestRateModel domesticInterestRate;
     std::vector<std::unique_ptr<RiskyAsset>> assets ;
+    std::vector<std::unique_ptr<Currency>>  currencies;
+    
+    InterestRateModel domesticInterestRate;
     TimeGrid monitoringTimeGrid;
     int model_size ;
     int numberOfDaysPerYear;

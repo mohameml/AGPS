@@ -11,7 +11,7 @@ service GrpcPricer {
 // Message contenant les données pour invoquer le pricer
 message PricingInput {
 
-  	repeated PastLines past = 1;  // Matrice des données historiques
+  	repeated PastLines past = 1;  // Matrice des données historiques 
   	bool monitoringDateReached = 2; // Indique si une date de monitoring est atteinte
   	double time = 3; // Temps mathématique
 	repeated Currency currencies = 4;
@@ -75,7 +75,7 @@ message CorrelationMatrix {
 
 // Résultats du pricing
 message PricingOutput {
-	double price = 1;  // Prix calculé
+	double price = 1;  // Prix calculé set_price
 	repeated double deltas = 2;  // Liste des deltas
 	double priceStdDev = 3;  // Écart-type du prix
 	repeated double deltasStdDev = 4;  // Écart-type des deltas
