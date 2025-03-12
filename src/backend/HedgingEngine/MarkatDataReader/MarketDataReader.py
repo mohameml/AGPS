@@ -16,7 +16,6 @@ from backend.HedgingEngine.MarkatDataReader.ExchangeRate import ExchangeRate
 from backend.HedgingEngine.FinancialParam.DataFeed import DataFeed
 
 
-
 class MarketDataReader:
     """
     - Classe responsable de la lecture des données de marché à partir d'un fichier et de la gestion des indices,  des taux de change et des taux d'intérêt.
@@ -143,4 +142,16 @@ class MarketDataReader:
         for date in self._index_price_history.records.keys():
             data_feeds.append(self.get_data_feed(date))
         return data_feeds
+    
+    def get_list_data_feed(self , finical_params) :
+        """
+        Récupère les données du marché pour toutes les dates de la période d'analyse.
+        """
+        # il faut parcourir les dates et appler get_data_feed pour chaque date
+        from backend.HedgingEngine.FinancialParam.ListDataFeed import ListDataFeed
 
+        data_feeds = ListDataFeed(finical_params)
+        for date in self._index_price_history.records.keys():
+            data_feeds.addDataFeed(self.get_data_feed(date))
+        return data_feeds
+    
