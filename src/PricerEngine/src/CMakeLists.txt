@@ -9,15 +9,15 @@ if (NOT CMAKE_BUILD_TYPE)
 endif ()
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+
 # Find Protobuf installation
-# Must use the CONFIG mode
-# block()
-#     set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ON)
-#     find_package(Protobuf REQUIRED)
-# endblock()
-# message(STATUS "Using protobuf ${Protobuf_VERSION}")
 option(protobuf_MODULE_COMPATIBLE TRUE)
 find_package(Protobuf CONFIG REQUIRED)
+
+# ligne ajouée
+set(PROTOBUF_INCLUDE_DIR "/home/chrifmhm/.local/include")
+include_directories(${PROTOBUF_INCLUDE_DIR})
 message(STATUS "Using protobuf ${Protobuf_VERSION}")
 
 
@@ -63,7 +63,8 @@ endif()
 
 # Find nlohmann_json to parse json files
 # Add nlohmann_json::nlohmann_json to target_link_libraries
-find_package(nlohmann_json REQUIRED)
+
+# find_package(nlohmann_json REQUIRED)
 
 # Include generated *.pb.h files
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
@@ -95,9 +96,31 @@ target_link_libraries(pricing_server
     ${_GRPC_GRPCPP}
     ${_PROTOBUF_LIBPROTOBUF}
     ${PNL_LIBRARIES}
-    nlohmann_json::nlohmann_json
 )
 pnl_add_postbuild(pricing_server)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Ajout d'un exécutable pour tester le pricer
 # add_executable(test_pricer test_pricer.cpp pricer.cpp json_reader.cpp BlackScholesModel.cpp ConditionalBasketOption.cpp ConditionalMaxOption.cpp Option.cpp)
@@ -115,3 +138,54 @@ pnl_add_postbuild(pricing_server)
 # )
 # pnl_add_postbuild(test_json_reader)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# cmake_minimum_required(VERSION 3.10)
+# project(OptionPricing)
+
+# # Release or Debug
+# if (NOT CMAKE_BUILD_TYPE)
+#     message(STATUS "Setting build type to 'Debug' as none was specified.")
+#     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
+# endif ()
+
+
+# set(CMAKE_CXX_STANDARD 17)
+# set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# # Ajoute le flag pour le debug si nécessaire
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+
+# # Détection de la bibliothèque PNL
+# # Find Pnl
+# find_package(Pnl REQUIRED)
+# set(LIBS ${LIBS} ${PNL_LIBRARIES})
+# include_directories(${PNL_INCLUDE_DIRS})
+# if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+#     add_definitions(-DPNL_RANGE_CHECK_OFF)
+# endif()
+
+# # Ajout des fichiers sources
+# add_executable(option_pricing main.cpp Option.cpp InterestRateModel.cpp TimeGrid.cpp)
+
+# # Inclusion des répertoires d'en-têtes
+# target_include_directories(option_pricing PRIVATE ${PNL_INCLUDE_DIRS})
+
+# # Liaison avec la bibliothèque PNL
+# target_link_libraries(option_pricing ${PNL_LIBRARIES})

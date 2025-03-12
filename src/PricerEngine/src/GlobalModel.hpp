@@ -4,7 +4,6 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
-#include "json_reader.hpp"
 #include "RiskyAsset.hpp"
 #include "Currency.hpp"
 #include "TimeGrid.hpp"
@@ -12,6 +11,10 @@
 #include <vector>
 #include <map>
 #include "InterestRateModel.hpp"
+#include "pricing.grpc.pb.h"
+#include "pricing.pb.h"
+
+
 
 class GlobalModel
 {
@@ -30,17 +33,17 @@ public:
     InterestRateModel domesticInterestRate;
     TimeGrid monitoringTimeGrid;
     int model_size ;
-    int numberOfDaysPerYear;
+    //int numberOfDaysPerYear;
 
 
 
 
 public:
     GlobalModel();
-    GlobalModel(const nlohmann::json json);
+    GlobalModel(const PricingInput& input);
     ~GlobalModel();
 
-    Currency*getCurrencyById(std::string id);
+    Currency *getCurrencyById(std::string id);
 
     /**
      * Génère une trajectoire du modèle et la stocke dans path (simulation conditionnelle)
@@ -52,7 +55,7 @@ public:
      * @param[in] path : matrice de taille (N+1)xD
      * @param[in] rng : génerateur des nombres aléatoires
      */
-    void asset(const PnlMat *past, int t, PnlMat *path, PnlRng *rng);
+    void asset(const PnlMat *past, double t, PnlMat *path, PnlRng *rng);
 
     /**
      * simuler 2 trajectoires utilisant les mêmes aléas Browniens mais shiftées l’une par rapport à l’autre
@@ -63,6 +66,6 @@ public:
      * @param[in] t : current time 
      *
      */
-    void shift_asset(int d, int t, double h, PnlMat *path);
+    void shift_asset(int d, double t, double h, PnlMat *path);
 };
 #endif

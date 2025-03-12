@@ -1,7 +1,6 @@
 #ifndef _Currency_HPP
 #define _Currency_HPP
 
-#include "json_reader.hpp"
 #include "InterestRateModel.hpp"
 #include "RiskyDynamics.hpp"
 

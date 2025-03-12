@@ -2,7 +2,6 @@
 #define _Risky_Dynamics_HPP
 
 #include "pnl/pnl_vector.h"
-#include "json_reader.hpp"
 
 class  RiskyDynamics {
 

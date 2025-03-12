@@ -6,6 +6,8 @@
 #include "pnl/pnl_matrix.h"
 #include "InterestRateModel.hpp"
 #include "TimeGrid.hpp"
+#include "pricing.grpc.pb.h"
+
 
 
 
@@ -22,7 +24,8 @@ public:
     /**
      * Constructeur de parsing :
      */
-    Option(InterestRateModel domesticInterestRate, TimeGrid monitoringTimeGrid);
+    Option((const PricingInput& input));
+    //Option(InterestRateModel domesticInterestRate, TimeGrid monitoringTimeGrid);
 
     /**
      * Destructeur

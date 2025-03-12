@@ -4,7 +4,8 @@
 #include "Option.hpp"
 #include "GlobalModel.hpp"
 #include "pnl/pnl_random.h"
-#include "Position.hpp"
+// #include "pricing.grpc.pb.h"
+
 
 class MonteCarlo {
 
@@ -13,16 +14,16 @@ public:
 
     Option *option;           /// pointeur sur l'option
     GlobalModel *model; /// pointeur vers le modèle
-    int sample_number;        /// nombre de tirage de MC
-    double fd_step;           /// pas de méthode de différance fini
+    int sample_number ;        /// nombre de tirage de MC
+    double fd_step ;           /// pas de méthode de différance fini
     PnlRng *rng;    
     int model_size ; /// size of the model 
-    int nbDays ;
-    int numberOfDaysPerYear;
+    // int nbDays ;
+    // int numberOfDaysPerYear;
 
 public : 
     MonteCarlo();
-    MonteCarlo(const nlohmann::json json);
+    MonteCarlo(const PricingInput& input);
     ~MonteCarlo();
 
     /**
@@ -32,7 +33,7 @@ public :
      * @param[in] position : classe contient : price , price_std , deltas_vect , stddev_deltas_vect
      * @param[in] Past : matrice de taille (last_index + 1)*D ou (last_index)*D qui continet s_t0 , s_t1 , ..... , st_i , st
      */
-    void priceAndDelta(int t, const PnlMat *Past, double& price , double& price_std , PnlVect* deltas_vect , PnlVect*  stddev_deltas_vect);
+    void priceAndDelta(double t, const PnlMat *Past, double& price , double& price_std , PnlVect* deltas_vect , PnlVect*  stddev_deltas_vect);
 
 
 protected:

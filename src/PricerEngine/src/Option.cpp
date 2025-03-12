@@ -11,11 +11,12 @@ Option::Option()
 {
 }
 
-Option::Option(InterestRateModel domesticInterestRate, TimeGrid monitoringTimeGrid)
+Option::Option((const PricingInput& input));
 {
 
-    this->domesticInterestRate = domesticInterestRate;
-    this->monitoringTimeGrid = monitoringTimeGrid;
+    this->domesticInterestRate = input.domesticInterestRate;
+    this->monitoringTimeGrid = TimeGrid(std::vector<double>(input.time_grid().begin(), input.time_grid().end()));
+
     
 }
 
