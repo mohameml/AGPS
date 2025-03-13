@@ -1,6 +1,7 @@
 import os
 from backend.HedgingEngine.FinancialParam.FinancialParams import FinancialParams
-from backend.HedgingEngine.MarkatDataReader.MarketDataReader import EnumIndex
+from backend.HedgingEngine.MarkatDataReader.MarketDataReader import EnumIndex, MarketDataReader
+from backend.HedgingEngine.FinancialEstimator.FinancialEstimator import FinancialEstimator
 import pandas as pd 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
@@ -27,12 +28,14 @@ def test_financial_params():
     T0 = pd.to_datetime('01-05-2009' , format='%d-%m-%Y')
     T = pd.to_datetime('01-06-2014', format='%d-%m-%Y')
 
-    finance_params = FinancialParams(FILE_PATH , indexes , T0 , T , dates_cibles)
+    marketDataReader = MarketDataReader(FILE_PATH , indexes , T0 , T)
+    financialEstimator = FinancialEstimator(marketDataReader)
+    finance_params = FinancialParams(financialEstimator ,  T0 , T , dates_cibles)
 
-    finance_params.to_json("./backend/tests/finance_params.json")
+    finance_params.to_json("./backend/tests/FinancialParam/finance_params.json")
+
+    # if everything is ok, then : 
+    assert True
 
 
 
-
-
-test_financial_params()

@@ -76,3 +76,10 @@
 ## 3. **Test et Validation**
 
 > Les tests sont définis dans le dossier `tests/` pour chaque composant. Ils permettent de vérifier la logique du moteur de couverture et les interactions gRPC.
+
+-   **lancer le test:**
+
+```bash
+export PYTHONPATH=$(pwd):$PYTHONPATH
+pytest backend/tests/NomDossierTest/nom_fichier_test.py
+```
