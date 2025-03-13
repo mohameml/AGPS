@@ -6,6 +6,7 @@ from backend.HedgingEngine.Pricer import pricing_pb2_grpc
 from backend.HedgingEngine.Pricer.Pricer import Pricer
 from backend.HedgingEngine.Pricer.PricingParams import PricingParams
 from backend.HedgingEngine.Pricer.PricingResults import PricingResults
+from backend.HedgingEngine.Utils.MathDateConverter import MathDateConverter
 
 
 class PricerGrpc(Pricer):
@@ -36,11 +37,12 @@ class PricerGrpc(Pricer):
 
     def pricing_params_to_pricing_input(self, pricing_params : PricingParams):
         
+        converter = MathDateConverter(self.params.nombreOfDaysInOneYear , self.params.time_grid.creationDate)
         input_data = pricing_pb2.PricingInput()
         
         # 1) Convert ListDataFeed to pastLines un marketDomestic : past 
 
-        past_in_market_domestic = pricing_params.data_feeds.toDomesticMarket()
+        past_in_market_domestic = pricing_params.data_feeds.toDomesticMarket(converter)
         for feed in past_in_market_domestic:
             line = pricing_pb2.PastLines()
             line.value.extend(feed)
@@ -75,6 +77,6 @@ class PricerGrpc(Pricer):
             input_data.correlations.append(row)
 
         # 6) timeGrid : 
-        input_data.time_grid.extend(self.params.formuleDescription.time_grid)
+        input_data.time_grid.extend(self.params.time_grid.get_time_grid(converter))
 
         return input_data

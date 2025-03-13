@@ -51,7 +51,7 @@ def test_hedger():
     output , data = hedger.hedge(reader.get_list_data_feed(finance_params) , T0 , portfolioData)
 
     print(output)
-    print(data)
+    data.display()
 
 
 test_hedger()

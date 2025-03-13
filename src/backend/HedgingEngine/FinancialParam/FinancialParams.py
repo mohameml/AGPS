@@ -1,34 +1,45 @@
 from backend.HedgingEngine.MarkatDataReader.MarketDataReader import MarketDataReader
 from backend.HedgingEngine.FinancialParam.AssetDescription import AssetDescription
-from backend.HedgingEngine.FinancialParam.FormuleDescription import FormuleDescription
+from backend.HedgingEngine.FinancialParam.TimeGrid import TimeGrid
 from typing import List
 from backend.HedgingEngine.MarkatDataReader.EnumIndex import EnumIndex
+from backend.HedgingEngine.FinancialEstimator.FinancialEstimator import FinancialEstimator
 from datetime import datetime 
 import json
 
 
 
-# TODO : passer MarketDataReader comme args au lieur de file_path 
 
 class FinancialParams : 
 
-    def __init__(self , file_path: str, indexes: List[EnumIndex], T0: datetime, T: datetime , list_ti : List[datetime] ):
+    def __init__(self , financialEstimator : FinancialEstimator, T0: datetime, T: datetime , list_ti : List[datetime] ):
         
-        self.nombreOfDaysInOneYear = 252 # TODO : a changer
+        self.nombreOfDaysInOneYear = 252 
 
-        self.marketDataReader : MarketDataReader = MarketDataReader(file_path , indexes , T0 , T)
+        self.marketDataReader = financialEstimator.marketDataReader
 
-        self.assetDescription : AssetDescription = AssetDescription()
-        self.assetDescription.estimate_params(self.marketDataReader)
+        self.assetDescription : AssetDescription = AssetDescription(financialEstimator)
         
-        self.formuleDescription : FormuleDescription = FormuleDescription(T0 , list_ti , T , self.nombreOfDaysInOneYear)
+        self.time_grid : TimeGrid = TimeGrid(T0 , list_ti , T)
+
+
+    def set_nb_days_in_one_year(self , year : int):
+        self.nombreOfDaysInOneYear = self.marketDataReader.get_nb_days_in_one_year(year)
+
+    def to_object(self):
+        """Convertit l'objet en dictionnaire."""
+        return {
+            "nombreOfDaysInOneYear": self.nombreOfDaysInOneYear,
+            "assetDescription": self._serialize_asset_description(),
+            "TimeGrid": self._serialize_formule_description()
+        }
 
     def to_json(self, json_path: str):
         """Sauvegarde certains attributs de l'objet dans un fichier JSON."""
         data = {
             "nombreOfDaysInOneYear": self.nombreOfDaysInOneYear,
             "assetDescription": self._serialize_asset_description(),
-            "formuleDescription": self._serialize_formule_description()
+            "TimeGrid": self._serialize_formule_description()
         }
 
         with open(json_path, "w", encoding="utf-8") as f:
@@ -47,10 +58,9 @@ class FinancialParams :
         }
 
     def _serialize_formule_description(self):
-        """Convertit l'objet `formuleDescription` en dictionnaire sérialisable."""
+        """Convertit l'objet `TimeGrid` en dictionnaire sérialisable."""
         return {
-            "creationDate": self.formuleDescription.creationDate.isoformat(),
-            "paymentDates": [date.isoformat() for date in self.formuleDescription.paymentDates],
-            "maturity": self.formuleDescription.maturity.isoformat(),
-            "time_grid": [date.isoformat() for date in self.formuleDescription.time_grid],
+            "creationDate": self.time_grid.creationDate.isoformat(),
+            "paymentDates": [date.isoformat() for date in self.time_grid.paymentDates],
+            "maturity": self.time_grid.maturity.isoformat(),
         }

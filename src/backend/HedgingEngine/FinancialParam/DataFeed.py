@@ -13,46 +13,18 @@ from backend.HedgingEngine.MarkatDataReader.EnumIndex import index_to_currency
 class DataFeed :
 
 
-    # TODO : MathDateConverter 
     def __init__(
         self, 
         date: datetime, 
         dict_index_price: Dict[EnumIndex, IndexPrice], 
         dict_exchange_rate: Dict[EnumCurrency, ExchangeRate],
-        # dict_interest_rate: Dict[EnumCurrency , InterestRate] ,
-        T0 : datetime
     ):
         self.date = date
-
-        # TODO : fixe nombreOfDaysWorksInOneYear : 
-        mathDataConverter = MathDateConverter(252)
-        self.t = mathDataConverter.ConvertToMathDistance(T0 , date)
-        
         self.dict_index_price = dict_index_price
         self.dict_exchange_rate = dict_exchange_rate
-        self.nbAsset = len(self.dict_index_price) + len(self.dict_exchange_rate)
 
 
-    def get_spot_list(self , dict_interest_rate : Dict[EnumCurrency , float]) -> Dict[str , float] :
-
-        spot_list = {}
-
-        res = self.toDomesticMarket(dict_interest_rate)
-
-        i = 0 
-        for index_name in EnumIndex : 
-            spot_list[index_name.value] = res[i]
-            i+=1 
-
-        for curr_name in EnumCurrency : 
-            if curr_name != EnumCurrency.EUR : 
-                spot_list[curr_name.value]  =  res[i]
-                i+=1
-
-        return spot_list
-                
-
-    def toDomesticMarket(self , dict_interest_rate : Dict[EnumCurrency , float]):
+    def toDomesticMarket(self , dict_interest_rate : Dict[EnumCurrency , float] , converter : MathDateConverter):
         res = []
 
         for index_name in EnumIndex :
@@ -67,11 +39,34 @@ class DataFeed :
         for curr_name in EnumCurrency :
 
             if curr_name != EnumCurrency.EUR : 
-                r_f = dict_interest_rate[curr_name] # TODO : r_f se trouve dans FinancialParam 
-                value = self.dict_exchange_rate[curr_name].rate*np.exp(self.t*r_f)
+                r_f = dict_interest_rate[curr_name] 
+                t = converter.ConvertToMathDistance(self.date)
+                value = self.dict_exchange_rate[curr_name].rate*np.exp(t*r_f)
                 res.append(float(value))
                 
         return res 
+
+    def get_spot_list(self , dict_interest_rate : Dict[EnumCurrency , float] , converter : MathDateConverter) -> Dict[str , float] :
+
+        """
+        retourne un dict avce les prices en marche domestique  : utilise en portfolio [RQ : curr_name est utilise ici pour le ZC du marche étranger ]
+        """
+
+        spot_list = {}
+
+        res = self.toDomesticMarket(dict_interest_rate , converter)
+
+        i = 0 
+        for index_name in EnumIndex : 
+            spot_list[index_name.value] = res[i]
+            i+=1 
+
+        for curr_name in EnumCurrency : 
+            if curr_name != EnumCurrency.EUR : 
+                spot_list[curr_name.value]  =  res[i]
+                i+=1
+
+        return spot_list
 
 
     def display_info(self):

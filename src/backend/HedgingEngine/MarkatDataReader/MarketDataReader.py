@@ -50,16 +50,19 @@ class MarketDataReader:
         filter_names_exchange_rate.remove('XEUR')
         self.data_exchange_rate = self.clean_data(self.data_exchange_rate , filter_names= filter_names_exchange_rate)
 
+        # self.filter_common_valid_dates()
+
 
         self._exchange_rate_history: ExchangeRateHistory = ExchangeRateHistory()
         self._index_price_history: IndexPriceHistory = IndexPriceHistory()
         self._interest_rate_history: InterestRateHistory = InterestRateHistory()
         
-        # self.number_of_days_in_one_year: Dict[datetime, int] = {}
 
         self.extract_index_price_history()
         self.extract_interest_rate_history()
         self.extract_exchange_rate_history()
+
+
 
 
     def clean_data(self , df : pd.DataFrame , filter_names : List[str]) -> None : 
@@ -71,6 +74,21 @@ class MarketDataReader:
         df = df.dropna()
 
         return df 
+    
+    def filter_common_valid_dates(self):
+        """
+        Filtre les trois DataFrames pour ne garder que les dates où toutes les valeurs sont valides.
+        """
+        common_dates = (
+            self.data_index_price.dropna().index
+            & self.data_exchange_rate.dropna().index
+            & self.data_interest_rate.dropna().index
+        )
+
+        self.data_index_price = self.data_index_price.loc[common_dates]
+        self.data_exchange_rate = self.data_exchange_rate.loc[common_dates]
+        self.data_interest_rate = self.data_interest_rate.loc[common_dates]
+        
 
     def extract_index_price_history(self) -> None:
         """Extrait les données des prix des indices depuis data_index_price."""
@@ -112,12 +130,21 @@ class MarketDataReader:
             self._exchange_rate_history.add_record(date , exchange_rate_list)
 
 
+    def get_nb_days_in_one_year(self , year : int) -> int :
+        """
+        Retourne le nombre de jours dans une année pour une date donnée.
+        """
+        nb_jours = sum([1 for date in self._index_price_history.records.keys() if date.year == year])
+        return nb_jours
 
 
     def get_data_feed(self, date: datetime) -> DataFeed:
         """
         Récupère les données du marché pour une date spécifique.
         """
+        if date not in self._index_price_history.records.keys() or date not in self._exchange_rate_history.records.keys() :
+            raise ValueError(f"La date {date} n'est pas dans la période d'analyse.")
+
         dict_index_prices : Dict[EnumIndex , IndexPrice] = {}
         dict_exchanges : Dict [EnumCurrency , ExchangeRate]= {}
 
@@ -129,13 +156,13 @@ class MarketDataReader:
             dict_exchanges[exchange_rate.base_currency] = exchange_rate
         
 
-        data_feed  : DataFeed = DataFeed(date , dict_index_prices , dict_exchanges , self.T0)
+        data_feed = DataFeed(date , dict_index_prices , dict_exchanges)
 
         return data_feed
 
     def get_all_data_feed(self) -> List[DataFeed]:
         """
-        Récupère les données du marché pour toutes les dates de la période d'analyse.
+        Récupère les données du marché pour toutes les dates de la période d'analyse sous forme List[DataFeed].
         """
         # il faut parcourir les dates et appler get_data_feed pour chaque date
         data_feeds = []
@@ -145,9 +172,8 @@ class MarketDataReader:
     
     def get_list_data_feed(self , finical_params) :
         """
-        Récupère les données du marché pour toutes les dates de la période d'analyse.
+        Récupère les données du marché pour toutes les dates de la période d'analyse sous forme ListDataFeed.
         """
-        # il faut parcourir les dates et appler get_data_feed pour chaque date
         from backend.HedgingEngine.FinancialParam.ListDataFeed import ListDataFeed
 
         data_feeds = ListDataFeed(finical_params)

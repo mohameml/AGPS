@@ -10,6 +10,7 @@ from datetime import datetime
 
 
 from backend.HedgingEngine.FinancialParam.FinancialParams import FinancialParams
+from backend.HedgingEngine.Utils.MathDateConverter import MathDateConverter
 
 class ListDataFeed:
 
@@ -17,7 +18,7 @@ class ListDataFeed:
         self.data_feeds : List[DataFeed] = []
         self.fincial_params = fincial_params
         self.dict_rf = fincial_params.assetDescription.get_dict_interset_rate_estimate() 
-    
+
 
     def addDataFeed(self , dataFeed : DataFeed) :
         self.data_feeds.append(dataFeed)
@@ -28,24 +29,31 @@ class ListDataFeed:
                 return feed 
         return None
     
-    # def getDataFeedsPaymentsDates(self , rebalacingDate : datetime):
+
+    def update_hedging_past(self , rebalancingDate : datetime ):
         
-    #     past = ListDataFeed(self.fincial_params)
+        self.data_feeds.clear()
 
-    #     for date in self.fincial_params.formuleDescription.paymentDates:
-    #         if date > rebalacingDate :
-    #             break
+        for date in self.fincial_params.time_grid.paymentDates:
+            if date > rebalancingDate :
+                break
             
-    #         past.addDataFeed(slef.?.getDataFeedByDate(date))
+            self.addDataFeed(self.fincial_params.marketDataReader.get_data_feed(date))
 
 
-    def toDomesticMarket(self) -> np.array:
+        if not (rebalancingDate in self.fincial_params.time_grid.paymentDates):
+            self.addDataFeed(self.fincial_params.marketDataReader.get_data_feed(rebalancingDate))
+
+
+    
+
+    def toDomesticMarket(self , converter : MathDateConverter) -> np.array:
         """
         Applique la méthode toDomesticMarket() de chaque DataFeed
         et retourne une matrice où chaque ligne correspond aux données d'un DataFeed.
         """
 
-        past = np.array([df.toDomesticMarket(self.dict_rf) for df in self.data_feeds])
+        past = np.array([df.toDomesticMarket(self.dict_rf , converter) for df in self.data_feeds])
         return past 
     
     def display_info(self):
