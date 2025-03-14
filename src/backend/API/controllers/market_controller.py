@@ -7,7 +7,7 @@ router = APIRouter()
 
 
 
-@router.get("/next-day/")
+@router.get("/next-day")
 async def get_data_feed(next_day_req: NextDayRequest , market_data_reader=Depends(get_market_data_reader)):
     try:
         date = next_day_req.date

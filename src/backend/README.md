@@ -83,3 +83,185 @@
 export PYTHONPATH=$(pwd):$PYTHONPATH
 pytest backend/tests/NomDossierTest/nom_fichier_test.py
 ```
+
+## 4. **Documentation de l'API:**
+
+> Cette API fournit deux endpoints principaux pour la gestion et la simulation de couverture d'un portefeuille financier.
+
+### 4.1. **`/hedge` (POST):**
+
+-   **Description:**
+
+    > Cet endpoint permet d'effectuer une couverture sur un portefeuille donné en fonction de ses compositions, du montant de cash disponible, et de la date d'analyse.
+
+-   **Requête:**
+
+    -   **URL** : `/hedge`
+    -   **Méthode** : `POST`
+    -   **Body (JSON, format `PortfolioDataRequest`)** :
+
+    ```json
+    {
+    	"cash": 10000.0,
+    	"compos": { "AAPL": 50, "GOOGL": 30 },
+    	"date": "2025-03-14T00:00:00",
+    	"isFirstTime": true,
+    	"currDate": "2025-03-14T00:00:00"
+    }
+    ```
+
+-   **Modèle de la requête (`PortfolioDataRequest`):**
+
+    | Champ         | Type               | Description                                                                      |
+    | ------------- | ------------------ | -------------------------------------------------------------------------------- |
+    | `cash`        | `float`            | Montant de cash disponible dans le portefeuille.                                 |
+    | `compos`      | `Dict[str, float]` | Dictionnaire représentant les compositions du portefeuille (ticker -> quantité). |
+    | `date`        | `datetime`         | Date d'analyse du portefeuille.                                                  |
+    | `isFirstTime` | `bool`             | Indique si c'est la première couverture effectuée.                               |
+    | `currDate`    | `datetime`         | Date actuelle de la requête.                                                     |
+
+-   **Réponse:**
+
+    ```json
+    {
+    	"status": "success",
+    	"data": {
+    		"output": {
+    			"date": "2025-03-14T00:00:00",
+    			"value": 105000.0,
+    			"deltas": [0.1, -0.2],
+    			"deltas_std_dev": [0.01, 0.02],
+    			"price": 3500.0,
+    			"price_std_dev": 15.0
+    		},
+    		"portfolio": {
+    			"compositions": { "AAPL": 50, "GOOGL": 30 },
+    			"cash": 5000.0,
+    			"date": "2025-03-14T00:00:00",
+    			"value": 105000.0
+    		}
+    	}
+    }
+    ```
+
+-   **Modèles de la réponse:**
+
+    -   **`OutputData` :**
+
+        | Champ            | Type          | Description                                       |
+        | ---------------- | ------------- | ------------------------------------------------- |
+        | `date`           | `datetime`    | Date du calcul de la couverture.                  |
+        | `value`          | `float`       | Valeur totale du portefeuille après couverture.   |
+        | `deltas`         | `List[float]` | Liste des deltas des actifs dans le portefeuille. |
+        | `deltas_std_dev` | `List[float]` | Écart-type des deltas calculés.                   |
+        | `price`          | `float`       | Prix total du portefeuille.                       |
+        | `price_std_dev`  | `float`       | Écart-type du prix.                               |
+
+    -   **`Portfolio`:**
+
+        | Champ          | Type               | Description                                     |
+        | -------------- | ------------------ | ----------------------------------------------- |
+        | `compositions` | `Dict[str, float]` | Composition du portefeuille.                    |
+        | `cash`         | `float`            | Montant de cash restant.                        |
+        | `date`         | `datetime`         | Date de la mise à jour.                         |
+        | `value`        | `float`            | Valeur totale du portefeuille après couverture. |
+
+### 4.2. **`/next-day` (GET):**
+
+-   **Description:**
+
+    > Cet endpoint permet d'obtenir les données de marché du jour suivant en fonction de la date fournie.
+
+-   **Requête:**
+
+    -   **URL** : `/next-day`
+    -   **Méthode** : `GET`
+    -   **Body (JSON, format `NextDayRequest`)** :
+
+    ```json
+    {
+    	"date": "2025-03-14T00:00:00"
+    }
+    ```
+
+-   **Modèle de la requête (`NextDayRequest`):**
+
+    | Champ  | Type       | Description                                                   |
+    | ------ | ---------- | ------------------------------------------------------------- |
+    | `date` | `datetime` | Date de référence pour récupérer les données du jour suivant. |
+
+-   **Réponse:**
+
+    ```json
+    {
+    	"status": "success",
+    	"data": {
+    		"date": "2025-03-15T00:00:00",
+    		"dict_index_price": {
+    			"SP500": 4800.5,
+    			"NASDAQ": 15000.3
+    		},
+    		"dict_exchange_rate": {
+    			"USD": 1.1,
+    			"JPY": 130.5
+    		}
+    	}
+    }
+    ```
+
+-   **Modèle de la réponse:**
+
+    | Champ                | Type               | Description                                  |
+    | -------------------- | ------------------ | -------------------------------------------- |
+    | `date`               | `datetime`         | Date du jour suivant.                        |
+    | `dict_index_price`   | `Dict[str, float]` | Dictionnaire des prix des indices boursiers. |
+    | `dict_exchange_rate` | `Dict[str, float]` | Dictionnaire des taux de change des devises. |
+
+### 4.3 **Pour tester l'API localement:**
+
+-   **lancer le serveur Cpp:**
+
+    ```bash
+    cd backend/tests/Pricer/serverCpp
+    mkdir build
+    cd build
+    cmake -DCMAKE_PREFIX_PATH=path/to/protoc ..
+    make
+    ./pricing_server
+    ```
+
+-   **lancer serveur uvicorn:**
+
+    ```bash
+    uvicorn backend.app:app --host 127.0.0.1 --port 3000 --reload
+    ```
+
+    RQ : il faut lancer depuis le dossier `src/`
+
+-   **Tester l'API:**
+
+    -   **`Tester /hedge (POST)`:**
+
+        ```bash
+        curl -X POST http://localhost:3000/hedge \
+            -H "Content-Type: application/json" \
+            -d '{
+                "cash" : 0 ,
+                "compos" :  {"EUROSTOXX50": 0.0, "SP500": 0.0, "FTSE100": 0.0, "TOPIX": 0.0, "ASX200": 0.0 , "USD": 0.0, "GBP": 0.0, "JPY": 0.0, "AUD": 0.0},
+                "date" : "2009-05-01T00:00:00",
+                "isFirstTime" : true ,
+                "currDate" : "2009-05-01T00:00:00"
+            }'
+        ```
+
+    -   **`Tester /next-day (GET)`:**
+
+        ```bash
+        curl -X GET http://localhost:8000/next-day \
+            -H "Content-Type: application/json" \
+            -d '{
+                "date": "2009-05-11T00:00:00"
+                }'
+        ```
+
+    RQ : vous pouvez aussi utiliser `postman`
