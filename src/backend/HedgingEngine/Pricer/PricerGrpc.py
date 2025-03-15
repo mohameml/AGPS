@@ -31,7 +31,7 @@ class PricerGrpc(Pricer):
     def hello_world(self):        
         info = self.grpc_client.HelloWorld(pricing_pb2.Empty())
         print(f"Message reçu : {info.message}")
-        return info
+        return info.message
 
 
 

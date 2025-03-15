@@ -160,24 +160,24 @@ class MarketDataReader:
 
         return data_feed
 
-    def get_all_data_feed(self) -> List[DataFeed]:
-        """
-        Récupère les données du marché pour toutes les dates de la période d'analyse sous forme List[DataFeed].
-        """
-        # il faut parcourir les dates et appler get_data_feed pour chaque date
-        data_feeds = []
-        for date in self._index_price_history.records.keys():
-            data_feeds.append(self.get_data_feed(date))
-        return data_feeds
+    # def get_all_data_feed(self) -> List[DataFeed]:
+    #     """
+    #     Récupère les données du marché pour toutes les dates de la période d'analyse sous forme List[DataFeed].
+    #     """
+    #     # il faut parcourir les dates et appler get_data_feed pour chaque date
+    #     data_feeds = []
+    #     for date in self._index_price_history.records.keys():
+    #         data_feeds.append(self.get_data_feed(date))
+    #     return data_feeds
     
-    def get_list_data_feed(self , finical_params) :
-        """
-        Récupère les données du marché pour toutes les dates de la période d'analyse sous forme ListDataFeed.
-        """
-        from backend.HedgingEngine.FinancialParam.ListDataFeed import ListDataFeed
+    # def get_list_data_feed(self , finical_params) :
+    #     """
+    #     Récupère les données du marché pour toutes les dates de la période d'analyse sous forme ListDataFeed.
+    #     """
+    #     from backend.HedgingEngine.FinancialParam.ListDataFeed import ListDataFeed
 
-        data_feeds = ListDataFeed(finical_params)
-        for date in self._index_price_history.records.keys():
-            data_feeds.addDataFeed(self.get_data_feed(date))
-        return data_feeds
+    #     data_feeds = ListDataFeed(finical_params)
+    #     for date in self._index_price_history.records.keys():
+    #         data_feeds.addDataFeed(self.get_data_feed(date))
+    #     return data_feeds
     

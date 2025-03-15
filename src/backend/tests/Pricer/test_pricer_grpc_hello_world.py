@@ -1,4 +1,5 @@
 import os
+from backend.HedgingEngine.FinancialEstimator.FinancialEstimator import FinancialEstimator
 from backend.HedgingEngine.FinancialParam.FinancialParams import FinancialParams
 from backend.HedgingEngine.MarkatDataReader.MarketDataReader import EnumIndex
 from backend.HedgingEngine.Pricer.PricerGrpc import PricerGrpc
@@ -13,6 +14,19 @@ import pandas as pd
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 FILE_PATH = os.path.join(BASE_DIR, "../../data/DonneesGPS2025.xlsx")
 FILE_PATH = os.path.abspath(FILE_PATH)
+
+
+"""
+============= test Grpc connecttion  =============
+- le test ce fait avec le ServerCpp : 
+- il faut lancer au début le server cpp : 
+    - cd src/backend/HedgingEngine/Pricer/serverCpp
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_PREFIX_PATH=/path/to/protoc ..
+    - make
+    - ./prcing_server
+"""
 
 def test_grpc_conn():
 
@@ -37,17 +51,15 @@ def test_grpc_conn():
     
     reader  = MarketDataReader(FILE_PATH , indexes , T0 , T)
 
-    finance_params = FinancialParams(FILE_PATH , indexes , T0 , T , dates_cibles)
+    fincail_estimation = FinancialEstimator(reader)
+    finance_params = FinancialParams(fincail_estimation , T0 , T , dates_cibles)
 
     pricerGrpc = PricerGrpc(finance_params)
 
     msg = pricerGrpc.hello_world()
-    print(msg)
+
+    assert msg == "Hello from gRPC Pricer Server!"
 
 
 
 
-
-
-
-test_grpc_conn()
