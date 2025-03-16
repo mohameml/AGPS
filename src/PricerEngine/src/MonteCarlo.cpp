@@ -1,17 +1,19 @@
 #include "MonteCarlo.hpp"
+#include "pricing.pb.h"          // Pour les messages (PricingInput, etc.)
 
 MonteCarlo::MonteCarlo()
 {
 }
 
-MonteCarlo::MonteCarlo(const PricingInput& input)
+MonteCarlo::MonteCarlo(const grpc_pricer::PricingInput& input)
 {
     sample_number = 50000;
     fd_step = 0.1; 
 
     
     model = new GlobalModel(input);
-    option = instance_option(input);
+    option = new Option(input);
+    
     
     model_size = model->assets.size() + model->currencies.size();
     
@@ -41,7 +43,7 @@ void MonteCarlo::priceAndDelta(double t, const PnlMat *Past, double& price , dou
     for (int i = 0; i < M; i++)
     {
         
-        model->asset(Past, t , path, this->rng); // TODO : type t int -> double
+        model->asset(Past, t , path, this->rng); 
         
         double phi_j = this->option->payOff(path);
         price += phi_j;
@@ -50,7 +52,7 @@ void MonteCarlo::priceAndDelta(double t, const PnlMat *Past, double& price , dou
         for (int d = 0; d < D; d++)
         {
             double diff_payoff = 0.0;
-            model->shift_asset(d, t , 1.0 + h, path); // TODO : type t int -> double
+            model->shift_asset(d, t , 1.0 + h, path); 
             diff_payoff += option->payOff(path);
             model->shift_asset(d, t , (1.0 - h) / (1.0 + h), path);
             diff_payoff -= option->payOff(path);
@@ -118,7 +120,7 @@ void MonteCarlo::end_of_calcul_delta(PnlVect *delta, PnlVect *delta_stdev, doubl
 //     json.at("RelativeFiniteDifferenceStep").get_to(fd_step);
 
 //     model = new GlobalModel(json);
-//     option = instance_option(json);
+//     option = option(json);
 
 //     model_size = model->assets.size() + model->currencies.size();
 

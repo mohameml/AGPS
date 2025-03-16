@@ -11,8 +11,8 @@
 #include <vector>
 #include <map>
 #include "InterestRateModel.hpp"
-#include "pricing.grpc.pb.h"
-#include "pricing.pb.h"
+#include "pricing.pb.h"          // Pour les messages (PricingInput, etc.)
+#include "pricing.grpc.pb.h" 
 
 
 
@@ -40,7 +40,9 @@ public:
 
 public:
     GlobalModel();
-    GlobalModel(const PricingInput& input);
+    // GlobalModel(const grpc_pricer::PricingInput& input);
+    // GlobalModel(const grpc_pricer::PricingInput& input);
+    GlobalModel(const grpc_pricer::PricingInput& input);
     ~GlobalModel();
 
     Currency *getCurrencyById(std::string id);

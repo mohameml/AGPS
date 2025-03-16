@@ -6,7 +6,8 @@
 #include "pnl/pnl_matrix.h"
 #include "InterestRateModel.hpp"
 #include "TimeGrid.hpp"
-#include "pricing.grpc.pb.h"
+#include "pricing.pb.h"          // Pour les messages (PricingInput, etc.)
+#include "pricing.grpc.pb.h" 
 
 
 
@@ -18,13 +19,14 @@ public:
 
     InterestRateModel domesticInterestRate;
     TimeGrid monitoringTimeGrid;
+    double maturity;
 
 public:
     Option();
     /**
      * Constructeur de parsing :
      */
-    Option((const PricingInput& input));
+    Option(const grpc_pricer::PricingInput& input);
     //Option(InterestRateModel domesticInterestRate, TimeGrid monitoringTimeGrid);
 
     /**

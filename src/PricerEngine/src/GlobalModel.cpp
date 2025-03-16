@@ -1,4 +1,7 @@
 #include "GlobalModel.hpp"
+#include "pricing.pb.h"
+
+
 
 GlobalModel::GlobalModel()
 {
@@ -10,17 +13,16 @@ GlobalModel::~GlobalModel()
     pnl_mat_free(&L);
 }
 
-
-GlobalModel::GlobalModel(const PricingInput& input)
+GlobalModel::GlobalModel(const grpc_pricer::PricingInput& input)
 {
     // ====== monitoringTimeGrid === 
     monitoringTimeGrid = TimeGrid(std::vector<double>(input.time_grid().begin(), input.time_grid().end()));
     
     // ==== Correlations and matrice cholesky :  ==== 
-    L = pnl_mat_create(input.correlations.size(), input.correlations.size());
-    for (size_t i = 0; i < input.correlations.size(); i++) {
-        for (size_t j = 0; j < input.correlations[i].values_size(); j++) {
-            MLET(L, i, j) = input.correlations[i].values(j);
+    L = pnl_mat_create(input.correlations().size(), input.correlations().size());
+    for (size_t i = 0; i < input.correlations().size(); i++) {
+        for (size_t j = 0; j < input.correlations(i).values().size(); j++) {
+            MLET(L, i, j) = input.correlations(i).values(j);
         }
     }
     pnl_mat_chol(L);
@@ -33,11 +35,13 @@ GlobalModel::GlobalModel(const PricingInput& input)
     // ================== Currencies ============== 
     PnlVect* volatilityVector = pnl_vect_create_from_double(model_size, 0.0);
     
-    domesticCurrencyId = input.domesticCurrencyId;
+    // Accéder à domesticCurrencyId via la méthode getter
+    std::string domesticCurrencyId = input.domesticcurrencyid();
     int index = 0;
-    int assetNb = model_size - (input.currencies_size() - 1);
+    int assetNb = model_size - (input.currencies().size() - 1);
     
-    for (const auto& currency : input.currencies) {
+    // Parcourir les currencies avec la méthode getter
+    for (const auto& currency : input.currencies()) {
         std::string currencyId = currency.id();
         double rf = currency.interestrate();
         double realVolatility = currency.volatility();
@@ -62,7 +66,8 @@ GlobalModel::GlobalModel(const PricingInput& input)
     // ================== Assets ============== 
     int index_asset = 0;
     
-    for (const auto& asset : input.assets) {
+    // Parcourir les assets avec la méthode getter
+    for (const auto& asset : input.assets()) {
         std::string currencyId = asset.currencyid();
         double realVolatility = asset.volatility();
         
@@ -93,6 +98,91 @@ GlobalModel::GlobalModel(const PricingInput& input)
     
     pnl_vect_free(&volatilityVector);
 }
+
+
+// GlobalModel::GlobalModel(const PricingInput& input)
+// GlobalModel::GlobalModel(const grpc_pricer::PricingInput& input)
+// {
+//     // ====== monitoringTimeGrid === 
+//     monitoringTimeGrid = TimeGrid(std::vector<double>(input.time_grid().begin(), input.time_grid().end()));
+    
+//     // ==== Correlations and matrice cholesky :  ==== 
+//     L = pnl_mat_create(input.correlations.size(), input.correlations.size());
+//     for (size_t i = 0; i < input.correlations.size(); i++) {
+//         for (size_t j = 0; j < input.correlations[i].values_size(); j++) {
+//             MLET(L, i, j) = input.correlations[i].values(j);
+//         }
+//     }
+//     pnl_mat_chol(L);
+    
+//     model_size = L->n;
+    
+//     // ===== vecteur of simulation G : ===== 
+//     G = pnl_vect_create_from_double(model_size, 0.0);
+    
+//     // ================== Currencies ============== 
+//     PnlVect* volatilityVector = pnl_vect_create_from_double(model_size, 0.0);
+    
+//     domesticCurrencyId = input.domesticCurrencyId;
+//     int index = 0;
+//     int assetNb = model_size - (input.currencies_size() - 1);
+    
+//     for (const auto& currency : input.currencies) {
+//         std::string currencyId = currency.id();
+//         double rf = currency.interestrate();
+//         double realVolatility = currency.volatility();
+
+//         if (currencyId == domesticCurrencyId) {
+//             this->domesticInterestRate = InterestRateModel(rf, currencyId);
+//         } else {
+//             pnl_mat_get_row(volatilityVector, L, assetNb + index);
+//             pnl_vect_mult_scalar(volatilityVector, realVolatility);
+
+//             currencies.push_back(std::make_unique<Currency>(
+//                 domesticInterestRate,
+//                 InterestRateModel(rf, currencyId),
+//                 realVolatility,
+//                 volatilityVector,
+//                 assetNb + index
+//             ));
+//             index++;
+//         }
+//     }
+    
+//     // ================== Assets ============== 
+//     int index_asset = 0;
+    
+//     for (const auto& asset : input.assets) {
+//         std::string currencyId = asset.currencyid();
+//         double realVolatility = asset.volatility();
+        
+//         if (currencyId == domesticCurrencyId) {
+//             pnl_mat_get_row(volatilityVector, L, index_asset);
+//             pnl_vect_mult_scalar(volatilityVector, realVolatility);
+//             assets.push_back(std::make_unique<RiskyAsset>(
+//                 domesticInterestRate,
+//                 realVolatility,
+//                 volatilityVector,
+//                 index_asset
+//             ));
+//         } else {
+//             Currency* currencyOfAsset = getCurrencyById(currencyId);
+//             pnl_mat_get_row(volatilityVector, L, index_asset);
+//             pnl_vect_mult_scalar(volatilityVector, realVolatility);
+//             pnl_vect_plus_vect(volatilityVector, currencyOfAsset->volatilityVector);
+//             double real_vol = pnl_vect_norm_two(volatilityVector);
+//             assets.push_back(std::make_unique<RiskyAsset>(
+//                 domesticInterestRate,
+//                 real_vol,
+//                 volatilityVector,
+//                 index_asset
+//             ));
+//         }
+//         index_asset++;
+//     }
+    
+//     pnl_vect_free(&volatilityVector);
+// }
 
 
 
@@ -131,7 +221,7 @@ void GlobalModel::asset(const PnlMat *past, double t, PnlMat *path, PnlRng *rng)
     pnl_vect_rng_normal(G, model_size, rng);
     //double step = (monitoringTimeGrid.at(last_index + 1) - t)  / (double)numberOfDaysPerYear ;
     double step = (monitoringTimeGrid.at(last_index + 1) - t);
-    bool isMonitoringDate = monitoringTimeGrid.has(t);
+    bool isMonitoringDate = monitoringTimeGrid.has(t); 
     
     for (const auto& risky_asset : assets)
     {
@@ -149,7 +239,7 @@ void GlobalModel::asset(const PnlMat *past, double t, PnlMat *path, PnlRng *rng)
     {
         
         // step = (monitoringTimeGrid.at(i)  - monitoringTimeGrid.at(i - 1)) / (double)numberOfDaysPerYear;
-        step = (monitoringTimeGrid.at(i)  - monitoringTimeGrid.at(i - 1)) / (double)numberOfDaysPerYear;
+        step = (monitoringTimeGrid.at(i)  - monitoringTimeGrid.at(i - 1)) ;
         pnl_vect_rng_normal(G, model_size, rng);
         
         for (const auto& risky_asset : assets)

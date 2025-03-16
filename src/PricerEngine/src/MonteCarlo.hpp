@@ -4,7 +4,8 @@
 #include "Option.hpp"
 #include "GlobalModel.hpp"
 #include "pnl/pnl_random.h"
-// #include "pricing.grpc.pb.h"
+#include "pricing.pb.h"       
+#include "pricing.grpc.pb.h" 
 
 
 class MonteCarlo {
@@ -23,7 +24,7 @@ public:
 
 public : 
     MonteCarlo();
-    MonteCarlo(const PricingInput& input);
+    MonteCarlo(const grpc_pricer::PricingInput& input);
     ~MonteCarlo();
 
     /**
