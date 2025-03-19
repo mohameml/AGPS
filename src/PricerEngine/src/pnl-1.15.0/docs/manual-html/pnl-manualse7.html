@@ -1,0 +1,2114 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head><title>Function bases and regression</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="generator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
+<!-- xhtml,uni-html4,2,subsection+,next,html --> 
+<meta name="src" content="pnl-manual.tex" /> 
+<link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
+</head><body 
+>
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse8.html" >next</a>] [<a 
+href="pnl-manualse6.html" >prev</a>] [<a 
+href="pnl-manualse6.html#tailpnl-manualse6.html" >prev-tail</a>] [<a 
+href="#tailpnl-manualse7.html">tail</a>] [<a 
+href="pnl-manual.html#pnl-manualse7.html" >up</a>] </p></div>
+<h3 class="sectionHead"><span class="titlemark">7   </span> <a 
+ id="x9-1040007"></a>Function bases and regression</h3>
+<!--l. 2--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">7.1   </span> <a 
+ id="x9-1050007.1"></a>Overview</h4>
+<!--l. 4--><p class="noindent" >To use these functionalities, you should include <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/pnl_basis.h</span></span></span>.
+<a 
+ id="dx9-105001"></a>
+</p>
+<!--l. 7-->
+<pre class="lstlisting" id="listing-38"><span class="label"><a 
+ id="x9-105002r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">_PnlBasis</span></span> 
+<span class="label"><a 
+ id="x9-105003r2"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span> 
+<span class="label"><a 
+ id="x9-105004r3"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span> 
+<span class="label"><a 
+ id="x9-105005r4"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Must</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">be</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">first</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">element</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">order</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">for</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">object</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">mechanism</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">work</span></span> 
+<span class="label"><a 
+ id="x9-105006r5"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">properly</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">.</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">This</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">allows</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">any</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlBasis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">pointer</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">be</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">cast</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">a</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlObject</span></span> 
+<span class="label"><a 
+ id="x9-105007r6"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105008r7"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlObject</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">object</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105009r8"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">basis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">type</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105010r9"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">id</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105011r10"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">string</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">label</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">basis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105012r11"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">const</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">char</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">label</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105013r12"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">number</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">variates</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105014r13"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">nb_variates</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105015r14"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">total</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">number</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">elements</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">basis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105016r15"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">nb_func</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105017r16"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">tensor</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">matrix</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105018r17"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlMatInt</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">T</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105019r18"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">sparse</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Tensor</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">matrix</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105020r19"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlSpMatInt</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">SpT</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105021r20"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">number</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">functions</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">tensor</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">T</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105022r21"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">len_T</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105023r22"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Compute</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">i</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">th</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">element</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">one</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dimensional</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">basis</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">.</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">As</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">a</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">convention</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">0)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">MUST</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">be</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">equal</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">1</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105024r23"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">i</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dim</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105025r24"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Compute</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">first</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">derivative</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">i</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">th</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">element</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">one</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dimensional</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">basis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105026r25"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">Df</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">i</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dim</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105027r26"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Compute</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">second</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">derivative</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">i</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">th</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">element</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">one</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dimensional</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">basis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105028r27"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">D2f</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">i</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dim</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105029r28"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_TRUE</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">if</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">basis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">is</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">reduced</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105030r29"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">isreduced</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105031r30"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">center</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">domain</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105032r31"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">center</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105033r32"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">inverse</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">scaling</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">factor</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">map</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">domain</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">[-1,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">1]^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">nb_variates</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105034r33"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">scale</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105035r34"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">An</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">array</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">additional</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">functions</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105036r35"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlRnFuncR</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">func_list</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105037r36"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">number</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">functions</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">func_list</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105038r37"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">len_func_list</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105039r38"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Extra</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">parameters</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">pass</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">basis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">functions</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105040r39"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">f_params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105041r40"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Size</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">bytes</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">be</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">passed</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">malloc</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105042r41"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">size_t</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">f_params_size</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105043r42"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Non</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">linear</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">mapping</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">data</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105044r43"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">map</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dim</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105045r44"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">First</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">derivative</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">non</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">linear</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">mapping</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105046r45"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">Dmap</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dim</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105047r46"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Second</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">d</span><span 
+class="ec-lmtti-10">Ã</span><span 
+class="ts1-lmtti10-">©</span><span 
+class="ec-lmtti-10">rivate</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">linear</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">mapping</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105048r47"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">D2map</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dim</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105049r48"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Extra</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">paramaters</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">for</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">map</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Dmap</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">and</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">D2map</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105050r49"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">map_params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105051r50"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Size</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">@p</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">map_params</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">bytes</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">be</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">passed</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">malloc</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-105052r51"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">size_t</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">map_params_size</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-105053r52"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">};</span></span></pre>
+<!--l. 62--><p class="noindent" >A <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> is a family of multivariate functions with real values. Two different kinds of functions
+can be stored in these families: tensor functions &#8212; originally, this was the only possibility &#8212; and
+standard multivariate function typed as <a 
+href="#x15-131031r13.1"><span class='struct'>PnlRnFuncR</span></a>.
+</p><!--l. 64--><p class="noindent" >
+</p>
+<h5 class="subsubsectionHead"><span class="titlemark">7.1.1   </span> <a 
+ id="x9-1060007.1.1"></a>Tensor functions</h5>
+<!--l. 66--><p class="noindent" >Tensor functions are built as a tensor product of one dimensional elements. Hence, we only need a
+tensor matrix <span class='var'>T</span> to describe a multi-dimensional basis in terms of the one dimensional one. These
+tensors functions can be easily evaluated and differentiated twice, see <a 
+href="#x9-109023r7.2">pnl_basis_eval</a>,
+<a 
+href="#x9-109023r7.2">pnl_basis_eval_vect</a>, <a 
+href="#x9-109023r7.2">pnl_basis_eval_D</a>, <a 
+href="#x9-109023r7.2">pnl_basis_eval_D_vect</a>, <a 
+href="#x9-109023r7.2">pnl_basis_eval_D2</a>,
+<a 
+href="#x9-109023r7.2">pnl_basis_eval_D2_vect</a>, <a 
+href="#x9-109023r7.2">pnl_basis_eval_derivs</a>, <a 
+href="#x9-109023r7.2">pnl_basis_eval_derivs_vect</a>.
+</p><!--l. 71--><p class="noindent" >Three bases are already registered as listed in Table&#x00A0;3. A new tensor basis can be registered using
+the function <a 
+href="#x9-1090007.2">pnl_basis_type_register</a>.
+</p>
+<div class="table">
+                                                                                    
+
+                                                                                    
+<!--l. 74--><p class="noindent" ><a 
+ id="x9-1060043"></a></p><hr class="float" /><div class="float" 
+>
+                                                                                    
+
+                                                                                    
+<!--tex4ht:inline--><div class="tabular"> <table id="TBL-12" class="tabular" 
+ 
+><colgroup id="TBL-12-1g"><col 
+id="TBL-12-1" /><col 
+id="TBL-12-2" /><col 
+id="TBL-12-3" /></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-12-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-1"  
+class="td11"><a 
+ id="dx9-106001"></a><span class='struct'>PNL_BASIS_CANONICAL</span>  </td><td  style="white-space:normal; text-align:left;" id="TBL-12-1-2"  
+class="td11"><!--l. 76--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-3"  
+class="td11">for the Canonical polynomials  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-1"  
+class="td11"><a 
+ id="dx9-106002"></a><span class='struct'>PNL_BASIS_HERMITE</span>       </td><td  style="white-space:normal; text-align:left;" id="TBL-12-2-2"  
+class="td11"><!--l. 77--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-3"  
+class="td11">for the Hermite polynomials     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-1"  
+class="td11"><a 
+ id="dx9-106003"></a><span class='struct'>PNL_BASIS_TCHEBYCHEV</span></td><td  style="white-space:normal; text-align:left;" id="TBL-12-3-2"  
+class="td11"><!--l. 78--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-3"  
+class="td11">for the Tchebychev polynomials</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-4-1"  
+class="td11">                          </td></tr></table>                                                      </div>
+ <div class="caption" 
+><span class="id">Table&#x00A0;3: </span><span  
+class="content">Names of the bases.</span></div><!--tex4ht:label?: x9-1060043 -->
+                                                                                    
+
+                                                                                    
+</div><hr class="endfloat" />
+</div>
+<!--l. 84--><p class="noindent" >The Hermite polynomials are defined by
+</p>
+<table 
+class="equation-star"><tr><td>
+<div class="math-display" >
+<img 
+src="pnl-manual22x.png" alt="            n  x2-dn- - x2-
+Hn(x) = (- 1) e2 dxn e  2 .
+" class="math-display"  /></div>
+</td></tr></table>
+<!--l. 87--><p class="nopar" >If <span 
+class="lmmi-10x-x-109">G </span>is a real valued standard normal random variable, <span 
+class="msbm-10x-x-109">E</span><span 
+class="rm-lmr-10x-x-109">[</span><span 
+class="lmmi-10x-x-109">H</span><sub><span 
+class="lmmi-8">n</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">G</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">H</span><sub><span 
+class="lmmi-8">m</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">G</span><span 
+class="rm-lmr-10x-x-109">)] = </span><span 
+class="lmmi-10x-x-109">n</span><span 
+class="rm-lmr-10x-x-109">!1</span><sub><img 
+src="pnl-manual23x.png" alt="{n=m }"  class="left" align="middle" /></sub>.
+</p><!--l. 91--><p class="noindent" >The two tensors <span class='var'>T</span> and <span class='var'>SpT</span> do actually store the same information &#8212; <span class='var'>T(i,j)</span> is the <span 
+class="ec-lmri-10x-x-109">degree </span>w.r.t the
+<span class='var'>j</span>-th variable in the <span class='var'>i</span>-th function. Originally, we were only using the dense representation <span class='var'>T</span>, which is
+far more convenient to use when building the basis but it slows down the evaluation of the basis by
+a great deal. To overcome this lack of efficiency, a sparse storage was added. Such a basis can be
+created using one of the following functions.
+</p>
+     <ul class="itemize1">
+     <li class="itemize">
+     <!--l. 94--><p class="noindent" ><a 
+ id="dx9-106005"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_create</span></span>&#x00A0;(<span class='args'>int index, int nb_func, int nb_variates</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create  a  <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>  for  the  family  defined  by  <span class='var'>index</span>  (see  Table&#x00A0;3  and
+     <a 
+href="#x9-1090007.2">pnl_basis_type_register</a>) with <span class='var'>nb_variates</span> variates. The basis will contain <span class='var'>nb_func</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 101--><p class="noindent" ><a 
+ id="dx9-106006"></a>   <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>   *</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_create_from_degree</span></span>&#x00A0;(<span class='args'>int   index,   int   degree,   int
+     nb_variates</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create  a  <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>  for  the  family  defined  by  <span class='var'>index</span>  (see  Table&#x00A0;3  and
+     <a 
+href="#x9-1090007.2">pnl_basis_type_register</a>) with total degree less or equal than <span class='var'>degree</span> and <span class='var'>nb_variates</span>
+     variates. The total degree is the sum of the partial degrees.<br 
+class="newline" />For instance, calling <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_basis_create_from_degree(index,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;2,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;4)</span></span></span> is equivalent to
+     calling <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_basis_create_from_tensor(index,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;T)</span></span></span> where <span class='var'>T</span> is given by
+     </p>
+                                                                                    
+
+                                                                                    
+<div class="math-display" >
+<img 
+src="pnl-manual24x.png" alt="(             )
+   0  0  0  0
+||  1  0  0  0 ||
+||  0  1  0  0 ||
+||             ||
+||  0  0  1  0 ||
+||  0  0  0  1 ||
+||  1  1  0  0 ||
+||  1  0  1  0 ||
+||  1  0  0  1 ||
+||  0  1  1  0 ||
+||  0  1  0  1 ||
+||  0  0  1  1 ||
+||             ||
+||  2  0  0  0 ||
+||  0  2  0  0 ||
+||  0  0  2  0 ||
+(  0  0  0  2 )
+" class="math-display"  /></div>
+     </li>
+     <li class="itemize">
+     <!--l. 129--><p class="noindent" ><a 
+ id="dx9-106007"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>  *</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_create_from_prod_degree</span></span>&#x00A0;(<span class='args'>int  index,  int  degree,  int
+     nb_variates</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create  a  <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>  for  the  family  defined  by  <span class='var'>index</span>  (see  Table&#x00A0;3  and
+     <a 
+href="#x9-1090007.2">pnl_basis_type_register</a>) with total degree less or equal than <span class='var'>degree</span> and <span class='var'>nb_variates</span>
+     variates. The total degree is the product of <span class='var'>MAX(1, d_i)</span> where the <span class='var'>d_i</span> are the partial
+     degrees.
+     </p></li>
+     <li class="itemize">
+     <!--l. 135--><p class="noindent" ><a 
+ id="dx9-106008"></a>  <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>  <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_create_from_hyperbolic_degree</span></span>&#x00A0;(<span class='args'>int  index,  double
+     degree, double q, int n</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create a sparse basis of polynomial with <span class='var'>n</span> variates. We give the example
+     of the Canonical basis. A canonical polynomial with <span class='var'>n</span> variates writes <span 
+class="lmmi-10x-x-109">X</span><sub><span 
+class="rm-lmr-8">1</span></sub><sup><span 
+class="lmmi-8">&#x03B1;</span><sub><span 
+class="rm-lmr-6">1</span></sub></sup><span 
+class="lmmi-10x-x-109">X</span><sub><span 
+class="rm-lmr-8">2</span></sub><sup><span 
+class="lmmi-8">&#x03B1;</span><sub><span 
+class="rm-lmr-6">2</span></sub></sup><span 
+class="lmmi-10x-x-109">&#x2026;</span><span 
+class="lmmi-10x-x-109">X</span><sub><span 
+class="lmmi-8">n</span></sub><sup><span 
+class="lmmi-8">&#x03B1;</span><sub><span 
+class="lmmi-6">n</span></sub></sup>.
+     To be a member of the basis, it must satisfy <img 
+src="pnl-manual25x.png" alt=" &#x2211;n     q
+(  i=1 &#x03B1;i )"  class="left" align="middle" /><sup><span 
+class="rm-lmr-8">1</span><span 
+class="lmmi-8">&#x2215;q</span></sup> <span 
+class="lmsy-10x-x-109">&#x2264;</span><span 
+class="lmmi-10x-x-109">degree</span>. This kind of basis
+     based on an hyperbolic set of indices gives priority to polynomials associated to low
+     order interaction.
+     </p></li>
+     <li class="itemize">
+     <!--l. 143--><p class="noindent" ><a 
+ id="dx9-106009"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_create_from_tensor</span></span>&#x00A0;(<span class='args'>int index, PnlMatInt <span 
+class="ts1-lmr10-x-x-109">*</span>T</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create  a  <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>  for  the  polynomial  family  defined  by  <span class='var'>index</span>  (see
+     Table&#x00A0;3) using the basis described by the tensor matrix <span class='var'>T</span>. The number of lines of <span class='var'>T</span> is
+     the number of functions of the basis whereas the numbers of columns of <span class='var'>T</span> is the number
+     of variates of the functions. Note that <span class='var'>T</span> is not copied inside this function but only its
+                                                                                    
+
+                                                                                    
+     address is stored, so <span 
+class="ec-lmbx-10x-x-109">never </span>free <span class='var'>T</span>. It will be freed when calling <a 
+href="#x9-1090007.2">pnl_basis_free</a> on the
+     returned object. i<br 
+class="newline" />Here is an example of a tensor matrix. Assume you are working with three variate
+     functions,  the  basis  <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">{</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;1,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;x,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;y,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;z,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;x^2,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;xy,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;yz,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;z^3}</span></span></span> is  decomposed  in  the  one
+     dimensional canonical basis using the following tensor matrix
+     </p>
+<div class="math-display" >
+<img 
+src="pnl-manual26x.png" alt="(         )
+|  0 0  0 |
+||  1 0  0 ||
+||  0 1  0 ||
+||  0 0  1 ||
+||  2 0  0 ||
+||  1 1  0 ||
+|(  0 1  1 |)
+   0 0  3
+" class="math-display"  /></div>
+     </li>
+     <li class="itemize">
+     <!--l. 170--><p class="noindent" ><a 
+ id="dx9-106010"></a> <span class='ret'>void </span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_set_from_tensor</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, int index, const <a 
+href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMatInt</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>T</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Set an alredy existing basis <span class='var'>b</span> to a polynomial family defined by <span class='var'>index</span>
+     (see Table&#x00A0;3) using the basis described by the tensor matrix <span class='var'>T</span>. The number of lines of
+     <span class='var'>T</span> is the number of functions of the basis whereas the numbers of columns of <span class='var'>T</span> is the
+     number of variates of the functions. <br 
+class="newline" />Same function as <a 
+href="#x9-1060007.1.1">pnl_basis_create_from_tensor</a> except that it operates on an already
+     existing basis.
+</p>
+     </li></ul>
+<h5 class="subsubsectionHead"><span class="titlemark">7.1.2   </span> <a 
+ id="x9-1070007.1.2"></a>Local basis functions</h5>
+<!--l. 185--><p class="noindent" >A local basis is a family of indicator functions of a Cartesian partition of <span 
+class="rm-lmr-10x-x-109">[</span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="rm-lmr-10x-x-109">1</span><span 
+class="lmmi-10x-x-109">,</span><span 
+class="rm-lmr-10x-x-109">1]</span><sup><span 
+class="lmmi-8">d</span></sup>. Let
+<span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">n</span><sub><span 
+class="lmmi-8">i</span></sub><span 
+class="rm-lmr-10x-x-109">)</span><sub><span 
+class="lmmi-8">i</span><span 
+class="lmsy8-">&#x2208;{</span><span 
+class="rm-lmr-8">1</span><span 
+class="lmmi-8">,</span><span 
+class="lmmi-8">&#x2026;</span><span 
+class="lmmi-8">,d</span><span 
+class="lmsy8-">}</span></sub> be the number of interval along each direction. An element of the partition write
+<span 
+class="lmmi-10x-x-109">A</span><sub><span 
+class="lmmi-8">k</span></sub> <span 
+class="rm-lmr-10x-x-109">=</span> <span 
+class="lmex-10">&#x220F;</span>
+  <sub><span 
+class="lmmi-8">i</span><span 
+class="rm-lmr-8">=1</span></sub><sup><span 
+class="lmmi-8">d</span></sup><span 
+class="rm-lmr-10x-x-109">[</span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="rm-lmr-10x-x-109">1 + </span><span 
+class="lmmi-10x-x-109">k</span><sub><span 
+class="lmmi-8">i</span></sub><span 
+class="lmmi-10x-x-109">&#x2215;n</span><sub><span 
+class="lmmi-8">i</span></sub><span 
+class="lmmi-10x-x-109">,</span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="rm-lmr-10x-x-109">1 + (</span><span 
+class="lmmi-10x-x-109">k</span><sub><span 
+class="lmmi-8">i</span></sub> <span 
+class="rm-lmr-10x-x-109">+ 1)</span><span 
+class="lmmi-10x-x-109">&#x2215;n</span><sub><span 
+class="lmmi-8">i</span></sub><span 
+class="rm-lmr-10x-x-109">] </span>where <span 
+class="lmmi-10x-x-109">k </span>is the multi-index defined by <span 
+class="lmmi-10x-x-109">k</span><sub><span 
+class="lmmi-8">i</span></sub> <span 
+class="lmsy-10x-x-109">&#x2208;{</span><span 
+class="rm-lmr-10x-x-109">0</span><span 
+class="lmmi-10x-x-109">,</span><span 
+class="lmmi-10x-x-109">&#x2026;</span><span 
+class="lmmi-10x-x-109">,n</span><sub><span 
+class="lmmi-8">i</span></sub> <span 
+class="lmsy-10x-x-109">- </span><span 
+class="rm-lmr-10x-x-109">1</span><span 
+class="lmsy-10x-x-109">}</span>
+for all <span 
+class="lmmi-10x-x-109">i </span><span 
+class="lmsy-10x-x-109">&#x2208;{</span><span 
+class="rm-lmr-10x-x-109">1</span><span 
+class="lmmi-10x-x-109">,</span><span 
+class="lmmi-10x-x-109">&#x2026;</span><span 
+class="lmmi-10x-x-109">,d</span><span 
+class="lmsy-10x-x-109">}</span>. These functions are orthogonal; this property is used by <a 
+href="#x9-109023r7.2">pnl_basis_fit_ls</a>. Note
+that they are not differentiable.
+</p><!--l. 187--><p class="noindent" >We provide the helper function <a 
+href="#x9-1070007.1.2">pnl_basis_local_get_index</a> to compute the linear representation of
+the multi-index <span 
+class="lmmi-10x-x-109">k</span>.
+</p>
+                                                                                    
+
+                                                                                    
+     <ul class="itemize1">
+     <li class="itemize">
+     <!--l. 190--><p class="noindent" ><a 
+ id="dx9-107001"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_local_create</span></span>&#x00A0;(<span class='args'>int *n_intervals, int space_dim</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create a local basis with <span class='var'>n_intervals[i - 1]</span> intervals along dimension <span 
+class="lmmi-10x-x-109">i</span>
+     for all <span 
+class="lmmi-10x-x-109">i </span><span 
+class="lmsy-10x-x-109">&#x2208;{</span><span 
+class="rm-lmr-10x-x-109">1</span><span 
+class="lmmi-10x-x-109">,</span><span 
+class="lmmi-10x-x-109">&#x2026;</span><span 
+class="lmmi-10x-x-109">,</span><span class='var'><span 
+class="lmmi-10x-x-109">space</span>_<span 
+class="lmmi-10x-x-109">dim</span></span><span 
+class="lmsy-10x-x-109">}</span>
+     </p></li>
+     <li class="itemize">
+     <!--l. 192--><p class="noindent" ><a 
+ id="dx9-107002"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_local_create_regular</span></span>&#x00A0;(<span class='args'>int n_intervals, int space_dim</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Equivalent  to  calling  <a 
+href="#x9-1070007.1.2">pnl_basis_local_create</a>  with  an  array  of  size
+     <span class='var'>space_dim</span> filled with <span class='var'>n_intervals</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 194--><p class="noindent" ><a 
+ id="dx9-107003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_local_get_index</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> *basis, const double *x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Return the linear index of the cell containing <span class='var'>x</span>. It is an integer between
+     <span 
+class="rm-lmr-10x-x-109">0 </span>and <span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmex-10">&#x220F;</span>
+ <sub><span 
+class="lmmi-8">i</span><span 
+class="rm-lmr-8">=1</span></sub><sup><span 
+class="lmmi-8">d</span></sup><span 
+class="lmmi-10x-x-109">n</span><sub><span 
+class="lmmi-8">i</span></sub><span 
+class="rm-lmr-10x-x-109">) </span><span 
+class="lmsy-10x-x-109">- </span><span 
+class="rm-lmr-10x-x-109">1</span>.</p></li></ul>
+<!--l. 198--><p class="noindent" >If the domain you want to consider is not <span 
+class="rm-lmr-10x-x-109">[</span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="rm-lmr-10x-x-109">1</span><span 
+class="lmmi-10x-x-109">,</span><span 
+class="rm-lmr-10x-x-109">1]</span><sup><span 
+class="lmmi-8">d</span></sup>, use the functions <a 
+href="#x9-109019r7.2">pnl_basis_set_domain</a>,
+<a 
+href="#x9-109019r7.2">pnl_basis_set_reduced</a> and <a 
+href="#x9-109023r7.2">pnl_basis_set_map</a> to map your product space into <span 
+class="rm-lmr-10x-x-109">[</span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="rm-lmr-10x-x-109">1</span><span 
+class="lmmi-10x-x-109">,</span><span 
+class="rm-lmr-10x-x-109">1]</span><sup><span 
+class="lmmi-8">d</span></sup>.
+</p><!--l. 200--><p class="noindent" >
+</p>
+<h5 class="subsubsectionHead"><span class="titlemark">7.1.3   </span> <a 
+ id="x9-1080007.1.3"></a>Standard multivariate functions</h5>
+<!--l. 202--><p class="noindent" >These functions are supposed to be <a 
+href="#x15-131031r13.1"><span class='struct'>PnlRnFuncR</span></a>.
+</p><!--l. 204--><p class="noindent" >To make this toolbox more complete, it is now possible to add some extra functions, which
+are not tensor product. They are stored using an independent mechanism in <span class='var'>func_list</span>.
+These additional functions are only taken into account by the methods <a 
+href="#x9-109023r7.2">pnl_basis_i</a>,
+<a 
+href="#x9-109023r7.2">pnl_basis_i_vect</a>, <a 
+href="#x9-109023r7.2">pnl_basis_eval</a> and <a 
+href="#x9-109023r7.2">pnl_basis_eval_vect</a>. Note in particular that it
+is not possible to differentiate these functions and that they are not sensitive to the
+<span class='var'>isreduced</span> attribute. To add an extra function to an existing <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>, call the function
+</p>
+     <ul class="itemize1">
+     <li class="itemize">
+     <!--l. 206--><p class="noindent" ><a 
+ id="dx9-108001"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_add_function</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, <a 
+href="#x15-131031r13.1"><span class='struct'>PnlRnFuncR</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>f</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Add the function <span class='var'>f</span> to the already existing basis <span class='var'>b</span>.</p></li></ul>
+<!--l. 210--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">7.2   </span> <a 
+ id="x9-1090007.2"></a>Functions</h4>
+                                                                                    
+
+                                                                                    
+     <ul class="itemize1">
+     <li class="itemize">
+     <!--l. 214--><p class="noindent" ><a 
+ id="dx9-109001"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_new</span></span>&#x00A0;(<span class='args'></span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> .
+     </p></li>
+     <li class="itemize">
+     <!--l. 217--><p class="noindent" ><a 
+ id="dx9-109002"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_clone</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>dest, const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>src</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Clone <span class='var'>src</span> into <span class='var'>dest</span>. The basis <span class='var'>dest</span> must already exist before calling this
+     function. On exit, <span class='var'>dest</span> and <span class='var'>src</span> are identical and independent.
+     </p></li>
+     <li class="itemize">
+     <!--l. 221--><p class="noindent" ><a 
+ id="dx9-109003"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_copy</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>B</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create a copy of <span class='var'>B</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 224--><p class="noindent" ><a 
+ id="dx9-109004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_free</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">**</span>basis</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Free a <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> created by <a 
+href="#x9-1060007.1.1">pnl_basis_create</a>. Beware that <span class='var'>basis</span> is the
+     address of a <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 229--><p class="noindent" ><a 
+ id="dx9-109005"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_del_elt</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>B, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVectInt</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>d</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Remove the function defined by the tensor product <span class='var'>d</span> from an existing
+     basis <span class='var'>B</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 233--><p class="noindent" ><a 
+ id="dx9-109006"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_del_elt_i</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>B, int i</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Remove the <span class='var'>i-th</span> element of basis <span class='var'>B</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 236--><p class="noindent" ><a 
+ id="dx9-109007"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_add_elt</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>B, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVectInt</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>d</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Add the function defined by the tensor <span class='var'>d</span> to the Basis <span class='var'>B</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 239--><p class="noindent" ><a 
+ id="dx9-109008"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_type_register</span></span>&#x00A0;(<span class='args'>const char *name, double (*f)(double, int, int,
+     void), double (*Df)(double, int, int, void), double (*D2f)(double, int, int, void), int
+     is_orthogonal</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Register a new basis type and return the index to be passed to <a 
+href="#x9-1060007.1.1">pnl_basis_create</a>.
+     The variable <span class='var'>name</span> is a unique string identifier of the family. The variables <span class='var'>f</span>, <span class='var'>Df</span>, <span class='var'>D2f</span> are the
+     one dimensional basis functions, its first and second order derivatives. Each of these functions
+     must return a <span class='var'>double</span> and take two arguments : the first one is the point at which evaluating
+                                                                                    
+
+                                                                                    
+     the basis functions, the second one is the index of function. The varis_orthogonal if the
+     elements of the basis are orthogonal for the <span 
+class="lmmi-10x-x-109">L</span><sup><span 
+class="rm-lmr-8">2</span></sup> scalar product. Here is a toy example to show
+     how the canonical basis is registered (this family is actually already available with the
+     id PNL_BASIS_CANONICAL, so the following example may look a little fake)
+     </p><!--l. 249-->
+     <pre class="lstlisting" id="listing-39"><span class="label"><a 
+ id="x9-109009r1"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">n</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dim</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">return</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_pow_i</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">n</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">}</span></span> 
+<span class="label"><a 
+ id="x9-109010r2"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">Df</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">n</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dim</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">return</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">n</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_pow_i</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">n</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-1)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">}</span></span> 
+<span class="label"><a 
+ id="x9-109011r3"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">n</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dim</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">return</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">n</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">n</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-1)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_pow_i</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">n</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-2)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">}</span></span> 
+<span class="label"><a 
+ id="x9-109012r4"></a></span> 
+<span class="label"><a 
+ id="x9-109013r5"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">int</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">id</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_basis_register</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">"</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">Canonic</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">"</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">Df</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">D2f</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">PNL_FALSE</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x9-109014r6"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span> 
+<span class="label"><a 
+ id="x9-109015r7"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">B</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">is</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Canonical</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">basis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">polynomials</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">with</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">degree</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">less</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">or</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">equal</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">than</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">2</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dimension</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">5.</span></span> 
+<span class="label"><a 
+ id="x9-109016r8"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x9-109017r9"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlBasis</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">B</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_basis_create_from_degree</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">id</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">2,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">5)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span></pre>
+     
+     </li>
+     <li class="itemize">
+     <!--l. 261--><p class="noindent" ><a 
+ id="dx9-109018"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_print</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>B</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Print the characteristics of a basis.
+</p>
+     </li></ul>
+<!--l. 267--><p class="noindent" >Functional regression based on a least square approach often leads to ill conditioned linear systems.
+One way of improving the stability of the system is to use centered and renormalized polynomials so
+that the original domain of interest <span 
+class="lmsy-10x-x-109"><!--span 
+class="htf-calligraphy"-->D<!--/span--> </span>(a subset of <span 
+class="msbm-10x-x-109">&#x211D;</span><sup><span 
+class="lmmi-8">d</span></sup>) is mapped to <span 
+class="rm-lmr-10x-x-109">[</span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="rm-lmr-10x-x-109">1</span><span 
+class="lmmi-10x-x-109">,</span><span 
+class="rm-lmr-10x-x-109">1]</span><sup><span 
+class="lmmi-8">d</span></sup>. If the
+domain <span 
+class="lmsy-10x-x-109"><!--span 
+class="htf-calligraphy"-->D<!--/span--> </span>is rectangular and writes <span 
+class="rm-lmr-10x-x-109">[</span><span 
+class="lmmi-10x-x-109">a,b</span><span 
+class="rm-lmr-10x-x-109">] </span>where <span 
+class="lmmi-10x-x-109">a,b </span><span 
+class="lmsy-10x-x-109">&#x2208; </span><span 
+class="msbm-10x-x-109">&#x211D;</span><sup><span 
+class="lmmi-8">d</span></sup>, the <span 
+class="ec-lmri-10x-x-109">reduction </span>mapping is done
+by
+</p>
+<table 
+class="equation"><tr><td>
+<div class="math-display" >
+<img 
+src="pnl-manual27x.png" alt="          (               )
+x &#x2208; D &#x21A6;- &#x2192;   xi --(bi +-ai)&#x2215;2
+              (bi - ai)&#x2215;2   i=1,&#x22C5;&#x22C5;&#x22C5;,d
+" class="math-display"  /><a 
+ id="x9-109019r1"></a></div>
+</td><td class="equation-label">(1)</td></tr></table>
+<!--l. 272--><p class="nopar" ></p>
+     <ul class="itemize1">
+     <li class="itemize">
+     <!--l. 274--><p class="noindent" ><a 
+ id="dx9-109020"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_set_domain</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>B, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>a, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>This function declares <span class='var'>B</span> as a centered and normalized basis as defined by
+     Equation&#x00A0;1. Calling this function is equivalent to calling <a 
+href="#x9-109019r7.2">pnl_basis_set_reduced</a> with
+     <span class='var'>center=(b+a)/2</span> and <span class='var'>scale=(b-a)/2</span>.
+     </p></li>
+     <li class="itemize">
+                                                                                    
+
+                                                                                    
+     <!--l. 280--><p class="noindent" ><a 
+ id="dx9-109021"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_set_reduced</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>B, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>center, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>
+     <span 
+class="ts1-lmr10-x-x-109">*</span>scale</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>This function declares <span class='var'>B</span> as a centered and normalized basis using the
+     mapping
+</p>
+     <table 
+class="equation-star"><tr><td>
+<div class="math-display" >
+<img 
+src="pnl-manual28x.png" alt="          (            )
+x &#x2208; D &#x21A6;-&#x2192;    xi --centeri
+              scalei    i=1,...,d
+" class="math-display"  /></div>
+     </td></tr></table>
+     <!--l. 286--><p class="nopar" >
+     </p></li>
+     <li class="itemize">
+     <!--l. 287--><p class="noindent" ><a 
+ id="dx9-109022"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_reset_reduced</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>B</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Reset the reduction settings.</p></li></ul>
+<!--l. 290--><p class="noindent" >Note that this renormalization does not apply to the extra functions by <a 
+href="#x9-1080007.1.3">pnl_basis_add_function</a>
+but only to the functions defined by the tensor <span class='var'>T</span>.
+</p><!--l. 292--><p class="noindent" >It is also possible to apply a non linear map <span 
+class="lmmi-10x-x-109">&#x03C6;</span><sub><span 
+class="lmmi-8">i</span></sub> <span 
+class="rm-lmr-10x-x-109">: </span><span 
+class="msbm-10x-x-109">&#x211D; </span><span 
+class="lmsy-10x-x-109">&#x2192;</span><span 
+class="msbm-10x-x-109">&#x211D; </span>to the <span 
+class="lmmi-10x-x-109">i</span><span 
+class="lmsy-10x-x-109">-</span>th coordinate of the input variable
+before the reduction operation if any. Then, the input variables are transformed according
+to
+</p>
+<table 
+class="equation"><tr><td>
+<div class="math-display" >
+<img 
+src="pnl-manual29x.png" alt="          (                  )
+x &#x2208; D &#x21A6;-&#x2192;   &#x03C6;i(xi)--(bi +-ai)&#x2215;2
+               (bi - ai)&#x2215;2    i=1,...,d
+" class="math-display"  /><a 
+ id="x9-109023r2"></a></div>
+</td><td class="equation-label">(2)</td></tr></table>
+<!--l. 297--><p class="nopar" >
+</p>
+                                                                                    
+
+                                                                                    
+     <ul class="itemize1">
+     <li class="itemize">
+     <!--l. 301--><p class="noindent" ><a 
+ id="dx9-109024"></a>   <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_set_map</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>   <span 
+class="ts1-lmr10-x-x-109">*</span>B,   double   (<span 
+class="ts1-lmr10-x-x-109">*</span>map)(double   x,   int   i,
+     void<span 
+class="ts1-lmr10-x-x-109">*</span>params), double (<span 
+class="ts1-lmr10-x-x-109">*</span>Dmap)(double x, int i, void<span 
+class="ts1-lmr10-x-x-109">*</span>params), double (<span 
+class="ts1-lmr10-x-x-109">*</span>D2map)(double
+     x, int i, void<span 
+class="ts1-lmr10-x-x-109">*</span>params), void <span 
+class="ts1-lmr10-x-x-109">*</span>params, size_t size_params</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Define the non linear applied to the input variables before the reduction
+     operation. The parameters <span class='var'>Dmap</span> and <span class='var'>D2map</span> can be <span class='var'>NULL</span>. The three functions <span class='var'>map</span>,
+     <span class='var'>Dmap</span> and <span class='var'>D2map</span> take as second argument the index of the coordinate, while their
+     third argument is used to passe extra parameters defined by <span class='var'>params</span>.</p></li></ul>
+     <ul class="itemize1">
+     <li class="itemize">
+     <!--l. 306--><p class="noindent" ><a 
+ id="dx9-109025"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_fit_ls</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>P, <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>coef, <a 
+href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>y</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the coefficients <span class='var'>coef</span> defined by
+</p>
+     <table 
+class="equation-star"><tr><td>
+<div class="math-display" >
+<img 
+src="pnl-manual30x.png" alt="                 (                )
+              &#x2211;n   N&#x2211;               2
+coef = arg min    (    &#x03B1;jPj(xi)- yi)
+           &#x03B1;  i=1   j=0
+" class="math-display"  /></div>
+     </td></tr></table>
+     <!--l. 311--><p class="nopar" >where <span class='var'>N</span> is the number of functions to regress upon and <span 
+class="lmmi-10x-x-109">n </span>is the number of points at which the
+     values of the original function are known. <span 
+class="lmmi-10x-x-109">P</span><sub><span 
+class="lmmi-8">j</span></sub> is the <span 
+class="lmmi-10x-x-109">j </span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="lmmi-10x-x-109">th </span>basis function. Each
+     row of the matrix <span class='var'>x</span> defines the coordinates of one point <span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">i</span></sub>. The function to be
+     approximated is defined by the vector <span class='var'>y</span> of the values of the function at the points
+     <span class='var'>x</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 318--><p class="noindent" ><a 
+ id="dx9-109026"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_ik_vect</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i, int
+     k</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>An element of a basis writes <span 
+class="lmex-10">&#x220F;</span>
+  <sub><span 
+class="lmmi-8">l</span><span 
+class="rm-lmr-8">=0</span></sub><sup><span class='var'><span 
+class="lmmi-8">nb</span><sub><span 
+class="lmmi-6">v</span></sub><span 
+class="lmmi-8">ariates</span></span></sup><span 
+class="lmmi-10x-x-109">&#x03D5;</span><sub><span 
+class="lmmi-8">l</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">l</span></sub><span 
+class="rm-lmr-10x-x-109">) </span>where the <span 
+class="lmmi-10x-x-109">&#x03D5;</span>&#8217;s are one
+     dimensional polynomials. This functions computes the therm <span 
+class="lmmi-10x-x-109">&#x03D5;</span><sub><span 
+class="lmmi-8">k</span></sub> of the <span class='var'>i-th</span> basis function at
+     the point <span class='var'>x</span>.
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 323--><p class="noindent" ><a 
+ id="dx9-109027"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_i_vect</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>If <span class='var'>b</span> is composed of <span 
+class="lmmi-10x-x-109">f</span><sub><span 
+class="rm-lmr-8">0</span></sub><span 
+class="lmmi-10x-x-109">,</span><span 
+class="lmmi-10x-x-109">&#x2026;</span><span 
+class="lmmi-10x-x-109">,f</span><sub><span class='var'><span 
+class="lmmi-8">nb</span>_<span 
+class="lmmi-8">func</span></span><span 
+class="lmsy8-">-</span><span 
+class="rm-lmr-8">1</span></sub>, then this function returns <span 
+class="lmmi-10x-x-109">f</span><sub><span 
+class="lmmi-8">i</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 327--><p class="noindent" ><a 
+ id="dx9-109028"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_i_D_vect</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i, int
+     j</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>If <span class='var'>b</span> is composed of <span 
+class="lmmi-10x-x-109">f</span><sub><span 
+class="rm-lmr-8">0</span></sub><span 
+class="lmmi-10x-x-109">,</span><span 
+class="lmmi-10x-x-109">&#x2026;</span><span 
+class="lmmi-10x-x-109">,f</span><sub><span class='var'><span 
+class="lmmi-8">nb</span>_<span 
+class="lmmi-8">func</span></span><span 
+class="lmsy8-">-</span><span 
+class="rm-lmr-8">1</span></sub>, then this function returns <span 
+class="lmmi-10x-x-109">&#x2202;</span><sub><span 
+class="lmmi-8">x</span><sub><span class='var'><span 
+class="lmmi-6">j</span></span></sub></sub><span 
+class="lmmi-10x-x-109">f</span><sub><span 
+class="lmmi-8">i</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 332--><p class="noindent" ><a 
+ id="dx9-109029"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_i_D2_vect</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i, int j1, int
+     j2</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>If <span class='var'>b</span> is composed of <span 
+class="lmmi-10x-x-109">f</span><sub><span 
+class="rm-lmr-8">0</span></sub><span 
+class="lmmi-10x-x-109">,</span><span 
+class="lmmi-10x-x-109">&#x2026;</span><span 
+class="lmmi-10x-x-109">,f</span><sub><span class='var'><span 
+class="lmmi-8">nb</span>_<span 
+class="lmmi-8">func</span></span><span 
+class="lmsy8-">-</span><span 
+class="rm-lmr-8">1</span></sub>, then this function returns <span 
+class="lmmi-10x-x-109">&#x2202;</span><sup><span 
+class="rm-lmr-8">2</span></sup><sub><span 
+class="lmmi-8">x</span><sub><span class='var'><span 
+class="lmmi-6">j</span><span 
+class="rm-lmr-6">1</span></span></sub><span 
+class="lmmi-8">,x</span><sub><span class='var'><span 
+class="lmmi-6">j</span><span 
+class="rm-lmr-6">2</span></span></sub></sub><span 
+class="lmmi-10x-x-109">f</span><sub><span 
+class="lmmi-8">i</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 338--><p class="noindent" ><a 
+ id="dx9-109030"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_eval_derivs_vect</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>coef, const
+     <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, double <span 
+class="ts1-lmr10-x-x-109">*</span>fx, <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Dfx, <a 
+href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>D2fx</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the function, the gradient and the Hessian matrix of
+     <span 
+class="lmex-10">&#x2211;</span>
+       <sub><span 
+class="lmmi-8">k</span><span 
+class="rm-lmr-8">=0</span></sub><sup><span 
+class="lmmi-8">n</span></sup><span class='var'><span 
+class="lmmi-10x-x-109">coef</span></span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="lmmi-10x-x-109">P</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmsy-10x-x-109">&#x22C5;</span><span 
+class="rm-lmr-10x-x-109">) </span>at the point <span class='var'>x</span>. On output, <span class='var'>fx</span> contains the value of the function, <span class='var'>Dfx</span> its
+     gradient and <span class='var'>D2fx</span> its Hessian matrix. This function is optimized and performs much
+     better than calling <a 
+href="#x9-109023r7.2">pnl_basis_eval</a>, <a 
+href="#x9-109023r7.2">pnl_basis_eval_D</a> and <a 
+href="#x9-109023r7.2">pnl_basis_eval_D2</a>
+     sequentially.
+     </p></li>
+     <li class="itemize">
+     <!--l. 346--><p class="noindent" ><a 
+ id="dx9-109031"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_eval_vect</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>basis, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>coef, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>
+     <span 
+class="ts1-lmr10-x-x-109">*</span>x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the linear combination of <span class='var'>P_k(x)</span> defined by <span class='var'>coef</span>. Given
+     the coefficients computed by the function <a 
+href="#x9-109023r7.2">pnl_basis_fit_ls</a>, this function returns
+     <span 
+class="lmex-10">&#x2211;</span>
+       <sub><span 
+class="lmmi-8">k</span><span 
+class="rm-lmr-8">=0</span></sub><sup><span 
+class="lmmi-8">n</span></sup><span class='var'><span 
+class="lmmi-10x-x-109">coef</span></span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="lmmi-10x-x-109">P</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span class='var'><span 
+class="lmmi-10x-x-109">x</span></span><span 
+class="rm-lmr-10x-x-109">)</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 352--><p class="noindent" ><a 
+ id="dx9-109032"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_eval_D_vect</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>basis, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>coef, const
+     <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the derivative with respect to <span class='var'>x_i</span> of the linear combination of
+     <span class='var'>P_k(x)</span> defined by <span class='var'>coef</span>. Given the coefficients computed by the function <a 
+href="#x9-109023r7.2">pnl_basis_fit_ls</a>,
+     this function returns <span 
+class="lmmi-10x-x-109">&#x2202;</span><sub><span 
+class="lmmi-8">x</span><sub><span 
+class="lmmi-6">i</span></sub></sub> <span 
+class="lmex-10">&#x2211;</span>
+   <sub><span 
+class="lmmi-8">k</span><span 
+class="rm-lmr-8">=0</span></sub><sup><span 
+class="lmmi-8">n</span></sup><span class='var'><span 
+class="lmmi-10x-x-109">coef</span></span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="lmmi-10x-x-109">P</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span class='var'><span 
+class="lmmi-10x-x-109">x</span></span><span 
+class="rm-lmr-10x-x-109">) </span>The index <span class='var'>i</span> may vary between <span class='var'>0</span> and
+     <span class='var'>P-&#x003E;nb_variates - 1</span>.
+     </p></li>
+     <li class="itemize">
+                                                                                    
+
+                                                                                    
+     <!--l. 360--><p class="noindent" ><a 
+ id="dx9-109033"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_eval_D2_vect</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>basis, const <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>coef, const
+     <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i, int j</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the derivative with respect to <span class='var'>x_i</span> of the linear combination of
+     <span class='var'>P_k(x)</span> defined by <span class='var'>coef</span>. Given the coefficients computed by the function <a 
+href="#x9-109023r7.2">pnl_basis_fit_ls</a>,
+     this function returns <span 
+class="lmmi-10x-x-109">&#x2202;</span><sub><span 
+class="lmmi-8">x</span><sub><span 
+class="lmmi-6">i</span></sub></sub><span 
+class="lmmi-10x-x-109">&#x2202;</span><sub><span 
+class="lmmi-8">x</span><sub><span 
+class="lmmi-6">j</span></sub></sub> <span 
+class="lmex-10">&#x2211;</span>
+   <sub><span 
+class="lmmi-8">k</span><span 
+class="rm-lmr-8">=0</span></sub><sup><span 
+class="lmmi-8">n</span></sup><span class='var'><span 
+class="lmmi-10x-x-109">coef</span></span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="lmmi-10x-x-109">P</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span class='var'><span 
+class="lmmi-10x-x-109">x</span></span><span 
+class="rm-lmr-10x-x-109">)</span>. The indices <span class='var'>i</span> and <span class='var'>j</span> may vary between <span class='var'>0</span> and
+     <span class='var'>P-&#x003E;nb_variates - 1</span>.
+</p>
+     </li></ul>
+<!--l. 369--><p class="noindent" >The following functions are provided for compatibility purposes but are marked as deprecated. Use
+the functions with the <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">_vect</span></span></span> extension. </p>
+     <ul class="itemize1">
+     <li class="itemize">
+     <!--l. 372--><p class="noindent" ><a 
+ id="dx9-109034"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_ik</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, const double <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i, int k</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
+href="#x9-109023r7.2">pnl_basis_ik_vect</a> but takes a C array as the point of
+     evaluation.
+     </p></li>
+     <li class="itemize">
+     <!--l. 375--><p class="noindent" ><a 
+ id="dx9-109035"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_i</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, double <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
+href="#x9-109023r7.2">pnl_basis_i_vect</a> but takes a C array as the point of
+     evaluation.
+     </p></li>
+     <li class="itemize">
+     <!--l. 378--><p class="noindent" ><a 
+ id="dx9-109036"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_i_D</span></span>&#x00A0;(<span class='args'> const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, const double <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i, int j </span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
+href="#x9-109023r7.2">pnl_basis_i_D_vect</a> but takes a C array as the point
+     of evaluation.
+     </p></li>
+     <li class="itemize">
+     <!--l. 381--><p class="noindent" ><a 
+ id="dx9-109037"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_i_D2</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>b, const double <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i, int j1, int j2</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
+href="#x9-109023r7.2">pnl_basis_i_D2_vect</a> but takes a C array as the point
+     of evaluation.
+     </p></li>
+     <li class="itemize">
+     <!--l. 384--><p class="noindent" ><a 
+ id="dx9-109038"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_eval</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>P, <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>coef, double <span 
+class="ts1-lmr10-x-x-109">*</span>x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
+href="#x9-109023r7.2">pnl_basis_eval_vect</a> but takes a C array as the point
+     of evaluation.
+     </p></li>
+     <li class="itemize">
+     <!--l. 387--><p class="noindent" ><a 
+ id="dx9-109039"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_eval_D</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>P, <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>coef, double <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
+href="#x9-109023r7.2">pnl_basis_eval_D_vect</a> but takes a C array as the
+     point of evaluation.
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 390--><p class="noindent" ><a 
+ id="dx9-109040"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_eval_D2</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>P, <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>coef, double <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i, int j</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
+href="#x9-109023r7.2">pnl_basis_eval_D2_vect</a> but takes a C array as the
+     point of evaluation.
+     </p></li>
+     <li class="itemize">
+     <!--l. 393--><p class="noindent" ><a 
+ id="dx9-109041"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_eval_derivs</span></span>&#x00A0;(<span class='args'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>P, <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>coef, double <span 
+class="ts1-lmr10-x-x-109">*</span>x, double <span 
+class="ts1-lmr10-x-x-109">*</span>fx,
+     <a 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Dfx, <a 
+href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>D2fx</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
+href="#x9-109023r7.2">pnl_basis_eval_derivs_vect</a> but takes a C array as
+     the point of evaluation.</p></li></ul>
+                                                                                    
+
+                                                                                    
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse8.html" >next</a>] [<a 
+href="pnl-manualse6.html" >prev</a>] [<a 
+href="pnl-manualse6.html#tailpnl-manualse6.html" >prev-tail</a>] [<a 
+href="pnl-manualse7.html" >front</a>] [<a 
+href="pnl-manual.html#pnl-manualse7.html" >up</a>] </p></div>
+<!--l. 1--><p class="noindent" ><a 
+ id="tailpnl-manualse7.html"></a> </p> 
+</body></html> 

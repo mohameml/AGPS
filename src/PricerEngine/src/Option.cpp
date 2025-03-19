@@ -62,9 +62,6 @@ void Option::computeDividends(const PnlMat* matrix,  PnlVect* perfDiv){
 }
 
 
-
-
-
 void perf(const PnlMat* matrix, PnlVect* perf) {
     PnlVect *row_i = pnl_vect_create(5);
     PnlVect *row_0 = pnl_vect_create(5); 
