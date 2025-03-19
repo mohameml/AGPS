@@ -12,61 +12,45 @@ from backend.HedgingEngine.FinancialEstimator.FinancialEstimator import Financia
 
 class  AssetDescription :
 
-    def __init__(self ):
+    def __init__(self ,  financialEstimator : FinancialEstimator) :
         
         self.domesticCurrencyId = "EUR"
-        self.matrix_corr = np.zeros((5,5))
+        self.matrix_corr = np.zeros((9,9))
         self.assets : List[Asset]= []
         self.currencies : List[Currency] =  []
-        self.financialEstimator : FinancialEstimator = FinancialEstimator()
+        self.estimate_params(financialEstimator);
 
         
 
-    def estimate_params(self , marketDataReader : MarketDataReader):
+    def estimate_params(self  , financialEstimator : FinancialEstimator):
 
 
-        # 1) Estimation de la volatilite de chaque index : 
-
-        for index_name in  EnumIndex : 
-
-            list_price = marketDataReader._index_price_history.get_all_price_by_index_name(index_name)
-            volatility = self.financialEstimator.volatilityEstimator.estimate_volatility(list_price)
+        for index_name , volatility in financialEstimator.dict_volatility_price.items() : 
             self.assets.append(Asset(index_name , volatility))
 
-        # 2) Estimation de la volatilite et de taux r_f de chaque Taux de Change : 
+        for curr_name in financialEstimator.dict_volatility_exchange_rate.keys() :
+            volatility = financialEstimator.dict_volatility_exchange_rate[curr_name]
+            rate = financialEstimator.dict_interest_rate[curr_name]
+            self.currencies.append(Currency(curr_name , volatility , rate))
 
-        for curr_name in EnumCurrency : 
 
-            if curr_name != EnumCurrency.EUR :
+        self.matrix_corr = financialEstimator.matrix_corr
 
-                list_interest_rate = marketDataReader._interest_rate_history.get_all_rate_by_curr_name(curr_name)
-                rate_f = self.financialEstimator.riskFreeEstimator.mean_estimate(list_interest_rate)
-                
-                list_exchange_rate = marketDataReader._exchange_rate_history.get_all_rate_by_currency_name(curr_name)
-                volatility_f = self.financialEstimator.volatilityEstimator.estimate_volatility(list_exchange_rate)
-                
-                self.currencies.append(Currency(curr_name , volatility_f , rate_f))
-            else :
 
-                list_interest_rate = marketDataReader._interest_rate_history.get_all_rate_by_curr_name(curr_name)
-                rate_eur = self.financialEstimator.riskFreeEstimator.mean_estimate(list_interest_rate)
-                self.currencies.append(Currency(curr_name , 0.0 , rate_eur))
+    def get_rate_of_domesitc_currency(self) -> float :
+        
+        for curr in self.currencies : 
+            if curr.id.value == self.domesticCurrencyId :
+                return curr.rate
 
-        # 3)  Estimation de la matrice de corrélation : 
-
-        matrix_index = np.array(marketDataReader._index_price_history.get_all_price_for_all_index_name())
-        matrix_exchange_rate = np.array(marketDataReader._exchange_rate_history.get_all_rate_for_all_curr_name())
-        matrix = np.vstack((matrix_index, matrix_exchange_rate[: ,:matrix_index.shape[1]]))
-
-        self.matrix_corr = self.financialEstimator.corrMatrixEstimator.estimate_correlation_matrix(matrix)
-
+        return 0.0
 
     def get_dict_interset_rate_estimate(self):
 
         dict_interset : Dict[EnumCurrency , float] = {}
 
         for curr in self.currencies :
-            dict_interset[curr.name]  = curr.rate
+            dict_interset[curr.id]  = curr.rate
 
         return dict_interset
 

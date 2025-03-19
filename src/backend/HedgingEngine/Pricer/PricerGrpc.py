@@ -6,11 +6,12 @@ from backend.HedgingEngine.Pricer import pricing_pb2_grpc
 from backend.HedgingEngine.Pricer.Pricer import Pricer
 from backend.HedgingEngine.Pricer.PricingParams import PricingParams
 from backend.HedgingEngine.Pricer.PricingResults import PricingResults
+from backend.HedgingEngine.Utils.MathDateConverter import MathDateConverter
 
 
 class PricerGrpc(Pricer):
 
-    def __init__(self, financial_parameters: FinancialParams , address: str = "http://localhost:50051"):
+    def __init__(self, financial_parameters: FinancialParams , address: str = "localhost:50051"):
         
         super().__init__(financial_parameters)
         self.channel = grpc.insecure_channel(address)
@@ -22,31 +23,29 @@ class PricerGrpc(Pricer):
         
         output = self.grpc_client.PriceAndDeltas(input_data)
 
-        # TODO : tester cette partie avec C++ et verifier les ordres de deltas et deltas_StdDev 
         res = PricingResults(list(output.deltas) , output.price , list(output.deltasStdDev) , output.priceStdDev)
 
         return res 
 
 
-    def hello_world(self):
-
-        # TODO : Test avec C++  : pour verfifer la partie connection : 
-        
+    def hello_world(self):        
         info = self.grpc_client.HelloWorld(pricing_pb2.Empty())
         print(f"Message reçu : {info.message}")
-        return info
+        return info.message
 
 
 
     def pricing_params_to_pricing_input(self, pricing_params : PricingParams):
         
+        converter = MathDateConverter(self.params.nombreOfDaysInOneYear , self.params.time_grid.creationDate)
         input_data = pricing_pb2.PricingInput()
         
         # 1) Convert ListDataFeed to pastLines un marketDomestic : past 
 
-        for feed in pricing_params.data_feeds:
+        past_in_market_domestic = pricing_params.data_feeds.toDomesticMarket(converter)
+        for feed in past_in_market_domestic:
             line = pricing_pb2.PastLines()
-            line.value.extend(feed.toDomesticMarket())
+            line.value.extend(feed)
             input_data.past.append(line)
         
         # 2) Convert to monitoringDateReached , time , domesticCurrencyId : 
@@ -78,6 +77,6 @@ class PricerGrpc(Pricer):
             input_data.correlations.append(row)
 
         # 6) timeGrid : 
-        input_data.time_grid.extend(self.params.formuleDescription.time_grid)
+        input_data.time_grid.extend(self.params.time_grid.get_time_grid(converter))
 
         return input_data

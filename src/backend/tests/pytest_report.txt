@@ -1,0 +1,32 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-8.3.4, pluggy-1.5.0
+rootdir: /home/mohameml/ENSIMAG/3A/MEQA/S10/03_Projet_App_gestion_PS/Projet/AGPS/src
+plugins: anyio-4.8.0
+collected 62 items
+
+backend/tests/API/test_api.py ..                                         [  3%]
+backend/tests/FinancialEstimator/test_corr_estimate.py ......            [ 12%]
+backend/tests/FinancialEstimator/test_financial_estimator.py ....        [ 19%]
+backend/tests/FinancialEstimator/test_risk_free_estimate.py .            [ 20%]
+backend/tests/FinancialEstimator/test_volatility_estimate.py ...         [ 25%]
+backend/tests/FinancialParam/test_data_feed_get_spot.py .                [ 27%]
+backend/tests/FinancialParam/test_data_feed_toDomestic.py .              [ 29%]
+backend/tests/FinancialParam/test_financial_params.py .                  [ 30%]
+backend/tests/FinancialParam/test_market_reader_get_data_feed.py ..      [ 33%]
+backend/tests/Hedging/test_hedge.py .                                    [ 35%]
+backend/tests/MarketDataReader/test_enum_currency.py .                   [ 37%]
+backend/tests/MarketDataReader/test_enum_index.py ..                     [ 40%]
+backend/tests/MarketDataReader/test_exchange_rate.py .......             [ 51%]
+backend/tests/MarketDataReader/test_exchange_rate_history.py ....        [ 58%]
+backend/tests/MarketDataReader/test_exchange_rate_list.py ......         [ 67%]
+backend/tests/MarketDataReader/test_index_price.py ......                [ 77%]
+backend/tests/MarketDataReader/test_interest_rate.py .....               [ 85%]
+backend/tests/MarketDataReader/test_market_reader_exchange_rate.py .     [ 87%]
+backend/tests/MarketDataReader/test_market_reader_index_price.py .       [ 88%]
+backend/tests/MarketDataReader/test_market_reader_interset_rate.py .     [ 90%]
+backend/tests/Pricer/test_priceDeltas.py .                               [ 91%]
+backend/tests/Pricer/test_pricer_grpc.py .                               [ 93%]
+backend/tests/Pricer/test_pricer_grpc_hello_world.py .                   [ 95%]
+backend/tests/Utils/test_math_date_convert.py ...                        [100%]
+
+================= 62 passed, 57 warnings in 111.72s (0:01:51) ==================

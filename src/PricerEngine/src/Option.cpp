@@ -4,18 +4,34 @@
 #include "pnl/pnl_matrix.h"
 #include <vector>
 #include <cmath>
+#include "pricing.pb.h"
+
 
 using namespace std;
 
-Option::Option()
-{
-}
 
-Option::Option(InterestRateModel domesticInterestRate, TimeGrid monitoringTimeGrid)
+Option::Option(const grpc_pricer::PricingInput& input)
 {
 
-    this->domesticInterestRate = domesticInterestRate;
-    this->monitoringTimeGrid = monitoringTimeGrid;
+    
+    std::string domesticCurrencyId = input.domesticcurrencyid();
+
+    double domesticRate = 0.0; // Taux d'intérêt de la devise domestique
+    bool domesticCurrencyFound = false;
+
+    for (const auto& currency : input.currencies()) {
+        if (currency.id() == domesticCurrencyId) {
+            domesticRate = currency.interestrate();
+            break;
+        }
+    }
+
+
+    this->domesticInterestRate = InterestRateModel(domesticRate, domesticCurrencyId);
+
+    this->monitoringTimeGrid = TimeGrid(std::vector<double>(input.time_grid().begin(), input.time_grid().end()));
+    this->maturity = monitoringTimeGrid.grid_time.back();
+
     
 }
 
@@ -55,7 +71,6 @@ void Option::computeDividends(const PnlMat* matrix,  PnlVect* perfDiv){
         double perf_i = std::max(pnl_vect_min(row_i), 0.0);
         pnl_vect_set(perfDiv, i-1, perf_i);
     }
-
     pnl_vect_free(&row_i);
     pnl_vect_free(&row_i_1);
 
@@ -127,8 +142,13 @@ double barriere_800_euros(double x){
 }
 
 
-double Option::payOff(const PnlMat* matrix){
+double Option::payOff(const PnlMat* path){
     
+    PnlMat *matrix = pnl_mat_create(path->m, 5);  // Même nombre de lignes, 5 colonnes
+    // Extraction des colonnes 0 à 4 (5 colonnes des indices)
+    pnl_mat_extract_subblock(matrix, path, 0, 0, path->m, 5);
+
+
     double perfValue = 0.0;
     PnlVect *perfDiv = pnl_vect_create(4);
     PnlVect *perfFlux = pnl_vect_create(5);
@@ -155,5 +175,6 @@ double Option::payOff(const PnlMat* matrix){
     std::cout << "Flux à la date Tc : " << flux_Tc << std::endl;
 
     res += flux_Tc;
+    pnl_mat_free(&matrix);
     return res;
 }

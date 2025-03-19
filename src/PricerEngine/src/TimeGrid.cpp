@@ -1,5 +1,6 @@
 #include "TimeGrid.hpp"
 #include <iostream>
+#include <algorithm>
 
 
 
@@ -46,5 +47,6 @@ int TimeGrid::getLastIndex(double t)
     
     return grid_time.size() - 1;
 }
-
-
+bool TimeGrid::has(double t) const {
+    return std::find(grid_time.begin(), grid_time.end(), t) != grid_time.end();
+}

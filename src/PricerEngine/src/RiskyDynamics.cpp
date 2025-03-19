@@ -1,5 +1,8 @@
 #include "RiskyDynamics.hpp"
 #include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+#include <iostream>
+#include <cmath>
 
 RiskyDynamics::RiskyDynamics()
 {

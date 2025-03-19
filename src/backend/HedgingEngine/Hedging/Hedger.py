@@ -1,82 +1,105 @@
+from datetime import datetime
 from backend.HedgingEngine.FinancialParam.FinancialParams import FinancialParams
 from backend.HedgingEngine.Pricer.PricerGrpc import PricerGrpc
 from backend.HedgingEngine.Pricer.PricingParams import PricingParams
-from backend.HedgingEngine.Pricer.PricingResults import PricingResults
-from backend.HedgingEngine.FinancialParam.DataFeed import DataFeed
-from backend.HedgingEngine.Rebalacing.FixedRebalacing import FixedRebalancing
 from backend.HedgingEngine.Utils.MathDateConverter import MathDateConverter
 from backend.HedgingEngine.Portfolio.Portfolio import Portfolio
 from backend.HedgingEngine.MarkatDataReader.OutputData import OutputData
+from backend.HedgingEngine.FinancialParam.ListDataFeed import ListDataFeed
+from backend.HedgingEngine.Portfolio.PortfolioData import PortfolioData
+
 
 class Hedging:
+
     def __init__(self, parameters: FinancialParams):
 
         self.financial_param = parameters
+        self.marketDataReader = self.financial_param.marketDataReader
+        self.converter = None  
         self.pricer = PricerGrpc(parameters)
-        self.oracle_rebalancing = FixedRebalancing(3) # TODO : get periode for rebalacingOrcale 
+        self.past = ListDataFeed(self.financial_param)
+        self.r =  self.financial_param.assetDescription.get_rate_of_domesitc_currency() 
+        self.dict_rf = self.financial_param.assetDescription.get_dict_interset_rate_estimate()
 
-    def hedge(self, data_feeds: list[DataFeed]) -> list[OutputData]:
 
+    def hedge(self, rebalancingDate: datetime, portfolioData: PortfolioData):
 
-        converter = MathDateConverter(self.financial_param.nombreOfDaysInOneYear)
-        past = [data_feeds[0]]
-        monitoring_date = False
-        time_math = converter.ConvertToMathDistance(
-            self.financial_param.formuleDescription.creationDate, data_feeds[0].date
+        # Récupérer les données de marché
+        feed = self.get_market_data(rebalancingDate)
+        
+        # Mettre à jour les paramètres financiers
+        self.update_financial_parameters(rebalancingDate)
+        
+        # Calcul des paramètres de pricing
+        pricer_params = self.get_pricing_params(rebalancingDate)
+        
+        # Calcul du pricing et des deltas
+        results = self.get_price_and_deltas(pricer_params)
+        
+        # Création et mise à jour du portfolio
+        portfolio = self.create_or_update_portfolio(results, feed, portfolioData)
+        
+        # Création de l'output
+        output = self.create_output(results, feed.date ,portfolio.value)
+        
+        return output, portfolio
+
+    def get_market_data(self, rebalancingDate: datetime):
+
+        feed = self.marketDataReader.get_data_feed(rebalancingDate)
+        if feed is None:
+            raise ValueError(f"La date {rebalancingDate} n'est pas dans la période d'analyse.")
+        return feed
+
+    def update_financial_parameters(self, rebalancingDate: datetime):
+        
+        # Mettre à jour nombreOfDaysInOneYear
+        self.financial_param.set_nb_days_in_one_year(rebalancingDate.year)
+        self.converter = MathDateConverter(
+            self.financial_param.nombreOfDaysInOneYear, 
+            self.financial_param.time_grid.creationDate
         )
 
-        pricer_params = PricingParams(past, time_math, monitoring_date)
-        
-        results = self.pricer.price_and_deltas(pricer_params)
-        
-        portfolio = Portfolio(results.deltas, data_feeds[0], results.price)
 
-        output0 = OutputData(
-            value=results.price,
-            date=data_feeds[0].date,
+    def get_pricing_params(self, rebalancingDate: datetime):
+        
+        # Récupérer les informations nécessaires pour le pricing
+        time_math = self.converter.ConvertToMathDistance(rebalancingDate)
+        monitoring_date = rebalancingDate in self.financial_param.time_grid.paymentDates
+        self.past.update_hedging_past(rebalancingDate)
+        return PricingParams(self.past, time_math, monitoring_date)
+
+    
+    def get_price_and_deltas(self, pricer_params):
+        
+        return self.pricer.price_and_deltas(pricer_params)
+
+    def create_or_update_portfolio(self, results, feed, portfolioData):
+    
+        # Si c'est la première fois, on crée un portfolio avec les deltas et le prix
+        portfolio = Portfolio(
+            results.deltas, 
+            feed.get_spot_list(self.dict_rf , self.converter),
+            feed.date,  
+            results.price    
+        )
+        
+        if not portfolioData.isFirstTime:
+            portfolio.set_parms(portfolioData.compos, portfolioData.cash, portfolioData.date)
+            time = self.converter.ConvertToMathDistance(feed.date, portfolio.date)
+            spot = feed.get_spot_list(self.dict_rf , self.converter)
+            portfolio.update_compo(results.deltas, spot, feed.date, time , self.r)
+        
+        return portfolio
+
+    def create_output(self, results, date, price):
+
+        return OutputData(
+            value=price , # portfolio.value if not portfolioData.isFirstTime else results.price
+            date=date,
             price=results.price,
             price_std_dev=results.price_std_dev,
             deltas=list(results.deltas.values()),
             deltas_std_dev=list(results.deltas_std_dev.values())
         )
 
-        list_output = [output0]
-        
-        hedging_past = [data_feeds[0]]
-        
-        r = self.financial_param.asset_description.currency_rates[
-            self.financial_param.asset_description.domestic_currency_id
-        ]
-
-        for feed in data_feeds[1:]:
-            time_math = converter.convert_to_math_distance(
-                self.financial_param.payoff_description.creation_date, feed.date
-            )
-            monitoring_date = feed.date in self.financial_param.payoff_description.payment_dates
-
-            if monitoring_date:
-                hedging_past.append(feed)
-                past = hedging_past.copy()
-            else:
-                past = hedging_past.copy()
-                past.append(feed)
-
-            pricer_params.set_params(past, time_math, monitoring_date)
-            results = self.pricer.price_and_deltas(pricer_params)
-
-            if self.oracle_rebalancing.is_rebalancing(feed.date):
-                time = converter.convert_to_math_distance(portfolio.date, feed.date)
-                value = portfolio.get_portfolio_value(feed, time, r)
-                portfolio.update_compo(results.deltas, feed, value)
-
-                output = OutputData(
-                    value=value,
-                    date=feed.date,
-                    price=results.price,
-                    price_std_dev=results.price_std_dev,
-                    deltas=list(results.deltas.values()),
-                    deltas_std_dev=list(results.deltas_std_dev.values())
-                )
-                list_output.append(output)
-        
-        return list_output

@@ -11,7 +11,7 @@ service GrpcPricer {
 // Message contenant les données pour invoquer le pricer
 message PricingInput {
 
-  	repeated PastLines past = 1;  // Matrice des données historiques
+  	repeated PastLines past = 1;  // Matrice des données historiques 
   	bool monitoringDateReached = 2; // Indique si une date de monitoring est atteinte
   	double time = 3; // Temps mathématique
 	repeated Currency currencies = 4;
@@ -20,14 +20,9 @@ message PricingInput {
 	repeated CorrelationMatrix correlations = 7;
 	repeated double time_grid = 8;
 	
-	// int32 numberOfDaysInOneYear = 7; //  252 par déafut :
-	// PortfolioRebalancingOracleDescription portfolioRebalancingOracleDescription = 8;
-	// Option option = 7; // ? :
 	
-	// int32 sampleNb = 11; 50000
-	// double relativeFiniteDifferenceStep = 12; // 0.1 
-
 }
+
 
 // Une ligne de la matrice historique
 message PastLines {
@@ -47,26 +42,6 @@ message Asset {
 	double volatility = 2;
 }
 
-// Description de la stratégie de rééquilibrage du portefeuille
-// message PortfolioRebalancingOracleDescription {
-// 	string type = 1;
-// 	int32 period = 2;
-// }
-
-
-// Détails de l'option
-// message Option {
-// 	string type = 1;
-// 	FixingDatesInDays fixingDatesInDays = 2;
-// 	double strike = 3;
-// 	int32 maturityInDays = 4;
-// }
-
-// Fixing dates en jours
-// message FixingDatesInDays {
-// 	string type = 1;
-// 	repeated int32 datesInDays = 2;
-// }
 
 // Matrice des corrélations
 message CorrelationMatrix {
@@ -75,7 +50,7 @@ message CorrelationMatrix {
 
 // Résultats du pricing
 message PricingOutput {
-	double price = 1;  // Prix calculé
+	double price = 1;  // Prix calculé set_price
 	repeated double deltas = 2;  // Liste des deltas
 	double priceStdDev = 3;  // Écart-type du prix
 	repeated double deltasStdDev = 4;  // Écart-type des deltas
@@ -88,3 +63,33 @@ message Empty {}
 message ReqInfo {
 	string message = 1 ; 
 }
+
+
+
+// int32 numberOfDaysInOneYear = 7; //  252 par déafut :
+// PortfolioRebalancingOracleDescription portfolioRebalancingOracleDescription = 8;
+// Option option = 7; // ? :
+
+// int32 sampleNb = 11; 50000
+// double relativeFiniteDifferenceStep = 12; // 0.1 
+
+// Description de la stratégie de rééquilibrage du portefeuille
+// message PortfolioRebalancingOracleDescription {
+	// 	string type = 1;
+	// 	int32 period = 2;
+	// }
+	
+	
+	// Détails de l'option
+	// message Option {
+		// 	string type = 1;
+// 	FixingDatesInDays fixingDatesInDays = 2;
+// 	double strike = 3;
+// 	int32 maturityInDays = 4;
+// }
+
+// Fixing dates en jours
+// message FixingDatesInDays {
+// 	string type = 1;
+// 	repeated int32 datesInDays = 2;
+// }

@@ -11,6 +11,9 @@ class RiskFreeRateEstimator:
 
     def mean_estimate(self , r_t : List[float]) -> float:
         """ Estimation par la moyenne historique. """
+        if len(r_t) == 0:
+            raise ValueError("La liste des taux r_t ne peut pas être vide.")
+
         return np.mean(r_t)
 
 

@@ -17,8 +17,10 @@ public :
     int at(int index);
     int len();
     int getLastIndex(double t);
+    bool has(double t) const;
 
 };
+
 
 
 #endif 

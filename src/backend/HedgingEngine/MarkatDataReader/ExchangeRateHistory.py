@@ -22,7 +22,7 @@ class ExchangeRateHistory(GenericHistory[ExchangeRateList]):
     def get_all_rate_for_all_curr_name(self) :
         
         """
-            - return matrix M = [  X_2 , ... X_5 ]
+            - return matrix M = [X_2 , ... X_5] {2 : USD , 3 : GBP , 4 : JPY , 5 : AUD}
             - avec X_i : X_i(t0) , ........ , X_i(t_N) ,  i : curr_name
         """
 

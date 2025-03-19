@@ -13,6 +13,17 @@ class CorrelationMatrixEstimator:
         Calcule la matrice de corrélation entre plusieurs actifs en utilisant les rendements logarithmiques.
         """
 
+        if len(list_prices) == 0:
+            raise ValueError("La liste des prix ne doit pas être vide.")
+        
+        if len(list_prices) == 1:
+            return np.array([[1.0]])
+
+        # le cas ou il y'a un actif de prix qui ne change pas : 
+        for prices in list_prices:
+            if np.all(prices == prices[0]):
+                raise ValueError("Les prix des actifs ne doivent pas être constants.")
+
         log_returns = []
 
         for prices in list_prices:
