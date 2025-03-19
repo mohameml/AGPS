@@ -42,6 +42,7 @@ PnlMat* convertPastToPnlMat(const grpc_pricer::PricingInput& input) {
     return past;
 }
 
+
 // Logic and data behind the server's behavior.
 class GrpcPricerImpl final : public grpc_pricer::GrpcPricer::Service {
 public:
@@ -79,6 +80,7 @@ public:
         pnl_mat_free(&past);
         pnl_vect_free(&delta);
         pnl_vect_free(&deltaStdDev);
+
         return Status::OK;
     }
 

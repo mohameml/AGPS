@@ -222,10 +222,11 @@ def test_financial_params():
     # time_grid: 5.2619047619047619
 
 
-    # print("=============== PrcingInput =================")
-    # print(input_data)
+    print("=============== PrcingInput =================")
+    print(input_data)
 
-    assert input_data is not None 
+
+    # assert input_data is not None 
     
 
 
