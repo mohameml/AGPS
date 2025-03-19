@@ -7,6 +7,7 @@ from backend.HedgingEngine.Pricer.Pricer import Pricer
 from backend.HedgingEngine.Pricer.PricingParams import PricingParams
 from backend.HedgingEngine.Pricer.PricingResults import PricingResults
 from backend.HedgingEngine.Utils.MathDateConverter import MathDateConverter
+from backend.HedgingEngine.MarkatDataReader.EnumIndex import index_to_currency
 
 
 class PricerGrpc(Pricer):
@@ -66,8 +67,8 @@ class PricerGrpc(Pricer):
         # 4) Convert assets : 
 
         for asset in self.params.assetDescription.assets : 
-            Asset = pricing_pb2.Asset(currencyId=asset.id.value , volatility=asset.volatility)
-            input_data.assets.append(Asset);
+            Asset = pricing_pb2.Asset(currencyId= index_to_currency[asset.id].value , volatility=asset.volatility)
+            input_data.assets.append(Asset)
 
         # 5) CorrelationMatrix : 
 

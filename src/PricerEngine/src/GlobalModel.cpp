@@ -18,6 +18,7 @@ GlobalModel::GlobalModel(const grpc_pricer::PricingInput& input)
     // ====== monitoringTimeGrid === 
     monitoringTimeGrid = TimeGrid(std::vector<double>(input.time_grid().begin(), input.time_grid().end()));
     
+    
     // ==== Correlations and matrice cholesky :  ==== 
     L = pnl_mat_create(input.correlations().size(), input.correlations().size());
     for (size_t i = 0; i < input.correlations().size(); i++) {
@@ -132,7 +133,6 @@ void GlobalModel::asset(const PnlMat *past, double t, PnlMat *path, PnlRng *rng)
     for (const auto& risky_asset : assets) {
         risky_asset->sampleNextDate(path, step, G, last_index + 1, isMonitoringDate);
     }
-    std::cout << "je rentre dans currency" << std::endl;
 
     for (const auto& currency : currencies) {
         currency->sampleNextDate(path, step, G, last_index + 1, isMonitoringDate);

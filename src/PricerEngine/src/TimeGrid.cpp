@@ -48,11 +48,6 @@ int TimeGrid::getLastIndex(double t)
         }
     }
 
-    if (last_index != grid_time.size() - 1) {
-        std::cout << "last_index = " << last_index << std::endl;
-    } else {
-        std::cout << "Aucune date trouvée inférieure à t" << std::endl;
-    }
 
     return last_index; // TODO : est ce qu'on doit retourner l'index ou la valeur ?
 }
