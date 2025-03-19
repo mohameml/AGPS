@@ -50,9 +50,9 @@ def test_financial_params():
     data.addDataFeed(reader.get_data_feed(T0))
     # data.append(reader.get_data_feed(T0))
 
-    time = 0.111 
+    time = 0.0
 
-    prcing_params = PricingParams(data  , time  , True);
+    prcing_params = PricingParams(data  , time  , True)
 
     input_data = pricerGrpc.pricing_params_to_pricing_input(prcing_params)
 

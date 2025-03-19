@@ -36,6 +36,7 @@ void MonteCarlo::priceAndDelta(double t, const PnlMat *Past, double& price , dou
     int M = sample_number;
     int N = model->monitoringTimeGrid.len();
     double h = fd_step;
+
     
     
     PnlMat *path = pnl_mat_create(N, D);

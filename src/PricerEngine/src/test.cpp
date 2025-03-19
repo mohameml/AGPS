@@ -25,7 +25,7 @@ grpc_pricer::PricingInput createTestInput() {
     input.set_monitoringdatereached(true);
 
     // Remplir time
-    input.set_time(0.111);
+    input.set_time(0.0);
 
     // Remplir currencies
     grpc_pricer::Currency* eur = input.add_currencies();
@@ -208,7 +208,7 @@ int testMontCarlo() {
     PnlVect *deltaStdDev = pnl_vect_create_from_scalar(input.correlations_size(),0.); // Initialiser avec une taille appropriée
     bool isMonitoringDate = input.monitoringdatereached();
     double currentDate = input.time();
-    PnlMat *past = convertPastToPnlMat(input);
+    PnlMat *past = convertPastToPnlMat(input);    
     MonteCarlo* Pricer = new MonteCarlo(input);
 
     if (past == NULL) {
@@ -217,14 +217,16 @@ int testMontCarlo() {
 
     // std::cout << "========== t = " << input.time() << "===========" << std::endl;
     // pnl_mat_print(past);
+
     Pricer->priceAndDelta(currentDate, past, price, priceStdDev, delta, deltaStdDev);
 
-    // std::cout << "price = " << price << std::endl;
-    // std::cout << "priceStdDev = " << priceStdDev << std::endl;
-    // std::cout << "Deltas = ";
-    // pnl_vect_print_asrow(delta);
-    // std::cout << "DeltasStdDev  = ";
-    // pnl_vect_print_asrow(deltaStdDev);
+    std::cout << "price = " << price << std::endl;
+    std::cout << "priceStdDev = " << priceStdDev << std::endl;
+    std::cout << "Deltas = ";
+    pnl_vect_print_asrow(delta);
+    std::cout << "DeltasStdDev  = ";
+    pnl_vect_print_asrow(deltaStdDev);
+
 
     pnl_mat_free(&past);
     pnl_vect_free(&delta);

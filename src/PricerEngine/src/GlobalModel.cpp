@@ -142,7 +142,6 @@ void GlobalModel::asset(const PnlMat *past, double t, PnlMat *path, PnlRng *rng)
 
         step = (monitoringTimeGrid.at(i) - monitoringTimeGrid.at(i - 1));
         pnl_vect_rng_normal(G, model_size, rng);
-        pnl_vect_print(G);
 
         for (const auto& risky_asset : assets) {
             risky_asset->sampleNextDate(path, step, G, i);

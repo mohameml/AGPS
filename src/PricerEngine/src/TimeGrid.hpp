@@ -14,7 +14,7 @@ public :
     TimeGrid();
     ~TimeGrid();
     TimeGrid(std::vector<double> grid_time); 
-    int at(int index);
+    double at(int index);
     int len();
     int getLastIndex(double t);
     bool has(double t) const;
