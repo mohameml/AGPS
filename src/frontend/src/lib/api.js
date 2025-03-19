@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'http://localhost:3000';
 
 // Enum des indices correspondant au backend
 const INDICES = {
@@ -24,18 +24,27 @@ const formatIndexName = (name) => {
 export const api = {
   async getPortfolio(date) {
     try {
+          // {
+          //   date: date,
+          //   isFirstTime: false,
+          //   currDate: date,
+          //   cash: 1000,
+          //   compos: {}
+          // }
+
       const response = await fetch(`${API_URL}/hedge`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          date: date,
-          isFirstTime: false,
-          currDate: date,
-          cash: 1000,
-          compos: {}
-        })
+          cash : 0 , 
+          compos :  {"EUROSTOXX50": 0.0, "SP500": 0.0, "FTSE100": 0.0, "TOPIX": 0.0, "ASX200": 0.0 , "USD": 0.0, "GBP": 0.0, "JPY": 0.0, "AUD": 0.0},
+          date : "2009-05-01T00:00:00",
+          isFirstTime : true ,
+          currDate : "2009-05-01T00:00:00"
+      
+      })
       });
 
       if (!response.ok) throw new Error('Failed to fetch portfolio data');
