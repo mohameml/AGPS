@@ -20,6 +20,7 @@ public:
     InterestRateModel domesticInterestRate;
     TimeGrid monitoringTimeGrid;
     double maturity;
+    PnlMat* matrix;;
 
 public:
     Option();

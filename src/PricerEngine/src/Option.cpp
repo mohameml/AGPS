@@ -32,11 +32,13 @@ Option::Option(const grpc_pricer::PricingInput& input)
     this->monitoringTimeGrid = TimeGrid(std::vector<double>(input.time_grid().begin(), input.time_grid().end()));
     this->maturity = monitoringTimeGrid.grid_time.back();
 
+    matrix = pnl_mat_create(monitoringTimeGrid.len(), 5);
     
 }
 
 Option::~Option()
 {
+    pnl_mat_free(&matrix);
 }
 
 double barriere_plus_ou_moins_15(PnlVect* x){
@@ -144,9 +146,9 @@ double barriere_800_euros(double x){
 
 double Option::payOff(const PnlMat* path){
     
-    PnlMat *matrix = pnl_mat_create(path->m, 5);  // Même nombre de lignes, 5 colonnes
+    // PnlMat *matrix = pnl_mat_create(path->m, 5);  // Même nombre de lignes, 5 colonnes
     // Extraction des colonnes 0 à 4 (5 colonnes des indices)
-    pnl_mat_extract_subblock(matrix, path, 0, 0, path->m, 5);
+    pnl_mat_extract_subblock(matrix, path, 0,matrix->m,0, matrix->n);
 
     
     double perfValue = 0.0;
@@ -164,17 +166,18 @@ double Option::payOff(const PnlMat* path){
         perfValue += pnl_vect_get(perfFlux, i-1);
         res += pnl_vect_get(perfDiv, i-1)*100 *domesticInterestRate.account(t_i, t_f);
 
-        std::cout << "Dividence numéro : " << i-1 << std::endl;
-        std::cout << "Valeur : " << pnl_vect_get(perfDiv, i-1)*100 *domesticInterestRate.account(t_i, t_f) << std::endl;
+        // std::cout << "Dividence numéro : " << i-1 << std::endl;
+        // std::cout << "Valeur : " << pnl_vect_get(perfDiv, i-1)*100 *domesticInterestRate.account(t_i, t_f) << std::endl;
+
 
     }
 
     perfValue += pnl_vect_get(perfFlux, 4);
     double flux_Tc = barriere_800_euros(1000*(1+0.60*perfValue));
     
-    std::cout << "Flux à la date Tc : " << flux_Tc << std::endl;
+    // std::cout << "Flux à la date Tc : " << flux_Tc << std::endl;
 
     res += flux_Tc;
-    pnl_mat_free(&matrix);
+    // pnl_mat_free(&matrix);
     return res;
 }

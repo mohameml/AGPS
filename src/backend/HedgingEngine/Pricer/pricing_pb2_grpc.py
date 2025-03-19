@@ -3,7 +3,8 @@
 import grpc
 import warnings
 
-import pricing_pb2 as pricing__pb2
+# import pricing_pb2 as pricing__pb2
+from backend.HedgingEngine.Pricer import pricing_pb2 as pricing__pb2
 
 GRPC_GENERATED_VERSION = '1.70.0'
 GRPC_VERSION = grpc.__version__
