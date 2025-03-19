@@ -24,7 +24,9 @@ class FinancialParams :
 
 
     def set_nb_days_in_one_year(self , year : int):
-        self.nombreOfDaysInOneYear = self.marketDataReader.get_nb_days_in_one_year(252)
+        # self.nombreOfDaysInOneYear = self.marketDataReader.get_nb_days_in_one_year(year)
+        self.nombreOfDaysInOneYear = 252 
+
 
     def to_object(self):
         """Convertit l'objet en dictionnaire."""

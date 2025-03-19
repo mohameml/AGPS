@@ -64,7 +64,7 @@
     Pour démarrer l'application FastAPI (depuis le dossier `src/`) :
 
     ```bash
-     uvicorn backend.app:app --host 127.0.0.1 --port 3000 --reload
+    uvicorn backend.app:app --host 127.0.0.1 --port 3000 --reload
     ```
 
     ou :

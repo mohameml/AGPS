@@ -34,14 +34,14 @@ class ListDataFeed:
         
         self.data_feeds.clear()
 
-        for date in self.fincial_params.time_grid.paymentDates:
+        for date in self.fincial_params.time_grid.time_grid_datetime:
             if date > rebalancingDate :
                 break
             
             self.addDataFeed(self.fincial_params.marketDataReader.get_data_feed(date))
 
 
-        if not (rebalancingDate in self.fincial_params.time_grid.paymentDates):
+        if not (rebalancingDate in self.fincial_params.time_grid.time_grid_datetime):
             self.addDataFeed(self.fincial_params.marketDataReader.get_data_feed(rebalancingDate))
 
 
