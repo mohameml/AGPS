@@ -32,7 +32,7 @@ class Hedging:
         
         # Calcul des paramètres de pricing
         pricer_params = self.get_pricing_params(rebalancingDate)
-        
+        print(pricer_params.time)
         # Calcul du pricing et des deltas
         results = self.get_price_and_deltas(pricer_params)
         

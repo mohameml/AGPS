@@ -94,10 +94,11 @@ def test_grpc_price_and_deltas():
     time_math = converter.ConvertToMathDistance(T0, data_feed_t0.date)
     pricer_params = PricingParams(past, time_math, monitoring_date)
 
-    print(pricer_params)
+    # print(pricer_params)
 
-    # res = pricerGrpc.price_and_deltas(pricer_params)
+    res = pricerGrpc.price_and_deltas(pricer_params)
     # print(res)
+
 
 
     #   Price : 100.0

@@ -50,8 +50,8 @@ public:
 
     Status PriceAndDeltas(ServerContext* context, const grpc_pricer::PricingInput* input, grpc_pricer::PricingOutput* output) override {
         double price, priceStdDev;
-        PnlVect *delta = pnl_vect_create(0); // Initialiser avec une taille appropriée
-        PnlVect *deltaStdDev = pnl_vect_create(0); // Initialiser avec une taille appropriée
+        PnlVect *delta = pnl_vect_create_from_scalar(input->correlations_size(),0.); // Initialiser avec une taille appropriée
+        PnlVect *deltaStdDev = pnl_vect_create_from_scalar(input->correlations_size(),0.); // Initialiser avec une taille appropriée
         bool isMonitoringDate = input->monitoringdatereached();
         double currentDate = input->time();
         PnlMat *past = convertPastToPnlMat(*input);

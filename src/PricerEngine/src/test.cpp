@@ -206,9 +206,11 @@ int testMontCarlo() {
     double price, priceStdDev;
     PnlVect *delta = pnl_vect_create_from_scalar(input.correlations_size(),0.); // Initialiser avec une taille appropriée
     PnlVect *deltaStdDev = pnl_vect_create_from_scalar(input.correlations_size(),0.); // Initialiser avec une taille appropriée
+    
     bool isMonitoringDate = input.monitoringdatereached();
     double currentDate = input.time();
-    PnlMat *past = convertPastToPnlMat(input);    
+    PnlMat *past = convertPastToPnlMat(input); 
+
     MonteCarlo* Pricer = new MonteCarlo(input);
 
     if (past == NULL) {

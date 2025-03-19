@@ -79,5 +79,5 @@ class PricerGrpc(Pricer):
 
         # 6) timeGrid : 
         input_data.time_grid.extend(self.params.time_grid.get_time_grid(converter))
-
+        print(input_data.time_grid)
         return input_data
