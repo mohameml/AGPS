@@ -9,8 +9,8 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>
 );
 
-if (process.env.NODE_ENV === 'development') {
-  import('./mock-server/browser').then(({ worker }) => {
-    worker.start()
-  })
-}
+// if (process.env.NODE_ENV === 'development') {
+//   import('./mock-server/browser').then(({ worker }) => {
+//     worker.start()
+//   })
+// }
