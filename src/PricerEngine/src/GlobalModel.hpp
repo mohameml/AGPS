@@ -19,12 +19,6 @@
 class GlobalModel
 {
 public:
-    // int model_size;       /// nombre d'actifs du modèle
-    // PnlVect *volatility;  /// vecteur de volatilités
-    // PnlVect *spots;       /// valeurs initiales des sous-jacents
-    // double time_step;     /// time step = T / N
-
-
     PnlMat *L;            /// raccine carrée de matrice de corrélation
     PnlVect *G;           /// Vector for simulation
     std::vector<std::unique_ptr<RiskyAsset>> assets ;
@@ -33,15 +27,10 @@ public:
     InterestRateModel domesticInterestRate;
     TimeGrid monitoringTimeGrid;
     int model_size ;
-    //int numberOfDaysPerYear;
-
-
 
 
 public:
     GlobalModel();
-    // GlobalModel(const grpc_pricer::PricingInput& input);
-    // GlobalModel(const grpc_pricer::PricingInput& input);
     GlobalModel(const grpc_pricer::PricingInput& input);
     ~GlobalModel();
 
