@@ -1,4 +1,7 @@
+// Modifiez le fichier ./lib/api.js pour ajouter le mode mock
+
 const API_URL = 'http://localhost:5000/api';
+const USE_MOCK = true; // Activer le mode mock
 
 // Enum des indices correspondant au backend
 const INDICES = {
@@ -21,9 +24,82 @@ const formatIndexName = (name) => {
   }
 };
 
+// Données mock pour les tests
+const MOCK_DATA = {
+  portfolio: {
+    cash: 150000,
+    EUROSTOXX50: {
+      quantity: 1000,
+      price: 3500.25,
+      foreignPrice: 3500.25
+    },
+    SP500: {
+      quantity: 500,
+      price: 4200.75,
+      foreignPrice: 4800.50
+    },
+    FTSE100: {
+      quantity: 750,
+      price: 7100.30,
+      foreignPrice: 6300.20
+    },
+    ASX200: {
+      quantity: 300,
+      price: 6800.15,
+      foreignPrice: 7200.45
+    },
+    TOPIX: {
+      quantity: 450,
+      price: 1900.80,
+      foreignPrice: 210000.0
+    }
+  },
+  output: {
+    pnl: 2.35,
+    EUROSTOXX50: {
+      before: 1000,
+      after: 1050
+    },
+    SP500: {
+      before: 500,
+      after: 480
+    },
+    FTSE100: {
+      before: 750,
+      after: 770
+    },
+    ASX200: {
+      before: 300,
+      after: 320
+    },
+    TOPIX: {
+      before: 450,
+      after: 430
+    }
+  }
+};
+
 export const api = {
   async getPortfolio(date) {
+    if (USE_MOCK) {
+      // Version mock
+      return {
+        portfolio: {
+          data: Object.entries(MOCK_DATA.portfolio)
+            .filter(([key]) => key !== 'cash')
+            .map(([name, details]) => ({
+              name: formatIndexName(name),
+              quantity: details.quantity || 0,
+              price: details.price || 0,
+              foreignPrice: details.foreignPrice || 0,
+              total: (details.quantity || 0) * (details.price || 0)
+            }))
+        }
+      };
+    }
+    
     try {
+      // Version originale
       const response = await fetch(`${API_URL}/hedge`, {
         method: 'POST',
         headers: {
@@ -47,7 +123,7 @@ export const api = {
           data: Object.entries(data.data.portfolio)
             .filter(([key]) => key !== 'cash')
             .map(([name, details]) => ({
-              name: formatIndexName(name), // Formater le nom de l'indice
+              name: formatIndexName(name),
               quantity: details.quantity || 0,
               price: details.price || 0,
               foreignPrice: details.foreignPrice || 0,
@@ -64,7 +140,21 @@ export const api = {
   },
 
   async getRebalancingInfo(date) {
+    if (USE_MOCK) {
+      // Version mock
+      return {
+        rebalancing: Object.entries(MOCK_DATA.output)
+          .filter(([key]) => key !== 'pnl')
+          .map(([name, details]) => ({
+            name: formatIndexName(name),
+            previousQuantity: details.before || 0,
+            newQuantity: details.after || 0
+          }))
+      };
+    }
+    
     try {
+      // Version originale
       const response = await fetch(`${API_URL}/hedge`, {
         method: 'POST',
         headers: {
@@ -85,9 +175,9 @@ export const api = {
       // Transform the output data to match the frontend structure
       const rebalancingData = {
         rebalancing: Object.entries(data.data.output)
-          .filter(([key]) => key !== 'pnl') // Exclude pnl from rebalancing data
+          .filter(([key]) => key !== 'pnl')
           .map(([name, details]) => ({
-            name: formatIndexName(name), // Formater le nom de l'indice
+            name: formatIndexName(name),
             previousQuantity: details.before || 0,
             newQuantity: details.after || 0
           }))
@@ -101,8 +191,13 @@ export const api = {
   },
 
   async rebalancePortfolio(date, currentPortfolio) {
+    if (USE_MOCK) {
+      // Version mock - simuler une réussite
+      return { status: "success", message: "Portfolio rebalanced successfully" };
+    }
+    
     try {
-      // Convertir les noms formatés en noms d'indices backend
+      // Version originale
       const backendCompos = currentPortfolio.reduce((acc, item) => {
         const backendName = Object.entries(INDICES).find(
           ([_, value]) => formatIndexName(value) === item.name
@@ -136,7 +231,21 @@ export const api = {
   },
 
   async getStats(date) {
+    if (USE_MOCK) {
+      // Version mock
+      const portfolioValue = Object.entries(MOCK_DATA.portfolio)
+        .filter(([key]) => key !== 'cash')
+        .reduce((sum, [_, details]) => sum + (details.quantity || 0) * (details.price || 0), 0);
+
+      return {
+        pnl: MOCK_DATA.output.pnl || 0,
+        portfolioValue: portfolioValue,
+        liquidativeValue: portfolioValue + MOCK_DATA.portfolio.cash
+      };
+    }
+    
     try {
+      // Version originale
       const response = await fetch(`${API_URL}/hedge`, {
         method: 'POST',
         headers: {

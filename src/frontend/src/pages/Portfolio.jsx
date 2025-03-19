@@ -14,8 +14,8 @@ export function Portfolio() {
     async function fetchData() {
       try {
         setLoading(true);
-        const data = await api.getPortfolio(date);
-        setPortfolioData(data.data || []);
+        const response = await api.getPortfolio(date);
+        setPortfolioData(response.portfolio.data || []);
         setError(null);
       } catch (err) {
         setError('Failed to fetch portfolio data');

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Eye, ArrowRight, X, AlertCircle } from 'lucide-react';
 import { api } from '../lib/api';
 
-export function PortfolioTable({ data }) {
+export function PortfolioTable({ data, currentDate }) {
   const [showRebalancing, setShowRebalancing] = useState(false);
   const [rebalancingData, setRebalancingData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -11,7 +11,7 @@ export function PortfolioTable({ data }) {
   const handleRebalanceInfo = async () => {
     try {
       setLoading(true);
-      const response = await api.getRebalancingInfo(new Date().toISOString().split('T')[0]);
+      const response = await api.getRebalancingInfo(currentDate);
       setRebalancingData(response.rebalancing);
       setShowRebalancing(true);
       setError(null);
@@ -26,10 +26,7 @@ export function PortfolioTable({ data }) {
   const handleRebalance = async () => {
     try {
       setLoading(true);
-      await api.rebalancePortfolio(
-        new Date().toISOString().split('T')[0],
-        { data }
-      );
+      await api.rebalancePortfolio(currentDate, data);
       // Refresh data after rebalancing
       window.location.reload();
     } catch (err) {
@@ -59,10 +56,10 @@ export function PortfolioTable({ data }) {
               {data.map((item, index) => (
                 <tr key={index} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 text-sm">{item.name}</td>
-                  <td className="px-6 py-4 text-sm font-mono">{item.quantity}</td>
-                  <td className="px-6 py-4 text-sm font-mono">{item.price}</td>
-                  <td className="px-6 py-4 text-sm font-mono">{item.foreignPrice}</td>
-                  <td className="px-6 py-4 text-sm font-mono">{item.total}</td>
+                  <td className="px-6 py-4 text-sm font-mono">{item.quantity.toFixed(2)}</td>
+                  <td className="px-6 py-4 text-sm font-mono">{item.price.toFixed(2)}</td>
+                  <td className="px-6 py-4 text-sm font-mono">{item.foreignPrice.toFixed(2)}</td>
+                  <td className="px-6 py-4 text-sm font-mono">{(item.quantity * item.price).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -117,14 +114,20 @@ export function PortfolioTable({ data }) {
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Product</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Previous Qty</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">New Qty</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Change</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {rebalancingData.map((item, index) => (
                     <tr key={index} className="hover:bg-gray-50">
                       <td className="px-6 py-4 text-sm">{item.name}</td>
-                      <td className="px-6 py-4 text-sm font-mono">{item.previousQuantity}</td>
-                      <td className="px-6 py-4 text-sm font-mono">{item.newQuantity}</td>
+                      <td className="px-6 py-4 text-sm font-mono">{item.previousQuantity.toFixed(2)}</td>
+                      <td className="px-6 py-4 text-sm font-mono">{item.newQuantity.toFixed(2)}</td>
+                      <td className="px-6 py-4 text-sm font-mono">
+                        <span className={item.newQuantity - item.previousQuantity >= 0 ? 'text-green-600' : 'text-red-600'}>
+                          {(item.newQuantity - item.previousQuantity).toFixed(2)}
+                        </span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

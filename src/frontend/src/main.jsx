@@ -8,3 +8,9 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>
 );
+
+if (process.env.NODE_ENV === 'development') {
+  import('./mock-server/browser').then(({ worker }) => {
+    worker.start()
+  })
+}

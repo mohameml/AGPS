@@ -1,0 +1,14 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "> Le projet backend est conçu pour fournir une API permettant de réaliser des calculs financiers avancés, y compris la gestion des risques et des stratégies de couverture (hedging). L'API interagit avec un moteur de couverture, `HedgingEngine`, qui est intégré via gRPC pour communiquer avec un pricer C++ externe. Le projet utilise FastAPI pour exposer l'API et gRPC pour la communication entre les différents services.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

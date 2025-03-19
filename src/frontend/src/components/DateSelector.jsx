@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, Calendar } from 'lucide-react';
+import { ChevronRight, ChevronsRight, Calendar } from 'lucide-react';
 
 export function DateSelector({ date, onDateChange }) {
   const [inputDate, setInputDate] = useState(date);
@@ -7,7 +7,19 @@ export function DateSelector({ date, onDateChange }) {
   const handleNextDay = () => {
     const nextDay = new Date(date);
     nextDay.setDate(nextDay.getDate() + 1);
-    const formattedDate = nextDay.toISOString().split('T')[0];
+    updateDate(nextDay);
+  };
+
+  // Nouvelle fonction pour next year
+  const handleNextYear = () => {
+    const nextYear = new Date(date);
+    nextYear.setFullYear(nextYear.getFullYear() + 1);
+    updateDate(nextYear);
+  };
+
+  // Fonction générique pour mettre à jour la date
+  const updateDate = (newDate) => {
+    const formattedDate = newDate.toISOString().split('T')[0];
     onDateChange(formattedDate);
   };
 
@@ -27,6 +39,7 @@ export function DateSelector({ date, onDateChange }) {
           </span>
         </div>
         <div className="flex items-center space-x-4">
+          {/* Bouton Next Day existant */}
           <button
             onClick={handleNextDay}
             className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -34,6 +47,16 @@ export function DateSelector({ date, onDateChange }) {
             Next Day
             <ChevronRight className="w-4 h-4 ml-1" />
           </button>
+
+          {/* Nouveau bouton Next Year */}
+          <button
+            onClick={handleNextYear}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Next Year
+            <ChevronsRight className="w-4 h-4 ml-1" />
+          </button>
+
           <div className="flex items-center space-x-2">
             <input
               type="text"
