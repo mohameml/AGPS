@@ -8,11 +8,29 @@ export function PortfolioTable({ data, currentDate }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+
+  const saveCurrentPortfolio = () => {
+    localStorage.setItem('previousPortfolio', JSON.stringify(data));
+  };
+
   const handleRebalanceInfo = async () => {
     try {
       setLoading(true);
+  
+      // Récupérer les données de rééquilibrage depuis le backend
       const response = await api.getRebalancingInfo(currentDate);
-      setRebalancingData(response.rebalancing);
+  
+      // Récupérer les quantités précédentes depuis le localStorage
+      const previousPortfolio = JSON.parse(localStorage.getItem('previousPortfolio')) || [];
+  
+      // Combiner les données du backend avec les quantités précédentes
+      const updatedRebalancing = response.rebalancing.map(item => ({
+        ...item,
+        previousQuantity: previousPortfolio.find(p => p.name === item.name)?.quantity || 0
+      }));
+  
+      // Mettre à jour l'état avec les données combinées
+      setRebalancingData(updatedRebalancing);
       setShowRebalancing(true);
       setError(null);
     } catch (err) {
@@ -25,17 +43,18 @@ export function PortfolioTable({ data, currentDate }) {
 
   const handleRebalance = async () => {
     try {
-      setLoading(true);
-      await api.rebalancePortfolio(currentDate, data);
-      // Refresh data after rebalancing
+      const response = await api.rebalancePortfolio(date, data);
+      // Utiliser response.data.output.deltas pour les changements
       window.location.reload();
     } catch (err) {
-      setError('Failed to rebalance portfolio');
-      console.error('Error:', err);
-    } finally {
-      setLoading(false);
+      setError("Failed to rebalance portfolio");
     }
   };
+
+  const previousPortfolio = JSON.parse(localStorage.getItem('previousPortfolio')) || [];
+
+
+  
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-blue-100 overflow-hidden">

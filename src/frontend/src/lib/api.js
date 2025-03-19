@@ -23,44 +23,33 @@ const formatIndexName = (name) => {
 
 export const api = {
   async getPortfolio(date) {
-    try {
-      const response = await fetch(`${API_URL}/hedge`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          date: date,
-          isFirstTime: false,
-          currDate: date,
-          cash: 1000,
-          compos: {}
-        })
-      });
+    const response = await fetch(`${API_URL}/hedge`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cash: 1000,
+        compos: { EUROSTOXX50: 0, SP500: 0, FTSE100: 0, TOPIX: 0, ASX200: 0 },
+        date: `${date}T00:00:00`, // Format ISO
+        isFirstTime: false,
+        currDate: `${date}T00:00:00`
+      })
+    });
 
-      if (!response.ok) throw new Error('Failed to fetch portfolio data');
-      const data = await response.json();
-
-      // Transform the portfolio data to match the frontend structure
-      const portfolioData = {
-        portfolio: {
-          data: Object.entries(data.data.portfolio)
-            .filter(([key]) => key !== 'cash')
-            .map(([name, details]) => ({
-              name: formatIndexName(name), // Formater le nom de l'indice
-              quantity: details.quantity || 0,
-              price: details.price || 0,
-              foreignPrice: details.foreignPrice || 0,
-              total: (details.quantity || 0) * (details.price || 0)
-            }))
-        }
-      };
-
-      return portfolioData;
-    } catch (error) {
-      console.error('API Error:', error);
-      throw error;
-    }
+    const data = await response.json();
+    if (data.status !== "success") throw new Error("API error");
+    
+    // Adapté à la structure de l'API réelle
+    return {
+      portfolio: {
+        data: Object.entries(data.data.portfolio.compositions).map(([name, quantity]) => ({
+          name: formatIndexName(name), 
+          quantity,
+          price: 0, // À récupérer depuis dict_index_price
+          total: quantity * price
+        })),
+        cash: data.data.portfolio.cash
+      }
+    };
   },
 
   async getRebalancingInfo(date) {
@@ -74,7 +63,7 @@ export const api = {
           date: date,
           isFirstTime: false,
           currDate: date,
-          cash: 1000000,
+          cash: 1000,
           compos: {}
         })
       });
