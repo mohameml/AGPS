@@ -100,6 +100,19 @@ target_link_libraries(pricing_server
 pnl_add_postbuild(pricing_server)
 
 
+# Ajout d'un exécutable pour tester GlobalModel
+add_executable(test_global_model test.cpp)
+target_link_libraries(test_global_model
+    my_lib
+    pricer_grpc_proto
+    ${_REFLECTION}
+    ${_GRPC_GRPCPP}
+    ${_PROTOBUF_LIBPROTOBUF}
+    ${PNL_LIBRARIES}
+)
+pnl_add_postbuild(test_global_model)
+
+
 
 
 

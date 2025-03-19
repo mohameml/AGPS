@@ -109,24 +109,3 @@ void MonteCarlo::end_of_calcul_delta(PnlVect *delta, PnlVect *delta_stdev, doubl
     pnl_vect_free(&delta_copy);
 }
 
-
-
-
-
-
-// MonteCarlo::MonteCarlo(const nlohmann::json json)
-// {
-//     json.at("SampleNb").get_to(sample_number);
-//     json.at("RelativeFiniteDifferenceStep").get_to(fd_step);
-
-//     model = new GlobalModel(json);
-//     option = option(json);
-
-//     model_size = model->assets.size() + model->currencies.size();
-
-//     nbDays = json.at("Option").at("MaturityInDays").get<int>();
-//     numberOfDaysPerYear = json.at("NumberOfDaysInOneYear").get<int>();
-
-//     rng = pnl_rng_create(PNL_RNG_MERSENNE);
-//     pnl_rng_sseed(rng, time(NULL));
-// }
