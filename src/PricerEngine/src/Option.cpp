@@ -148,7 +148,7 @@ double Option::payOff(const PnlMat* path){
     // Extraction des colonnes 0 à 4 (5 colonnes des indices)
     pnl_mat_extract_subblock(matrix, path, 0, 0, path->m, 5);
 
-
+    
     double perfValue = 0.0;
     PnlVect *perfDiv = pnl_vect_create(4);
     PnlVect *perfFlux = pnl_vect_create(5);
