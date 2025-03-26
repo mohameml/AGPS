@@ -14,7 +14,7 @@ class RiskFreeRateEstimator:
         if len(r_t) == 0:
             raise ValueError("La liste des taux r_t ne peut pas être vide.")
 
-        return np.mean(r_t)
+        return np.mean(r_t) # log(1+ r_t) = r_t
 
 
 
