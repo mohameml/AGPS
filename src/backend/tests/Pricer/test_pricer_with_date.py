@@ -72,14 +72,26 @@ def test_grpc_price_and_deltas():
     ]
     
     dates_cibles = [
-        pd.to_datetime('01-04-2010', format="%d-%m-%Y"),
-        pd.to_datetime('01-04-2011', format="%d-%m-%Y"),
-        pd.to_datetime('01-04-2012', format="%d-%m-%Y"),
-        pd.to_datetime('01-04-2013', format="%d-%m-%Y"),
+        pd.to_datetime('03-07-2001', format="%d-%m-%Y"),
+        pd.to_datetime('02-07-2002', format="%d-%m-%Y"),
+        pd.to_datetime('02-07-2003', format="%d-%m-%Y"),
+        pd.to_datetime('02-07-2004', format="%d-%m-%Y"),
     ]
 
-    T0 = pd.to_datetime('01-05-2009' , format='%d-%m-%Y')
-    T = pd.to_datetime('01-06-2014', format='%d-%m-%Y')
+    T0 = pd.to_datetime('05-07-2000' , format='%d-%m-%Y')
+    T = pd.to_datetime('05-07-2005', format='%d-%m-%Y')
+    
+
+    # dates_cibles = [
+    #     pd.to_datetime('04-01-2010', format="%d-%m-%Y"),
+    #     pd.to_datetime('04-01-2011', format="%d-%m-%Y"),
+    #     pd.to_datetime('04-01-2012', format="%d-%m-%Y"),
+    #     pd.to_datetime('04-01-2013', format="%d-%m-%Y"),
+    # ]
+
+    # T0 = pd.to_datetime('05-01-2009' , format='%d-%m-%Y')
+    # T = pd.to_datetime('06-01-2014', format='%d-%m-%Y')
+
 
     
     reader  = MarketDataReader(FILE_PATH , indexes , T0 , T)
@@ -106,7 +118,7 @@ def test_grpc_price_and_deltas():
 
     date = pd.to_datetime('01-04-2010', format='%d-%m-%Y') # changer date pour tester Pricer à une autre date 
 
-    output, portfolio = hedge_engine.hedge(date, portfolioData)
+    output, portfolio = hedge_engine.hedge(T0, portfolioData)
 
 
 

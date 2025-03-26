@@ -63,17 +63,26 @@ class MarketDataReader:
         self.extract_exchange_rate_history()
 
 
-
-
-    def clean_data(self , df : pd.DataFrame , filter_names : List[str]) -> None : 
+    def clean_data(self, df: pd.DataFrame, filter_names: List[str]) -> None:
         filter_names.append('Date')
         df = df[filter_names]
         df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
         df = df[(df.Date >= self.T0) & (df.Date <= self.T)]
         df = df.set_index('Date')
-        df = df.dropna()
+        df = df.fillna(method='ffill')  # Remplace les valeurs manquantes par la valeur précédente
+        return df
 
-        return df 
+
+
+    # def clean_data(self , df : pd.DataFrame , filter_names : List[str]) -> None : 
+    #     filter_names.append('Date')
+    #     df = df[filter_names]
+    #     df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+    #     df = df[(df.Date >= self.T0) & (df.Date <= self.T)]
+    #     df = df.set_index('Date')
+    #     df = df.dropna()
+
+    #    return df 
     
     def filter_common_valid_dates(self):
         """

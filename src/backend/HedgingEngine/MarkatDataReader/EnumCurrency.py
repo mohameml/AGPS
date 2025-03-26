@@ -7,7 +7,7 @@ class EnumCurrency(Enum):
     USD = "USD"
     GBP = "GBP"
     JPY = "JPY"
-    AUD = "AUD"
+    # AUD = "AUD"
 
     def str_to_enum(name: str) :
         """
