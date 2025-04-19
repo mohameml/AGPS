@@ -27,6 +27,9 @@ class  AssetDescription :
 
         dict_interest_rate = financialEstimator.estimate_dict_interest_rate()
         dict_volatility_exchange_rate  = financialEstimator.estimate_dict_volatility_exchange_rate()
+        # print("=== dict_volatility_exchange_rate ===")
+        # print(dict_volatility_exchange_rate)
+
         dict_volatility_price  = financialEstimator.estimate_dict_volatility_price()
 
         for index_name , volatility in dict_volatility_price.items() : 
@@ -42,8 +45,10 @@ class  AssetDescription :
 
 
     def get_volatility(self , curr_name : EnumCurrency) -> float :
+
         for curr in self.currencies : 
             if curr.id == curr_name :
+                # print(f"curr.id = {curr.id} , curr.volatility = {curr.volatility}")
                 return curr.volatility
 
 

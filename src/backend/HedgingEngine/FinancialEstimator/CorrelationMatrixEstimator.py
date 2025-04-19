@@ -31,6 +31,8 @@ class CorrelationMatrixEstimator:
         
         log_returns_matrix = np.array(log_returns)
         
-        correlation_matrix = np.corrcoef(log_returns_matrix)
+        correlation_matrix  = np.round(np.corrcoef(log_returns) , decimals=2)  # np.corrcoef(log_returns_matrix)
         
+        # np.cov(log_returns_matrix)
+
         return correlation_matrix

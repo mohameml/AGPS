@@ -83,7 +83,8 @@ def test_grpc_price_and_deltas():
             "FTSE100": 0.0, 
             "TOPIX": 0.0, 
             "ASX200": 0.0 , 
-            "USD": 0.0, "GBP": 0.0, 
+            "USD": 0.0, 
+            "GBP": 0.0, 
             "JPY": 0.0, 
             "AUD": 0.0
         }, 
