@@ -142,7 +142,7 @@ class MarketDataReader:
 
         dict_interest_rate : Dict[EnumCurrency , float] = {}
         for interest_rate in interest_rate_list.items :
-            dict_interest_rate[interest_rate.currency] = np.log(1 + interest_rate.rate)
+            dict_interest_rate[interest_rate.currency] = np.log(1 + interest_rate.rate)*3.65
 
         return dict_interest_rate
     

@@ -94,7 +94,7 @@ def test_grpc_price_and_deltas():
 
     # date = pd.to_datetime('01-04-2010', format='%d-%m-%Y') # changer date pour tester Pricer à une autre date 
 
-    output, portfolio = hedge_engine.hedge(T0, portfolioData)
+    output, portfolio = hedge_engine.hedge(T, portfolioData)
 
 
 
