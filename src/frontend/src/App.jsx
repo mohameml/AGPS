@@ -3,8 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { Portfolio } from './pages/Portfolio';
-import { MarketInfo } from './pages/MarketInfo';
-import { Client } from './pages/Client';
 import { Info } from './pages/Info';
 
 function App() {
@@ -18,8 +16,6 @@ function App() {
             <div className="max-w-7xl mx-auto">
               <Routes>
                 <Route path="/" element={<Portfolio />} />
-                <Route path="/market" element={<MarketInfo />} />
-                <Route path="/client" element={<Client />} />
                 <Route path="/info" element={<Info />} />
               </Routes>
             </div>

@@ -8,7 +8,7 @@ class EnumIndex(Enum):
     FTSE100 = "FTSE100"
     TOPIX = "TOPIX"
     ASX200 = "ASX200"
-    
+
 
     def str_to_enum(name: str) :
         """
@@ -45,4 +45,5 @@ index_to_currency = {
     EnumIndex.FTSE100: EnumCurrency.GBP,
     EnumIndex.TOPIX: EnumCurrency.JPY,
     EnumIndex.ASX200: EnumCurrency.AUD,
+
 }

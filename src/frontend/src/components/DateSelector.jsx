@@ -10,14 +10,19 @@ export function DateSelector({ date, onDateChange }) {
     updateDate(nextDay);
   };
 
-  // Nouvelle fonction pour next year
   const handleNextYear = () => {
     const nextYear = new Date(date);
     nextYear.setFullYear(nextYear.getFullYear() + 1);
     updateDate(nextYear);
   };
 
-  // Fonction générique pour mettre à jour la date
+  const handleNextMonth = () => {
+    const nextMonth = new Date(date);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    updateDate(nextMonth);
+  };
+  
+
   const updateDate = (newDate) => {
     const formattedDate = newDate.toISOString().split('T')[0];
     onDateChange(formattedDate);
@@ -39,7 +44,6 @@ export function DateSelector({ date, onDateChange }) {
           </span>
         </div>
         <div className="flex items-center space-x-4">
-          {/* Bouton Next Day existant */}
           <button
             onClick={handleNextDay}
             className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -48,7 +52,14 @@ export function DateSelector({ date, onDateChange }) {
             <ChevronRight className="w-4 h-4 ml-1" />
           </button>
 
-          {/* Nouveau bouton Next Year */}
+          <button
+            onClick={handleNextMonth}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Next Month
+            <ChevronsRight className="w-4 h-4 ml-1" />
+          </button>
+
           <button
             onClick={handleNextYear}
             className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
