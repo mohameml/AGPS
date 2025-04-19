@@ -25,14 +25,33 @@ class GrpcPricerServiceImpl final : public GrpcPricer::Service {
         std::cout << "nbAsset =" << numAssets << std::endl;
         
         // Réponse bidon avec price = 100.0 et priceStdDev = 2.0
-        reply->set_price(100.0);
-        reply->set_pricestddev(2.0);
+        reply->set_price(767.37);
+        reply->set_pricestddev(0.002);
     
         // Remplir deltas et deltasStdDev avec 0.0
+        reply->add_deltas(0.0006); // # EURO
+        reply->add_deltas(0.007); // # SP
+        reply->add_deltas(0.0004);// # FT
+        reply->add_deltas(0.417) ;// # TOPIX
+        reply->add_deltas(0.0022); // # ASX200
+        reply->add_deltas(0.0); // # USD 
+        reply->add_deltas(0.0) ;// # GBP
+        reply->add_deltas(0.0); // # JPY
+        reply->add_deltas(-10.59); // # AUD
+
+
         for (int i = 0; i < numAssets; ++i) {
-            reply->add_deltas(0.0);
+            // reply->add_deltas(0.0);
             reply->add_deltasstddev(0.0);
         }
+
+        std::cout << "price  = " << reply->price() << std::endl;
+        std::cout << "priceStdDev  = " << reply->pricestddev() << std::endl;
+        std::cout << "deltas  = ";
+        for (int i = 0; i < numAssets; ++i) {
+            std::cout << reply->deltas(i) << " ";
+        }
+        std::cout << std::endl;
     
         return Status::OK;
     }
