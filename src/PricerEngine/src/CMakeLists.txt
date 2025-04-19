@@ -16,7 +16,7 @@ option(protobuf_MODULE_COMPATIBLE TRUE)
 find_package(Protobuf CONFIG REQUIRED)
 
 # ligne ajouée
-set(PROTOBUF_INCLUDE_DIR "/home/chrifmhm/.local/include") # changer ceci avec le chemin vers protoc runtime 
+set(PROTOBUF_INCLUDE_DIR "/home/mohameml/.local/include") # changer ceci avec le chemin vers protoc runtime 
 include_directories(${PROTOBUF_INCLUDE_DIR})
 message(STATUS "Using protobuf ${Protobuf_VERSION}")
 

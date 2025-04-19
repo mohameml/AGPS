@@ -34,31 +34,6 @@ FILE_PATH = os.path.abspath(FILE_PATH)
 """
 
 
-def get_financial_params():
-    
-    indexes = [
-        EnumIndex.ASX200 , 
-        EnumIndex.EUROSTOXX50 ,
-        EnumIndex.FTSE100 ,
-        EnumIndex.SP500 ,
-        EnumIndex.TOPIX
-    ]
-    
-    dates_cibles = [
-        pd.to_datetime('01-04-2010', format="%d-%m-%Y"),
-        pd.to_datetime('01-04-2011', format="%d-%m-%Y"),
-        pd.to_datetime('01-04-2012', format="%d-%m-%Y"),
-        pd.to_datetime('01-04-2013', format="%d-%m-%Y"),
-    ]
-
-    T0 = pd.to_datetime('01-05-2009' , format='%d-%m-%Y')
-    T = pd.to_datetime('01-06-2014', format='%d-%m-%Y')
-
-    marketDataReader = MarketDataReader(FILE_PATH , indexes , T0 , T)
-    financialEstimator = FinancialEstimator(marketDataReader)
-    finance_params = FinancialParams(financialEstimator ,  T0 , T , dates_cibles)
-
-    return finance_params
 
 
 def test_grpc_price_and_deltas():
@@ -71,26 +46,26 @@ def test_grpc_price_and_deltas():
         EnumIndex.TOPIX
     ]
     
-    dates_cibles = [
-        pd.to_datetime('03-07-2001', format="%d-%m-%Y"),
-        pd.to_datetime('02-07-2002', format="%d-%m-%Y"),
-        pd.to_datetime('02-07-2003', format="%d-%m-%Y"),
-        pd.to_datetime('02-07-2004', format="%d-%m-%Y"),
-    ]
-
-    T0 = pd.to_datetime('05-07-2000' , format='%d-%m-%Y')
-    T = pd.to_datetime('05-07-2005', format='%d-%m-%Y')
-    
-
     # dates_cibles = [
-    #     pd.to_datetime('04-01-2010', format="%d-%m-%Y"),
-    #     pd.to_datetime('04-01-2011', format="%d-%m-%Y"),
-    #     pd.to_datetime('04-01-2012', format="%d-%m-%Y"),
-    #     pd.to_datetime('04-01-2013', format="%d-%m-%Y"),
+    #     pd.to_datetime('03-07-2001', format="%d-%m-%Y"),
+    #     pd.to_datetime('02-07-2002', format="%d-%m-%Y"),
+    #     pd.to_datetime('02-07-2003', format="%d-%m-%Y"),
+    #     pd.to_datetime('02-07-2004', format="%d-%m-%Y"),
     # ]
 
-    # T0 = pd.to_datetime('05-01-2009' , format='%d-%m-%Y')
-    # T = pd.to_datetime('06-01-2014', format='%d-%m-%Y')
+    # T0 = pd.to_datetime('05-07-2000' , format='%d-%m-%Y')
+    # T = pd.to_datetime('05-07-2005', format='%d-%m-%Y')
+    
+
+    dates_cibles = [
+        pd.to_datetime('04-01-2010', format="%d-%m-%Y"),
+        pd.to_datetime('04-01-2011', format="%d-%m-%Y"),
+        pd.to_datetime('04-01-2012', format="%d-%m-%Y"),
+        pd.to_datetime('04-01-2013', format="%d-%m-%Y"),
+    ]
+
+    T0 = pd.to_datetime('05-01-2009' , format='%d-%m-%Y')
+    T = pd.to_datetime('06-01-2014', format='%d-%m-%Y')
 
 
     
@@ -112,11 +87,11 @@ def test_grpc_price_and_deltas():
             "JPY": 0.0, 
             "AUD": 0.0
         }, 
-        date=pd.to_datetime('01-05-2009', format='%d-%m-%Y'), 
+        date=T0, 
         isFirstTime=True
     )
 
-    date = pd.to_datetime('01-04-2010', format='%d-%m-%Y') # changer date pour tester Pricer à une autre date 
+    # date = pd.to_datetime('01-04-2010', format='%d-%m-%Y') # changer date pour tester Pricer à une autre date 
 
     output, portfolio = hedge_engine.hedge(T0, portfolioData)
 
