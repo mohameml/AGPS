@@ -47,7 +47,7 @@ export function Portfolio() {
         </div>
       ) : (
         <>
-          <PortfolioTable data={portfolioData} currentDate={date} />
+          <PortfolioTable data={portfolioData} currentDate={date} setPortfolioData={setPortfolioData}/>
           <Stats date={date} />
         </>
       )}

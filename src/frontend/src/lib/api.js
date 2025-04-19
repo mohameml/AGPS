@@ -1,6 +1,6 @@
 const API_URL = 'http://localhost:3000';
 
-const INDICES = {
+export const INDICES = {
   ASX200: 'ASX200',
   EUROSTOXX50: 'EUROSTOXX50',
   FTSE100: 'FTSE100',
@@ -8,7 +8,7 @@ const INDICES = {
   TOPIX: 'TOPIX'
 };
 
-const formatIndexName = (name) => {
+export const formatIndexName = (name) => {
   switch (name) {
     case INDICES.ASX200: return 'ASX 200';
     case INDICES.EUROSTOXX50: return 'EURO STOXX 50';
@@ -78,47 +78,43 @@ export const api = {
     }
   },
 
+
   async rebalancePortfolio(date, currentPortfolio) {
     try {
-      // Convertir les noms frontend -> backend
-      if (!currentPortfolio || typeof currentPortfolio !== 'object') {
-        throw new Error('Portfolio data format invalide');
-      }
-  
-      // Conversion corrigée
       const backendCompos = Object.keys(currentPortfolio).reduce((acc, name) => {
-        const backendName = Object.keys(INDICES).find(k => 
-          formatIndexName(k) === name
-        );
+        const backendName = Object.keys(INDICES).find(k => formatIndexName(k) === name);
         if (backendName) acc[backendName] = currentPortfolio[name];
         return acc;
       }, {});
 
-      // Exécuter le rééquilibrage
-      const hedgeResponse = await fetch(`${API_URL}/hedge`, {
+      const response = await fetch(`${API_URL}/hedge`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           date: `${date}T00:00:00`,
-          isFirstTime: false,
-          currDate: `${date}T00:00:00`,
-          cash: 1000,
+          isFirstTime: false, // Ajouté
+          currDate: `${date}T00:00:00`, // Ajouté
+          cash: 1000, // Ajouté
           compos: backendCompos
         })
       });
-      const hedgeData = await hedgeResponse.json();
-      if (!hedgeResponse.ok) throw new Error(hedgeData.message);
 
-      return { status: "success", message: "Portfolio rebalanced successfully" };
+      const data = await response.json();
+      
+      if (!response.ok) {
+        const errorMsg = data.detail?.[0]?.msg || "Erreur de validation";
+        throw new Error(`Erreur serveur: ${errorMsg}`);
+      }
+
+      return data;
 
     } catch (error) {
-      console.error('Erreur Rééquilibrage:', error);
-      throw new Error('Échec : ' + error.message);
+      throw new Error(`Échec du rééquilibrage: ${error.message}`);
     }
   },
 
-  // ====== Fichier : ./lib/api.js ======
-async getRebalancingInfo(date) {
+
+  async getRebalancingInfo(date) {
     try {
       const response = await fetch(`${API_URL}/hedge`, {
         method: 'POST',
@@ -132,20 +128,23 @@ async getRebalancingInfo(date) {
         })
       });
       const data = await response.json();
+    
+    // Adapter au format du backend
+      const indicesOrder = ["EUROSTOXX50", "SP500", "FTSE100", "TOPIX", "ASX200"];
       
-      // Extraction corrigée des données
       return {
-        rebalancing: Object.entries(INDICES).map(([backendName]) => ({
+        rebalancing: indicesOrder.map((backendName) => ({
           name: formatIndexName(backendName),
-          previousQuantity: data.data?.portfolio?.compositions?.[backendName] || 0,
-          newQuantity: data.data?.output?.deltas?.[backendName] || 0
+          previousQuantity: data.data.portfolio.compositions[backendName] - data.data.output.deltas[0], // Prendre le premier delta
+          newQuantity: data.data.portfolio.compositions[backendName]
         }))
       };
-    } catch (error) {
+  } catch (error) {
       console.error('Erreur Rebalancing Info:', error);
       throw error;
     }
   },
+
 
   async getStats(date) {
     try {
@@ -182,8 +181,11 @@ async getRebalancingInfo(date) {
           return sum + (qty * localPrice * exchangeRate);
         }, 0);
 
+      const initialValue = 1000;
+      const pnl = ((portfolioValue + portfolioData.data.portfolio.cash - initialValue) / initialValue) * 100;
+
       return {
-        pnl: portfolioData.data.output?.pnl || 0,
+        pnl: pnl,
         portfolioValue,
         liquidativeValue: portfolioValue + portfolioData.data.portfolio.cash
       };
@@ -194,3 +196,4 @@ async getRebalancingInfo(date) {
     }
   }
 };
+

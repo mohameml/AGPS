@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Eye, ArrowRight, X, AlertCircle } from 'lucide-react';
 import { api } from '../lib/api';
+import { INDICES, formatIndexName } from '../lib/api';
 
-export function PortfolioTable({ data, currentDate }) {
+export function PortfolioTable({ data, currentDate, setPortfolioData }) {
   const [showRebalancing, setShowRebalancing] = useState(false);
   const [rebalancingData, setRebalancingData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -38,21 +39,36 @@ export function PortfolioTable({ data, currentDate }) {
 
   const handleRebalance = async () => {
     try {
-      // Vérifier que data est bien un tableau
-      const portfolioData = Array.isArray(data) ? data : [];
-      
-      const compos = portfolioData.reduce((acc, item) => {
+      const compos = data.reduce((acc, item) => {
         acc[item.name] = item.quantity;
         return acc;
       }, {});
   
-      await api.rebalancePortfolio(currentDate, compos);
-      window.location.reload();
+      // 1. Envoyer la requête de rebalance
+      const response = await api.rebalancePortfolio(currentDate, compos);
+      
+      // 2. Extraire les nouvelles données de la réponse directe
+      const backendData = response.data.portfolio.compositions;
+      
+      // 3. Mapper les données correctement
+      const newData = Object.keys(INDICES).map(backendName => {
+        const quantity = backendData[backendName] || 0;
+        const existingItem = data.find(d => d.name === formatIndexName(backendName));
+        
+        return {
+          name: formatIndexName(backendName),
+          quantity: quantity,
+          price: existingItem?.price || 0, // Conserver le prix existant
+          foreignPrice: existingItem?.foreignPrice || 0
+        };
+      });
+  
+      setPortfolioData(newData);
+  
     } catch (err) {
-      setError("Failed to rebalance portfolio: " + err.message);
-      console.error('Error:', err);
+      setError(err.message);
     }
-  };
+  };;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-blue-100 overflow-hidden">
