@@ -57,10 +57,17 @@ class PricerGrpc(Pricer):
 
         # 3) Convet params.assetDescription.currencies to Grpc.currencies : 
 
-        for curr in self.params.assetDescription.currencies : 
-            currency = pricing_pb2.Currency(id=curr.id.value , 
-                                            interestRate=curr.rate , 
-                                            volatility= curr.volatility)
+
+        # for curr in self.params.assetDescription.currencies : 
+        #     currency = pricing_pb2.Currency(id=curr.id.value , 
+        #                                     interestRate=curr.rate , 
+        #                                     volatility= curr.volatility)
+        #     input_data.currencies.append(currency)
+
+        for curr in pricing_params.dict_interest_rate.keys() :
+            currency = pricing_pb2.Currency(id=curr.value , 
+                                            interestRate=pricing_params.dict_interest_rate[curr] , 
+                                            volatility= self.params.assetDescription.get_volatility(curr))
             input_data.currencies.append(currency)
         
         

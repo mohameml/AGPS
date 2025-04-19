@@ -166,8 +166,9 @@ double Option::payOff(const PnlMat* path){
         perfValue += pnl_vect_get(perfFlux, i-1);
         res += pnl_vect_get(perfDiv, i-1)*100 *domesticInterestRate.account(t_i, t_f);
 
-        std::cout << "Dividence numéro : " << i-1 << std::endl;
-        std::cout << "Valeur : " << pnl_vect_get(perfDiv, i-1)*100 << std::endl;
+        // std::cout << "Dividence numéro : " << i-1 << std::endl;
+        // std::cout << "Valeur : " << pnl_vect_get(perfDiv, i-1)*100 << std::endl;
+
 
 
 
@@ -176,7 +177,7 @@ double Option::payOff(const PnlMat* path){
     perfValue += pnl_vect_get(perfFlux, 4);
     double flux_Tc = barriere_800_euros(1000*(1+0.60*perfValue));
     
-    std::cout << "Flux à la date Tc : " << flux_Tc << std::endl;
+    // std::cout << "Flux à la date Tc : " << flux_Tc << std::endl;
 
     res += flux_Tc;
     // pnl_mat_free(&matrix);

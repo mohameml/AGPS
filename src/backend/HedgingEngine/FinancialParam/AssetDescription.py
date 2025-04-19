@@ -25,16 +25,26 @@ class  AssetDescription :
     def estimate_params(self  , financialEstimator : FinancialEstimator):
 
 
-        for index_name , volatility in financialEstimator.dict_volatility_price.items() : 
+        dict_interest_rate = financialEstimator.estimate_dict_interest_rate()
+        dict_volatility_exchange_rate  = financialEstimator.estimate_dict_volatility_exchange_rate()
+        dict_volatility_price  = financialEstimator.estimate_dict_volatility_price()
+
+        for index_name , volatility in dict_volatility_price.items() : 
             self.assets.append(Asset(index_name , volatility))
 
-        for curr_name in financialEstimator.dict_volatility_exchange_rate.keys() :
-            volatility = financialEstimator.dict_volatility_exchange_rate[curr_name]
-            rate = financialEstimator.dict_interest_rate[curr_name]
+        for curr_name in dict_volatility_exchange_rate.keys() :
+            volatility = dict_volatility_exchange_rate[curr_name]
+            rate = dict_interest_rate[curr_name]
             self.currencies.append(Currency(curr_name , volatility , rate))
 
 
-        self.matrix_corr = financialEstimator.matrix_corr
+        self.matrix_corr = financialEstimator.estimate_matrix_corr()
+
+
+    def get_volatility(self , curr_name : EnumCurrency) -> float :
+        for curr in self.currencies : 
+            if curr.id == curr_name :
+                return curr.volatility
 
 
     def get_rate_of_domesitc_currency(self) -> float :

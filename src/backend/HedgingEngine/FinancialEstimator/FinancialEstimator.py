@@ -10,30 +10,42 @@ from typing import Dict
 
 class FinancialEstimator :
 
-    def __init__(self , marketDataReader : MarketDataReader):
+    def __init__(self , marketDataReader : MarketDataReader ):
         self.volatilityEstimator : VolatilityEstimator = VolatilityEstimator()
         self.riskFreeEstimator : RiskFreeRateEstimator = RiskFreeRateEstimator()
         self.corrMatrixEstimator : CorrelationMatrixEstimator = CorrelationMatrixEstimator()
         self.marketDataReader = marketDataReader
 
-        self.dict_interest_rate : Dict[EnumCurrency , float] = self.estimate_dict_interest_rate()
-        self.dict_volatility_exchange_rate : Dict[EnumCurrency , float] = self.estimate_dict_volatility_exchange_rate()
-        self.dict_volatility_price : Dict[EnumIndex , float] = self.estimate_dict_volatility_price()
-        self.matrix_corr = self.estimate_matrix_corr()
+        # self.dict_interest_rate : Dict[EnumCurrency , float] = self.estimate_dict_interest_rate()
+        # self.dict_volatility_exchange_rate : Dict[EnumCurrency , float] = self.estimate_dict_volatility_exchange_rate()
+        # self.dict_volatility_price : Dict[EnumIndex , float] = self.estimate_dict_volatility_price()
+        # self.matrix_corr = self.estimate_matrix_corr()
 
 
 
-    def estimate_dict_interest_rate(self) :
+    def estimate_dict_interest_rate(self) -> Dict[EnumCurrency , float] :
         
         dict_interest_rate = {}
 
+        # TODO : changer ceci : il faut utiliser le current_rate
+
+        # list_interest_rate = self.marketDataReader.get_current_rate(date)
+
+
+        # for interest_rate in list_interest_rate :
+        #     dict_interest_rate[interest_rate.currency] = interest_rate.rate # log(1 + interest_rate.rate) # TODO : check if we need to use log(1 + interest_rate.rate) or not
+
+        # return dict_interest_rate
+    
+    
         for curr_name in EnumCurrency : 
 
             list_interest_rate = self.marketDataReader._interest_rate_history.get_all_rate_by_curr_name(curr_name)
             rate_f = self.riskFreeEstimator.mean_estimate(list_interest_rate)
-            dict_interest_rate[curr_name] = rate_f
 
+            dict_interest_rate[curr_name] = rate_f
         return dict_interest_rate
+    
 
 
     

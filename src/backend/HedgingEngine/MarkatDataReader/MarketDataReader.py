@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List, Dict
+import numpy as np
 import pandas as pd
 from backend.HedgingEngine.MarkatDataReader.EnumIndex import EnumIndex
 from backend.HedgingEngine.MarkatDataReader.EnumCurrency import EnumCurrency
@@ -113,6 +114,36 @@ class MarketDataReader:
             self._index_price_history.add_record(date , index_price_list)
             
 
+
+    def get_current_rate(self , date : datetime) -> float :
+        """
+        Retourne le taux d'intérêt pour une date donnée.
+        """
+        if date not in self._interest_rate_history.records.keys() :
+            raise ValueError(f"La date {date} n'est pas dans la période d'analyse.")
+        
+
+        interest_rate_list = self._interest_rate_history.records[date]
+
+        return interest_rate_list.items
+    
+
+    def get_current_rate_dict(self , date : datetime) -> Dict[EnumCurrency , float] :
+        """
+        Retourne le taux d'intérêt pour une date donnée sous forme de dictionnaire.
+        """
+        if date not in self._interest_rate_history.records.keys() :
+            raise ValueError(f"La date {date} n'est pas dans la période d'analyse.")
+        
+
+        interest_rate_list = self._interest_rate_history.records[date]
+
+        dict_interest_rate : Dict[EnumCurrency , float] = {}
+        for interest_rate in interest_rate_list.items :
+            dict_interest_rate[interest_rate.currency] = np.log(1 + interest_rate.rate) *3.65
+
+        return dict_interest_rate
+    
 
 
     def extract_interest_rate_history(self) -> None:

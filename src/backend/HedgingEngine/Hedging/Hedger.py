@@ -1,5 +1,6 @@
 from datetime import datetime
 from backend.HedgingEngine.FinancialParam.FinancialParams import FinancialParams
+from backend.HedgingEngine.MarkatDataReader.EnumCurrency import EnumCurrency
 from backend.HedgingEngine.Pricer.PricerGrpc import PricerGrpc
 from backend.HedgingEngine.Pricer.PricingParams import PricingParams
 from backend.HedgingEngine.Utils.MathDateConverter import MathDateConverter
@@ -18,6 +19,7 @@ class Hedging:
         self.converter = None  
         self.pricer = PricerGrpc(parameters)
         self.past = ListDataFeed(self.financial_param)
+        # TODO : we must use the current rate
         self.r =  self.financial_param.assetDescription.get_rate_of_domesitc_currency() 
         self.dict_rf = self.financial_param.assetDescription.get_dict_interset_rate_estimate()
 
@@ -32,7 +34,7 @@ class Hedging:
         
         # Calcul des paramètres de pricing
         pricer_params = self.get_pricing_params(rebalancingDate)
-        print(pricer_params.time)
+        # print(pricer_params.time)
         # Calcul du pricing et des deltas
         results = self.get_price_and_deltas(pricer_params)
         
@@ -66,8 +68,15 @@ class Hedging:
         # Récupérer les informations nécessaires pour le pricing
         time_math = self.converter.ConvertToMathDistance(rebalancingDate)
         monitoring_date = rebalancingDate in self.financial_param.time_grid.paymentDates
+        dict_interest_rate = self.marketDataReader.get_current_rate_dict(rebalancingDate)
+
+        for curr in dict_interest_rate.keys() :
+            if curr != EnumCurrency.EUR :
+                self.dict_rf[curr] = dict_interest_rate[curr]
+        # self.dict_rf = dict_interest_rate
+        self.r = self.dict_rf[EnumCurrency.EUR]
         self.past.update_hedging_past(rebalancingDate)
-        return PricingParams(self.past, time_math, monitoring_date)
+        return PricingParams(self.past, time_math, monitoring_date , dict_interest_rate)
 
     
     def get_price_and_deltas(self, pricer_params):
