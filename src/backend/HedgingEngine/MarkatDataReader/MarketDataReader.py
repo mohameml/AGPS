@@ -115,17 +115,17 @@ class MarketDataReader:
             
 
 
-    def get_current_rate(self , date : datetime) -> float :
-        """
-        Retourne le taux d'intérêt pour une date donnée.
-        """
-        if date not in self._interest_rate_history.records.keys() :
-            raise ValueError(f"La date {date} n'est pas dans la période d'analyse.")
+    # def get_current_rate(self , date : datetime) -> float :
+    #     """
+    #     Retourne le taux d'intérêt pour une date donnée.
+    #     """
+    #     if date not in self._interest_rate_history.records.keys() :
+    #         raise ValueError(f"La date {date} n'est pas dans la période d'analyse.")
         
 
-        interest_rate_list = self._interest_rate_history.records[date]
+    #     interest_rate_list = self._interest_rate_history.records[date]
 
-        return interest_rate_list.items
+    #     return interest_rate_list.items
     
 
     def get_current_rate_dict(self , date : datetime) -> Dict[EnumCurrency , float] :
@@ -136,11 +136,13 @@ class MarketDataReader:
             raise ValueError(f"La date {date} n'est pas dans la période d'analyse.")
         
 
+
         interest_rate_list = self._interest_rate_history.records[date]
+        interest_rate_list.display_info()
 
         dict_interest_rate : Dict[EnumCurrency , float] = {}
         for interest_rate in interest_rate_list.items :
-            dict_interest_rate[interest_rate.currency] = np.log(1 + interest_rate.rate) *3.65
+            dict_interest_rate[interest_rate.currency] = np.log(1 + interest_rate.rate)
 
         return dict_interest_rate
     

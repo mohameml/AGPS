@@ -64,6 +64,7 @@ class PricerGrpc(Pricer):
         #                                     volatility= curr.volatility)
         #     input_data.currencies.append(currency)
 
+        # print(pricing_params.dict_interest_rate)
         for curr in pricing_params.dict_interest_rate.keys() :
             currency = pricing_pb2.Currency(id=curr.value , 
                                             interestRate=pricing_params.dict_interest_rate[curr] , 
@@ -86,5 +87,7 @@ class PricerGrpc(Pricer):
 
         # 6) timeGrid : 
         input_data.time_grid.extend(self.params.time_grid.get_time_grid(converter))
-        print(input_data.time_grid)
+        # print(input_data.time_grid)
+
+        print(input_data)
         return input_data

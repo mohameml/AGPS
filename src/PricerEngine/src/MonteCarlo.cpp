@@ -100,11 +100,11 @@ void MonteCarlo::end_of_calcul_delta(PnlVect *delta, PnlVect *delta_stdev, doubl
     pnl_vect_mult_vect_term(delta_copy, delta);
     pnl_vect_minus_vect(delta_stdev, delta_copy);
     pnl_vect_div_double(delta_stdev, M);
-    // pnl_vect_map_inplace(delta_stdev, std::sqrt);
-    for (size_t i = 0; i < delta_stdev->size; i++)
-    {
-        LET(delta_stdev , i) = std::sqrt(std::abs(GET(delta_stdev , i)));
-    }
+    pnl_vect_map_inplace(delta_stdev, std::sqrt);
+    // for (size_t i = 0; i < delta_stdev->size; i++)
+    // {
+    //     LET(delta_stdev , i) = std::sqrt(std::abs(GET(delta_stdev , i)));
+    // }
     
     
     pnl_vect_free(&delta_copy);
