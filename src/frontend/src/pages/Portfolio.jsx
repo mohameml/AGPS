@@ -5,7 +5,7 @@ import { Stats } from '../components/Stats';
 import { api } from '../lib/api';
 
 export function Portfolio() {
-  const [date, setDate] = useState('2009-01-05');
+  const [date, setDate] = useState('2010-01-04');
   const [portfolioData, setPortfolioData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

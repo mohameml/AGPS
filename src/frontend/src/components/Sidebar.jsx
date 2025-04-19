@@ -13,18 +13,6 @@ export function Sidebar() {
       path: '/'
     },
     {
-      icon: LineChart,
-      title: 'Market Information',
-      description: 'Index in live',
-      path: '/market'
-    },
-    {
-      icon: Users,
-      title: 'Client',
-      description: "All client's information",
-      path: '/client'
-    },
-    {
       icon: Info,
       title: 'Info',
       description: 'Information about this product',
