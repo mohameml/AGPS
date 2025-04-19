@@ -9,6 +9,9 @@ class EnumIndex(Enum):
     TOPIX = "TOPIX"
     ASX200 = "ASX200"
     # NIKKEI='NIKKEI'
+    TOPIX = "TOPIX"
+    ASX200 = "ASX200"
+    # NIKKEI='NIKKEI'
 
     def str_to_enum(name: str) :
         """
@@ -23,6 +26,8 @@ class EnumIndex(Enum):
         match name :
             case "ASX200":
                 return EnumIndex.ASX200
+            case "ASX200":
+                return EnumIndex.ASX200
             case "EUROSTOXX50":
                 return EnumIndex.EUROSTOXX50
             case "FTSE100":
@@ -31,7 +36,11 @@ class EnumIndex(Enum):
                 return EnumIndex.SP500
             case "TOPIX":
                 return EnumIndex.TOPIX
+            case "TOPIX":
+                return EnumIndex.TOPIX
 
+            # case "NIKKEI":
+            #     return EnumIndex.NIKKEI
             # case "NIKKEI":
             #     return EnumIndex.NIKKEI
             
@@ -49,5 +58,8 @@ index_to_currency = {
     EnumIndex.ASX200: EnumCurrency.AUD,
     # EnumIndex.NIKKEI: EnumCurrency.JPY,
     # EnumIndex.FTSE100: EnumCurrency.GBP
+    EnumIndex.TOPIX: EnumCurrency.JPY,
+    EnumIndex.ASX200: EnumCurrency.AUD,
+    # EnumIndex.NIKKEI: EnumCurrency.JPY,
+    # EnumIndex.FTSE100: EnumCurrency.GBP
 }
-
